@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Edith</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTextEdit" name="textEdit">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>791</width>
+      <height>531</height>
+     </rect>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuAlemeen">
+    <property name="title">
+     <string>Algemeen</string>
+    </property>
+    <addaction name="actionNieuw"/>
+    <addaction name="actionOpslaan"/>
+    <addaction name="actionOpslaan_als"/>
+    <addaction name="separator"/>
+    <addaction name="actionSluiten"/>
+   </widget>
+   <widget class="QMenu" name="menuBewerken">
+    <property name="title">
+     <string>Bewerken</string>
+    </property>
+    <addaction name="actionKopieren"/>
+    <addaction name="actionKnippen"/>
+    <addaction name="actionPlakken"/>
+    <addaction name="actionZoeken"/>
+    <addaction name="actionVervangen"/>
+    <addaction name="separator"/>
+    <addaction name="separator"/>
+    <addaction name="actionDo"/>
+    <addaction name="actionRedo"/>
+   </widget>
+   <widget class="QMenu" name="menuBeeld">
+    <property name="title">
+     <string>Beeld</string>
+    </property>
+    <addaction name="actionLettergrootte"/>
+   </widget>
+   <widget class="QMenu" name="menuDiversen">
+    <property name="title">
+     <string>Invoegen</string>
+    </property>
+    <addaction name="actionDatum"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionInfo"/>
+   </widget>
+   <addaction name="menuAlemeen"/>
+   <addaction name="menuBewerken"/>
+   <addaction name="menuBeeld"/>
+   <addaction name="menuDiversen"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionNieuw">
+   <property name="text">
+    <string>Nieuw</string>
+   </property>
+  </action>
+  <action name="actionOpslaan">
+   <property name="text">
+    <string>Opslaan</string>
+   </property>
+  </action>
+  <action name="actionOpslaan_als">
+   <property name="text">
+    <string>Opslaan als</string>
+   </property>
+  </action>
+  <action name="actionSluiten">
+   <property name="text">
+    <string>Sluiten</string>
+   </property>
+  </action>
+  <action name="actionKopieren">
+   <property name="text">
+    <string>Kopieren</string>
+   </property>
+  </action>
+  <action name="actionKnippen">
+   <property name="text">
+    <string>Knippen</string>
+   </property>
+  </action>
+  <action name="actionPlakken">
+   <property name="text">
+    <string>Plakken</string>
+   </property>
+  </action>
+  <action name="actionZoeken">
+   <property name="text">
+    <string>Zoeken</string>
+   </property>
+  </action>
+  <action name="actionVervangen">
+   <property name="text">
+    <string>Vervangen</string>
+   </property>
+  </action>
+  <action name="actionDo">
+   <property name="text">
+    <string>Undo</string>
+   </property>
+  </action>
+  <action name="actionRedo">
+   <property name="text">
+    <string>Redo</string>
+   </property>
+  </action>
+  <action name="actionLettergrootte">
+   <property name="text">
+    <string>Lettergrootte</string>
+   </property>
+  </action>
+  <action name="actionDatum">
+   <property name="text">
+    <string>Datum</string>
+   </property>
+  </action>
+  <action name="actionInfo">
+   <property name="text">
+    <string>Info</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
