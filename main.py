@@ -1,5 +1,5 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton
+from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QFileDialog
 from mainwindow import Ui_MainWindow
 from PyQt6.uic import loadUi
 
@@ -14,6 +14,8 @@ class Venster(QMainWindow):
         # self.ui = Ui_MainWindow()       
         # self.ui.setupUi(self)
         loadUi("mainwindow.ui",self)
+
+        self.current_path = None
 
         self.actionNieuw.triggered.connect(self.nieuw)
         self.actionOpslaan.triggered.connect(self.opslaan)
@@ -35,27 +37,54 @@ class Venster(QMainWindow):
 
     def nieuw(self):
         print("nieuw")
+        self.textEdit.clear()
+        self.setWindowTitle("Geen naam")
+        self.current_path = None
 
     def opslaan(self):
         print("opslaan")
+        if self.current_path is not None:
+            filetext = self.textEdit.toPlainText()
+            print(filetext)
+            with open(self.current_path, 'w') as f:
+                f.write(filetext)
+        else:
+            self.opslaan_als()
 
     def opslaan_als(self):
         print("opslaan als")
+        pathname = QFileDialog.getSaveFileName(self, 'Bestand opslaan', 'Documenten', 'Tekst bestanden (*.txt, *.md)')
+        print(pathname[0])
+        filetext = self.textEdit.toPlainText()
+        with open(pathname[0], 'w') as f:
+            f.write(filetext)
+        self.current_path = pathname[0]
+        self.setWindowTitle(pathname[0])
 
     def open(self):
         print("open")
+        fname = QFileDialog.getOpenFileName(self, 'Open bestand', 'Documenten', 'Tekst bestanden (*.txt, *.md)')
+        print(fname[0]) # gekozen bestand
+        self.setWindowTitle(fname[0])
+        with open(fname[0], 'r') as f:
+            filetext = f.read()
+            self.textEdit.setText(filetext)
+        self.current_path = fname[0]
 
     def sluiten(self):
         print("sluiten")
 
     def kopieren(self):
         print("kopieren")
+        self.textEdit.copy()
 
     def knippen(self):
         print("knippen")
+        self.textEdit.cut()
 
     def plakken(self):
         print("plakken")
+        self.textEdit.paste()
 
     def zoeken(self):
         print("zoeken")
@@ -65,9 +94,11 @@ class Venster(QMainWindow):
 
     def undo(self):
         print("undo")
+        self.textEdit.undo()
 
     def redo(self):
         print("redo")
+        self.textEdit.redo()
 
         # laat het venster zien
         self.show()
