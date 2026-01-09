@@ -64,25 +64,32 @@
     <property name="title">
      <string>Beeld</string>
     </property>
-    <addaction name="actionLettergrootte"/>
+    <addaction name="actionlichte_modus"/>
+    <addaction name="actiondonkere_modus"/>
+    <addaction name="actionletters_groter"/>
+    <addaction name="actionletters_kleiner"/>
    </widget>
-   <widget class="QMenu" name="menuDiversen">
+   <widget class="QMenu" name="menuUitlijnen">
+    <property name="title">
+     <string>Uitlijnen</string>
+    </property>
+    <addaction name="actionRechts"/>
+    <addaction name="actionLinks"/>
+    <addaction name="actionMidden"/>
+    <addaction name="actionVerdelen"/>
+   </widget>
+   <widget class="QMenu" name="menuInvoegen">
     <property name="title">
      <string>Invoegen</string>
     </property>
     <addaction name="actionDatum"/>
-   </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionInfo"/>
+    <addaction name="actionTijd"/>
    </widget>
    <addaction name="menuAlgemeen"/>
    <addaction name="menuBewerken"/>
    <addaction name="menuBeeld"/>
-   <addaction name="menuDiversen"/>
-   <addaction name="menuHelp"/>
+   <addaction name="menuUitlijnen"/>
+   <addaction name="menuInvoegen"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNieuw">
@@ -194,6 +201,62 @@
    </property>
    <property name="shortcut">
     <string extracomment="Ctrl+O">Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionlichte_modus">
+   <property name="text">
+    <string>lichte modus</string>
+   </property>
+  </action>
+  <action name="actiondonkere_modus">
+   <property name="text">
+    <string>donkere modus</string>
+   </property>
+  </action>
+  <action name="actionletters_groter">
+   <property name="text">
+    <string>letters groter</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+=</string>
+   </property>
+  </action>
+  <action name="actionletters_kleiner">
+   <property name="text">
+    <string>letters kleiner</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+-</string>
+   </property>
+  </action>
+  <action name="actionRechts">
+   <property name="text">
+    <string>Rechts</string>
+   </property>
+  </action>
+  <action name="actionLinks">
+   <property name="text">
+    <string>Links</string>
+   </property>
+  </action>
+  <action name="actionMidden">
+   <property name="text">
+    <string>Midden</string>
+   </property>
+  </action>
+  <action name="actionDatum">
+   <property name="text">
+    <string>Datum</string>
+   </property>
+  </action>
+  <action name="actionVerdelen">
+   <property name="text">
+    <string>Verdelen</string>
+   </property>
+  </action>
+  <action name="actionTijd">
+   <property name="text">
+    <string>Tijd</string>
    </property>
   </action>
  </widget>

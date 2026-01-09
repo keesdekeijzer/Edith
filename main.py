@@ -1,4 +1,6 @@
 import sys
+
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QFileDialog
 from mainwindow import Ui_MainWindow
 from PyQt6.uic import loadUi
@@ -16,6 +18,7 @@ class Venster(QMainWindow):
         loadUi("mainwindow.ui",self)
 
         self.current_path = None
+        self.current_fontsize = 12
 
         self.actionNieuw.triggered.connect(self.nieuw)
         self.actionOpslaan.triggered.connect(self.opslaan)
@@ -34,6 +37,20 @@ class Venster(QMainWindow):
 
         self.actionUndo.triggered.connect(self.undo)
         self.actionRedo.triggered.connect(self.redo)
+
+        self.actiondonkere_modus.triggered.connect(self.gebruik_donkere_modus)
+        self.actionlichte_modus.triggered.connect(self.gebruik_lichte_modus)
+
+        self.actionletters_groter.triggered.connect(self.letters_groter)
+        self.actionletters_kleiner.triggered.connect(self.letters_kleiner)
+
+        self.actionRechts.triggered.connect(self.rechts)
+        self.actionMidden.triggered.connect(self.midden)
+        self.actionLinks.triggered.connect(self.links)
+        self.actionVerdelen.triggered.connect(self.verdelen)
+
+        self.actionDatum.triggered.connect(self.datum)
+        self.actionTijd.triggered.connect(self.tijd)
 
     def nieuw(self):
         print("nieuw")
@@ -86,10 +103,10 @@ class Venster(QMainWindow):
         print("plakken")
         self.textEdit.paste()
 
-    def zoeken(self):
+    def zoeken(self): # todo
         print("zoeken")
 
-    def vervangen(self):
+    def vervangen(self): # todo
         print("vervangen")
 
     def undo(self):
@@ -100,8 +117,51 @@ class Venster(QMainWindow):
         print("redo")
         self.textEdit.redo()
 
+    def gebruik_donkere_modus(self):
+        self.setStyleSheet('''
+            QWidget{
+                background-color: rgb(33,33,33);
+                color: #FFFFFF;
+                }
+            QTextEdit{
+                background-color: rgb(46,46,46);
+                }
+            QMenuBar::item:selected{
+                color: #000000;
+                }               
+            ''')
+
+    def gebruik_lichte_modus(self):
+        self.setStyleSheet("")
+
         # laat het venster zien
         self.show()
+
+    def letters_groter(self):
+        self.current_fontsize +=1
+        self.textEdit.setFontPointSize(self.current_fontsize)
+
+    def letters_kleiner(self):
+        self.current_fontsize -=1
+        self.textEdit.setFontPointSize(self.current_fontsize)
+
+    def rechts(self):
+        self.textEdit.setAlignment(Qt.AlignmentFlag.AlignRight)
+
+    def midden(self):
+        self.textEdit.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+    def links(self):
+        self.textEdit.setAlignment(Qt.AlignmentFlag.AlignLeft)
+
+    def verdelen(self):
+        self.textEdit.setAlignment(Qt.AlignmentFlag.AlignJustify)
+
+    def datum(self): # todo
+        print("datum")
+
+    def tijd(self): # todo
+        print("tijd")
 
 
 if __name__ == "__main__":
