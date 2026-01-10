@@ -4,6 +4,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QFileDialog
 from mainwindow import Ui_MainWindow
 from PyQt6.uic import loadUi
+import datetime
 
 # pyuic6 -o mainwindow.py mainwindow.ui
 
@@ -51,6 +52,7 @@ class Venster(QMainWindow):
 
         self.actionDatum.triggered.connect(self.datum)
         self.actionTijd.triggered.connect(self.tijd)
+        self.actionVandaag.triggered.connect(self.vandaag)
 
     def nieuw(self):
         print("nieuw")
@@ -80,7 +82,7 @@ class Venster(QMainWindow):
 
     def open(self):
         print("open")
-        fname = QFileDialog.getOpenFileName(self, 'Open bestand', 'Documenten', 'Tekst bestanden (*.txt, *.md)')
+        fname = QFileDialog.getOpenFileName(self, 'Open bestand', 'Documenten', 'Tekst bestanden (*.txt *.md)')
         print(fname[0]) # gekozen bestand
         self.setWindowTitle(fname[0])
         with open(fname[0], 'r') as f:
@@ -158,10 +160,22 @@ class Venster(QMainWindow):
         self.textEdit.setAlignment(Qt.AlignmentFlag.AlignJustify)
 
     def datum(self): # todo
-        print("datum")
+        nu = datetime.datetime.now()
+        datum_nu = nu.strftime("%Y-%m-%d")
+        print(f"datum: {datum_nu}")
+        self.textEdit.insertPlainText(datum_nu)
 
     def tijd(self): # todo
-        print("tijd")
+        nu = datetime.datetime.now()
+        tijd_nu = nu.strftime("%H:%M")
+        print(f"tijd: {tijd_nu}")
+        self.textEdit.insertPlainText(tijd_nu)
+
+    def vandaag(self): # todo
+        nu = datetime.datetime.now()
+        datum_nu = nu.strftime("%Y-%m-%d")
+        print(f"datum: {datum_nu}")
+        self.textEdit.insertPlainText(datum_nu)
 
 
 if __name__ == "__main__":

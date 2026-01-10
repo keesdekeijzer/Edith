@@ -82,8 +82,8 @@
     <property name="title">
      <string>Invoegen</string>
     </property>
-    <addaction name="actionDatum"/>
     <addaction name="actionTijd"/>
+    <addaction name="actionVandaag"/>
    </widget>
    <addaction name="menuAlgemeen"/>
    <addaction name="menuBewerken"/>
@@ -244,11 +244,6 @@
     <string>Midden</string>
    </property>
   </action>
-  <action name="actionDatum">
-   <property name="text">
-    <string>Datum</string>
-   </property>
-  </action>
   <action name="actionVerdelen">
    <property name="text">
     <string>Verdelen</string>
@@ -257,6 +252,17 @@
   <action name="actionTijd">
    <property name="text">
     <string>Tijd</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+T</string>
+   </property>
+  </action>
+  <action name="actionVandaag">
+   <property name="text">
+    <string>Vandaag</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+V</string>
    </property>
   </action>
  </widget>
