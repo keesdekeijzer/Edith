@@ -57,7 +57,6 @@
     <addaction name="actionPlakken"/>
     <addaction name="separator"/>
     <addaction name="actionZoeken"/>
-    <addaction name="actionVervangen"/>
     <addaction name="separator"/>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
@@ -177,11 +176,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
-   </property>
-  </action>
-  <action name="actionVervangen">
-   <property name="text">
-    <string>Vervangen</string>
    </property>
   </action>
   <action name="actionUndo">

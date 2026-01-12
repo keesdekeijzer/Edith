@@ -1,14 +1,97 @@
 import sys
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QApplication, QWidget, QMainWindow, QPushButton, QFileDialog, QDialog, QMessageBox
-from mainwindow import Ui_MainWindow
+from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog, QDialog, QMessageBox, QStatusBar, QLabel
+from PyQt6.QtWidgets import QLineEdit, QHBoxLayout, QVBoxLayout
+# from mainwindow import Ui_MainWindow
 from PyQt6.uic import loadUi
 import datetime
 from PyQt6.QtPrintSupport import QPrinter, QPrintDialog
-from PyQt6.QtGui import QTextCharFormat
+from PyQt6.QtGui import QTextCursor
 
 # pyuic6 -o mainwindow.py mainwindow.ui
+
+class ZoekenVervangenDialoog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Zoeken en Vervangen")
+        self.setModal(False)
+        self.parent = parent
+
+        self.vind_label = QLabel("Vind:")
+        self.vind_invoer = QLineEdit()
+        self.vervang_label = QLabel("Vervang:")
+        self.vervang_invoer = QLineEdit()
+
+        self.vind_volgende_knop = QPushButton("Vind volgende")
+        self.vervang_knop = QPushButton("Vervang")
+        self.alles_vervangen_knop = QPushButton("Alles vervangen")
+        self.sluit_knop = QPushButton("Sluiten")
+
+        h1 = QHBoxLayout()
+        h1.addWidget(self.vind_label)
+        h1.addWidget(self.vind_invoer)
+
+        h2 = QHBoxLayout()
+        h2.addWidget(self.vervang_label)
+        h2.addWidget(self.vervang_invoer)
+
+        h3 = QHBoxLayout()
+        h3.addWidget(self.vind_volgende_knop)
+        h3.addWidget(self.vervang_knop)
+        h3.addWidget(self.alles_vervangen_knop)
+        h3.addWidget(self.sluit_knop)
+
+        v = QVBoxLayout()
+        v.addLayout(h1)
+        v.addLayout(h2)
+        v.addLayout(h3)
+        self.setLayout(v)
+
+        self.vind_volgende_knop.clicked.connect(self.vind_volgende)
+        self.vervang_knop.clicked.connect(self.vervang_een)
+        self.alles_vervangen_knop.clicked.connect(self.vervang_alle)
+        self.sluit_knop.clicked.connect(self.close)
+
+    def vind_volgende(self):
+        text = self.vind_invoer.text()
+        if not text:
+            return
+        gevonden = self.parent.textEdit.find(text)
+        if not gevonden:
+            # weer naar boven
+            cursor = self.parent.textEdit.textCursor()
+            cursor.movePosition(QTextCursor.MoveOperation.Start)
+            self.parent.textEdit.setTextCursor(cursor)
+            gevonden = self.parent.textEdit.find(text)
+            print(f"'{text}' niet gevonden")
+            if not gevonden:
+                term = text.replace('<','&lt;')
+                term = term.replace('>','&gt;')
+                QMessageBox.information(self, "Vinden", f"'{term}' niet gevonden")
+
+    def vervang_een(self):
+        cursor = self.parent.textEdit.textCursor()
+        if cursor.hasSelection():
+            selectie = cursor.selectedText()
+            zoek_tekst = self.vind_invoer.text()
+            if (selectie == zoek_tekst):
+                cursor.insertText(self.vervang_invoer.text())
+        self.vind_volgende()
+
+    def vervang_alle(self):
+        zoek_tekst = self.vind_invoer.text()
+        vervang_tekst = self.vervang_invoer.text()
+        if not zoek_tekst:
+            return
+        doc = self.parent.textEdit.document()
+        cursor = QTextCursor(doc)
+        text = doc.toPlainText()
+        nieuwe_tekst = text.replace(zoek_tekst, vervang_tekst)
+        # vervang het hele document, met 1 undo te herstellen 
+        cursor.select(QTextCursor.SelectionType.Document)
+        cursor.insertText(nieuwe_tekst)
+
 
 
 class Venster(QMainWindow):
@@ -16,8 +99,6 @@ class Venster(QMainWindow):
         super().__init__()
 
         # Hoofdvenster
-        # self.ui = Ui_MainWindow()       
-        # self.ui.setupUi(self)
         loadUi("mainwindow.ui",self)
 
         self.current_path = None
@@ -39,7 +120,7 @@ class Venster(QMainWindow):
         self.actionPlakken.triggered.connect(self.plakken)
 
         self.actionZoeken.triggered.connect(self.zoeken)
-        self.actionVervangen.triggered.connect(self.vervangen)
+        #self.actionVervangen.triggered.connect(self.vervangen)
 
         self.actionUndo.triggered.connect(self.undo)
         self.actionRedo.triggered.connect(self.redo)
@@ -66,6 +147,13 @@ class Venster(QMainWindow):
         self.actionOnderstrepen.triggered.connect(self.onderstrepen)
 
         self.actionOver_Edith.triggered.connect(self.over_edith)
+
+        self.maak_statusbar()
+
+    def maak_statusbar(self):
+        self.statusbar = QStatusBar()
+        self.setStatusBar(self.statusbar)
+        self.statusbar.showMessage("Begin")
 
     def nieuw(self):
         print("nieuw")
@@ -138,11 +226,13 @@ class Venster(QMainWindow):
         print("plakken")
         self.textEdit.paste()
 
-    def zoeken(self): # todo
+    def zoeken(self):
         print("zoeken")
-
-    def vervangen(self): # todo
-        print("vervangen")
+        if not hasattr(self, "_vind_dialoog") or self._vind_dialoog is None:
+            self._vind_dialoog = ZoekenVervangenDialoog(self)
+        self._vind_dialoog.show()
+        self._vind_dialoog.raise_()
+        self._vind_dialoog.activateWindow()
 
     def undo(self):
         print("undo")
