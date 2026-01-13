@@ -102,12 +102,19 @@
     </property>
     <addaction name="actionOver_Edith"/>
    </widget>
+   <widget class="QMenu" name="menuMemo">
+    <property name="title">
+     <string>Memo</string>
+    </property>
+    <addaction name="actionOpen_memo"/>
+   </widget>
    <addaction name="menuAlgemeen"/>
    <addaction name="menuBewerken"/>
    <addaction name="menuBeeld"/>
    <addaction name="menuUitlijnen"/>
    <addaction name="menuInvoegen"/>
    <addaction name="menuOpmaak"/>
+    <addaction name="menuMemo"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -335,6 +342,11 @@
   <action name="actionOver_Edith">
    <property name="text">
     <string>Over Edith</string>
+   </property>
+  </action>
+  <action name="actionOpen_memo">
+   <property name="text">
+    <string>Open memo</string>
    </property>
   </action>
  </widget>

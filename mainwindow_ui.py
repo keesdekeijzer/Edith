@@ -90,6 +90,8 @@ class Ui_MainWindow(object):
         self.actionOver_Efith.setObjectName(u"actionOver_Efith")
         self.actionOver_Edith = QAction(MainWindow)
         self.actionOver_Edith.setObjectName(u"actionOver_Edith")
+        self.actionOpen_memo = QAction(MainWindow)
+        self.actionOpen_memo.setObjectName(u"actionOpen_memo")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.textEdit = QTextEdit(self.centralwidget)
@@ -113,6 +115,8 @@ class Ui_MainWindow(object):
         self.menuOpmaak.setObjectName(u"menuOpmaak")
         self.menuHelp = QMenu(self.menubar)
         self.menuHelp.setObjectName(u"menuHelp")
+        self.menuMemo = QMenu(self.menubar)
+        self.menuMemo.setObjectName(u"menuMemo")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -124,6 +128,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuUitlijnen.menuAction())
         self.menubar.addAction(self.menuInvoegen.menuAction())
         self.menubar.addAction(self.menuOpmaak.menuAction())
+        self.menubar.addAction(self.menuMemo.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
         self.menuAlgemeen.addAction(self.actionNieuw)
         self.menuAlgemeen.addAction(self.actionOpslaan)
@@ -158,6 +163,7 @@ class Ui_MainWindow(object):
         self.menuOpmaak.addAction(self.actionVet)
         self.menuOpmaak.addAction(self.actionOnderstrepen)
         self.menuHelp.addAction(self.actionOver_Edith)
+        self.menuMemo.addAction(self.actionOpen_memo)
 
         self.retranslateUi(MainWindow)
 
@@ -258,6 +264,7 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(shortcut)
         self.actionOver_Efith.setText(QCoreApplication.translate("MainWindow", u"Over Edith", None))
         self.actionOver_Edith.setText(QCoreApplication.translate("MainWindow", u"Over Edith", None))
+        self.actionOpen_memo.setText(QCoreApplication.translate("MainWindow", u"Open memo", None))
         self.menuAlgemeen.setTitle(QCoreApplication.translate("MainWindow", u"Algemeen", None))
         self.menuBewerken.setTitle(QCoreApplication.translate("MainWindow", u"Bewerken", None))
         self.menuBeeld.setTitle(QCoreApplication.translate("MainWindow", u"Beeld", None))
@@ -265,5 +272,6 @@ class Ui_MainWindow(object):
         self.menuInvoegen.setTitle(QCoreApplication.translate("MainWindow", u"Invoegen", None))
         self.menuOpmaak.setTitle(QCoreApplication.translate("MainWindow", u"Opmaak", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
+        self.menuMemo.setTitle(QCoreApplication.translate("MainWindow", u"Memo", None))
     # retranslateUi
 

@@ -11,6 +11,31 @@ from PyQt6.QtGui import QTextCursor
 
 # pyuic6 -o mainwindow.py mainwindow.ui
 
+class Memo(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Memo")
+        self.setGeometry(100, 100, 600, 400)
+        loadUi("memo.ui",self)
+        self.setWindowTitle("Edith Memo")
+        self.pushButton.clicked.connect(self.zoeken_memo)
+        self.pushButton_2.clicked.connect(self.opslaan_memo)
+        self.pushButton_3.clicked.connect(self.verwijderen_memo)
+        self.pushButton_4.clicked.connect(self.close)
+
+    def opslaan_memo(self):
+        print('opslaan memo')
+
+    def zoeken_memo(self):
+        print('zoeken memo')
+
+    def verwijderen_memo(self):
+        print('verwijderen memo')
+        self.lineEdit.clear()
+        self.plainTextEdit.clear()  
+
+
+
 class ZoekenVervangenDialoog(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -146,6 +171,8 @@ class Venster(QMainWindow):
         self.actionVet.triggered.connect(self.vet)
         self.actionOnderstrepen.triggered.connect(self.onderstrepen)
 
+        self.actionOpen_memo.triggered.connect(self.open_memo)
+
         self.actionOver_Edith.triggered.connect(self.over_edith)
 
         self.maak_statusbar()
@@ -211,40 +238,38 @@ class Venster(QMainWindow):
             self.dialog_critical(str(e))
 
     def sluiten(self):
-        print("sluiten")
         sys.exit()
 
     def kopieren(self):
-        print("kopieren")
         self.textEdit.copy()
 
     def knippen(self):
-        print("knippen")
         self.textEdit.cut()
 
     def plakken(self):
-        print("plakken")
         self.textEdit.paste()
 
     def zoeken(self):
-        print("zoeken")
         if not hasattr(self, "_vind_dialoog") or self._vind_dialoog is None:
             self._vind_dialoog = ZoekenVervangenDialoog(self)
         self._vind_dialoog.show()
         self._vind_dialoog.raise_()
         self._vind_dialoog.activateWindow()
 
+    def open_memo(self):
+        print("open memo")
+        self.memo_venster = Memo()
+        self.memo_venster.show()
+
     def undo(self):
-        print("undo")
         self.textEdit.undo()
 
     def redo(self):
-        print("redo")
         self.textEdit.redo()
 
     def alles_selecteren(self):
-        print("alles selecteren")
-
+        self.textEdit.selectAll()
+        
     def gebruik_donkere_modus(self):
         self.setStyleSheet('''
             QWidget{
