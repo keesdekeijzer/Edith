@@ -19,6 +19,21 @@ import sqlite3
 
 DATABASE = "/home/kees/Data/memo.db"
 
+
+class MemoLijst(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Memo Lijst")
+        self.setGeometry(100, 100, 600, 400)
+        loadUi("memolijst.ui",self)
+        self.setWindowTitle("Edith Memo Lijst")
+        
+        self.actionSluiten.triggered.connect(self.sluiten)
+
+    def sluiten(self):
+        self.close()
+
+
 class Memo(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -245,6 +260,8 @@ class Venster(QMainWindow):
 
         self.actionAlles_selecteren.triggered.connect(self.alles_selecteren)
 
+        self.actionNormaliseren.triggered.connect(self.normaliseren)
+
         self.actiondonkere_modus.triggered.connect(self.gebruik_donkere_modus)
         self.actionlichte_modus.triggered.connect(self.gebruik_lichte_modus)
 
@@ -265,6 +282,7 @@ class Venster(QMainWindow):
         self.actionOnderstrepen.triggered.connect(self.onderstrepen)
 
         self.actionOpen_memo.triggered.connect(self.open_memo)
+        self.actionMemo_lijst.triggered.connect(self.memo_lijst)
 
         self.actionOver_Edith.triggered.connect(self.over_edith)
 
@@ -398,6 +416,11 @@ class Venster(QMainWindow):
         self.memo_venster = Memo()
         self.memo_venster.show()
 
+    def memo_lijst(self):
+        print("memo lijst")
+        self.memo_lijst_venster = MemoLijst()
+        self.memo_lijst_venster.show()
+
     def undo(self):
         self.textEdit.undo()
 
@@ -406,6 +429,15 @@ class Venster(QMainWindow):
 
     def alles_selecteren(self):
         self.textEdit.selectAll()
+
+    def normaliseren(self):
+        print("normaliseren")
+        # split() function divides the string into a list of words and join() reassembles them with a specified separator.
+        cursor = self.textEdit.textCursor()
+        if cursor.hasSelection():
+            selectie = cursor.selectedText()
+            genormaliseerde_tekst = '.\n'.join(selectie.split('.'))
+            cursor.insertText(genormaliseerde_tekst)
 
     def gebruik_donkere_modus(self):
         self.setStyleSheet('''
