@@ -2,7 +2,7 @@ import sys
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog, QDialog, QMessageBox, QStatusBar, QLabel
-from PyQt6.QtWidgets import QLineEdit, QHBoxLayout, QVBoxLayout
+from PyQt6.QtWidgets import QLineEdit, QHBoxLayout, QVBoxLayout, QListWidgetItem, QListWidget, QAbstractItemView
 # from mainwindow import Ui_MainWindow
 from PyQt6.uic import loadUi
 import datetime
@@ -24,11 +24,67 @@ class MemoLijst(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Memo Lijst")
-        self.setGeometry(100, 100, 600, 400)
-        loadUi("memolijst.ui",self)
+        self.setGeometry(100, 100, 600, 600)
+        loadUi("memolijst4.ui",self)
         self.setWindowTitle("Edith Memo Lijst")
+
+
+        print('toon memo lijst')
+        # Use 'with' to connect to the SQLite database
+        with sqlite3.connect(DATABASE) as connection:
+            cursor = connection.cursor()
+
+            # SQL command to select all memos
+            select_query = '''
+            SELECT * FROM memos;
+            '''
+
+            # Execute the SQL command
+            cursor.execute(select_query)
+
+            # Fetch all records
+            memos = cursor.fetchall()
+
+            # Print each memo
+            labels = []
+            for memo in memos:
+
+                labels.append(QLabel(f"<b>{memo[0]}</b><br>{memo[1]}"))
+
+            vulling = ''
+            for label in labels:
+                vulling += f"{label.text()}<br><br>"
+            self.textBrowser.setHtml(vulling)
+            self.textBrowser.moveCursor(QTextCursor.MoveOperation.Start)
+
+        self.actionExporteren.triggered.connect(self.exporteren)
         
-        self.actionSluiten.triggered.connect(self.sluiten)
+        self.actionSluiten.triggered.connect(self.sluiten   )
+
+    def exporteren(self):
+        print('exporteren memo lijst')
+        # Use 'with' to connect to the SQLite database
+        with sqlite3.connect(DATABASE) as connection:
+            cursor = connection.cursor()
+
+            # SQL command to select all memos
+            select_query = '''
+            SELECT * FROM memos;
+            '''
+
+            # Execute the SQL command
+            cursor.execute(select_query)
+
+            # Fetch all records
+            memos = cursor.fetchall()
+
+            # Print each memo
+            for memo in memos:
+                print(f'Titel: {memo[0]}')
+                print(f'Inhoud: {memo[1]}')
+                print('---------------------')
+
+        QMessageBox.about(self, "Geëxporteerd", "Het is gelukt. Memo lijst is geëxporteerd naar de console.")
 
     def sluiten(self):
         self.close()
