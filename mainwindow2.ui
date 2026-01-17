@@ -45,6 +45,8 @@
     <addaction name="actionOpslaan_als_Markdown"/>
     <addaction name="separator"/>
     <addaction name="actionOpen"/>
+    <addaction name="actionOpen_HTML"/>
+    <addaction name="actionOpen_Markdown"/>
     <addaction name="separator"/>
     <addaction name="actionAfdrukken"/>
     <addaction name="separator"/>
@@ -223,7 +225,7 @@
   </action>
   <action name="actionOpen">
    <property name="text">
-    <string>Open</string>
+    <string>Open Tekst</string>
    </property>
    <property name="shortcut">
     <string extracomment="Ctrl+O">Ctrl+O</string>
@@ -381,6 +383,16 @@
   <action name="actionMemo_lijst">
    <property name="text">
     <string>Memo lijst</string>
+   </property>
+  </action>
+  <action name="actionOpen_HTML">
+   <property name="text">
+    <string>Open HTML</string>
+   </property>
+  </action>
+  <action name="actionOpen_Markdown">
+   <property name="text">
+    <string>Open Markdown</string>
    </property>
   </action>
  </widget>

@@ -19,6 +19,7 @@ import sqlite3
 
 DATABASE = "/home/kees/Data/memo.db"
 
+DARKMODE = False
 
 class MemoLijst(QMainWindow):
     def __init__(self):
@@ -27,6 +28,8 @@ class MemoLijst(QMainWindow):
         self.setGeometry(100, 100, 600, 600)
         loadUi("memolijst4.ui",self)
         self.setWindowTitle("Edith Memo Lijst")
+
+        self.check_dark_mode()
 
 
         print('toon memo lijst')
@@ -60,6 +63,24 @@ class MemoLijst(QMainWindow):
         self.actionExporteren.triggered.connect(self.exporteren)
         
         self.actionSluiten.triggered.connect(self.sluiten   )
+
+    def check_dark_mode(self):
+        dm = DARKMODE
+        print(f'donkere modus voor memo lijst: {dm}')
+        if dm:
+            self.setStyleSheet('''
+                QMenuBar::item:selected{
+                    color: #000000;}
+                QWidget{
+                    background-color: rgb(33,33,33);
+                    color: #FFFFFF;
+                    }
+                QTextBrowser{
+                    background-color: rgb(46,46,46);
+                    color: #FFFFFF;
+                    }''')
+        else:
+            self.setStyleSheet("")
 
     def exporteren(self):
         print('exporteren memo lijst')
@@ -97,6 +118,9 @@ class Memo(QMainWindow):
         self.setGeometry(100, 100, 600, 400)
         loadUi("memo.ui",self)
         self.setWindowTitle("Edith Memo")
+
+        self.check_dark_mode()
+
         self.pushButton.clicked.connect(self.zoeken_memo)
         self.pushButton_2.clicked.connect(self.opslaan_memo)
         self.pushButton_3.clicked.connect(self.verwijderen_memo)
@@ -113,6 +137,26 @@ class Memo(QMainWindow):
                 )
             ''')
             self.connection.commit()   
+
+    def check_dark_mode(self):
+        dm = DARKMODE
+        print(f'donkere modus voor memo: {dm}')
+        if dm:
+            self.setStyleSheet('''
+                QWidget{
+                    background-color: rgb(33,33,33);
+                    color: #FFFFFF;
+                    }
+                QTextEdit{
+                    background-color: rgb(46,46,46);
+                }
+                QPushButton{
+                    background-color: rgb(70,70,70);
+                    color: #FFFFFF;
+                    }
+                QLineEdit{
+                    background-color: rgb(46,46,46);
+                    }''')
 
     def opslaan_memo(self):
         print('opslaan memo')
@@ -204,6 +248,16 @@ class ZoekenVervangenDialoog(QDialog):
         self.setWindowTitle("Zoeken en Vervangen")
         self.setModal(False)
         self.parent = parent
+
+        if DARKMODE:
+            self.setStyleSheet('''
+                QWidget{
+                    background-color: rgb(33,33,33);
+                    color: #FFFFFF;
+                    }
+                QTextEdit{
+                    background-color: rgb(46,46,46);
+                    }''')
 
         self.vind_label = QLabel("Vind:")
         self.vind_invoer = QLineEdit()
@@ -299,6 +353,8 @@ class Venster(QMainWindow):
         self.actionOpslaan_als_Markdown.triggered.connect(self.opslaan_als_markdown)
 
         self.actionOpen.triggered.connect(self.open)
+        self.actionOpen_HTML.triggered.connect(self.open_HTML)
+        self.actionOpen_Markdown.triggered.connect(self.open_Markdown)
 
         self.actionAfdrukken.triggered.connect(self.afdrukken)
 
@@ -438,6 +494,32 @@ class Venster(QMainWindow):
         except Exception as e:
             self.dialog_critical(str(e))
 
+    def open_HTML(self):
+        print("open html")
+        try:
+            fname = QFileDialog.getOpenFileName(self, 'Open HTML bestand', 'Documenten', 'HTML bestanden (*.html *.htm);;Alle bestanden (*)')
+            print(fname[0]) # gekozen bestand
+            self.setWindowTitle(fname[0])
+            with open(fname[0], 'r') as f:
+                htmltext = f.read()
+                self.textEdit.setHtml(htmltext)
+            self.current_path = fname[0]
+        except Exception as e:
+            self.dialog_critical(str(e))
+
+    def open_Markdown(self):
+        print("open markdown")
+        try:
+            fname = QFileDialog.getOpenFileName(self, 'Open Markdown bestand', 'Documenten', 'Markdown bestanden (*.md *.markdown);;Alle bestanden (*)')
+            print(fname[0]) # gekozen bestand
+            self.setWindowTitle(fname[0])
+            with open(fname[0], 'r') as f:
+                mdtext = f.read()
+                self.textEdit.setMarkdown(mdtext)
+            self.current_path = fname[0]
+        except Exception as e:
+            self.dialog_critical(str(e))
+
     def afdrukken(self):
         print("afdrukken")
         try:
@@ -496,6 +578,9 @@ class Venster(QMainWindow):
             cursor.insertText(genormaliseerde_tekst)
 
     def gebruik_donkere_modus(self):
+        global DARKMODE
+        DARKMODE = True
+        print(f"donkere modus: {DARKMODE}")
         self.setStyleSheet('''
             QWidget{
                 background-color: rgb(33,33,33);
@@ -510,6 +595,7 @@ class Venster(QMainWindow):
             ''')
 
     def gebruik_lichte_modus(self):
+        DARKMODE = False
         self.setStyleSheet("")
 
         # laat het venster zien
