@@ -2,7 +2,7 @@ import sys
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QMainWindow, QPushButton, QFileDialog, QDialog, QMessageBox, QStatusBar, QLabel
-from PyQt6.QtWidgets import QLineEdit, QHBoxLayout, QVBoxLayout, QListWidgetItem, QListWidget, QAbstractItemView
+from PyQt6.QtWidgets import QLineEdit, QHBoxLayout, QVBoxLayout, QInputDialog
 # from mainwindow import Ui_MainWindow
 from PyQt6.uic import loadUi
 import datetime
@@ -12,14 +12,13 @@ import sqlite3
 
 # pyuic6 -o mainwindow.py mainwindow.ui
 
-# todo waarschuwing als bestand niet is opgeslagen 
-
-
 # Pad naar de database : instelbaar maken?
 
 DATABASE = "/home/kees/Data/memo.db"
 
 DARKMODE = False
+
+OPSLAGLOCATIE = "/home/kees/Data/"
 
 class MemoLijst(QMainWindow):
     def __init__(self):
@@ -31,6 +30,8 @@ class MemoLijst(QMainWindow):
 
         self.check_dark_mode()
 
+        self.docs = OPSLAGLOCATIE
+
 
         print('toon memo lijst')
         # Use 'with' to connect to the SQLite database
@@ -39,7 +40,7 @@ class MemoLijst(QMainWindow):
 
             # SQL command to select all memos
             select_query = '''
-            SELECT * FROM memos;
+            SELECT * FROM memos ORDER BY title;
             '''
 
             # Execute the SQL command
@@ -84,13 +85,14 @@ class MemoLijst(QMainWindow):
 
     def exporteren(self):
         print('exporteren memo lijst')
+        export = []
         # Use 'with' to connect to the SQLite database
         with sqlite3.connect(DATABASE) as connection:
             cursor = connection.cursor()
 
             # SQL command to select all memos
             select_query = '''
-            SELECT * FROM memos;
+            SELECT * FROM memos ORDER BY title;
             '''
 
             # Execute the SQL command
@@ -104,11 +106,29 @@ class MemoLijst(QMainWindow):
                 print(f'Titel: {memo[0]}')
                 print(f'Inhoud: {memo[1]}')
                 print('---------------------')
+                export.append(f"Titel:{memo[0]}\nInhoud: {memo[1]}\n---------------------\n")
+        
+        export_tekst = '\n'.join(export)
+        try:
+            pathname = QFileDialog.getSaveFileName(self, 'Bestand opslaan', self.docs, 'Tekst bestanden (*.txt)')
+            print(pathname[0])
+            filetext = export_tekst
+            with open(pathname[0], 'w') as f:
+                f.write(filetext)
+            self.current_path = pathname[0]
+            QMessageBox.about(self, "Geëxporteerd", "Het is gelukt. Memo lijst is geëxporteerd naar een bestand.")
+        except Exception as e:
+            self.dialog_critical(str(e))
 
-        QMessageBox.about(self, "Geëxporteerd", "Het is gelukt. Memo lijst is geëxporteerd naar de console.")
 
     def sluiten(self):
         self.close()
+
+    def dialog_critical(self, s):
+        dlg = QMessageBox(self)
+        dlg.setText(s)
+        dlg.setIcon(QMessageBox.Icon.Critical)
+        dlg.show()
 
 
 class Memo(QMainWindow):
@@ -345,6 +365,10 @@ class Venster(QMainWindow):
         self.current_path = None
         self.current_fontsize = 12
         self.is_vet = False
+        self.unsaved_changes = False
+        self.docs = OPSLAGLOCATIE
+
+        self.textEdit.textChanged.connect(self.on_text_changed)
 
         self.actionNieuw.triggered.connect(self.nieuw)
         self.actionOpslaan.triggered.connect(self.opslaan)
@@ -388,6 +412,8 @@ class Venster(QMainWindow):
         self.actionDatum.triggered.connect(self.datum)
         self.actionTijd.triggered.connect(self.tijd)
         self.actionVandaag.triggered.connect(self.vandaag)
+        self.actionmd_afbeelding.triggered.connect(self.md_afbeelding)
+        self.actionmd_link.triggered.connect(self.md_link)
 
         self.actionCursief.triggered.connect(self.cursief)
         self.actionVet.triggered.connect(self.vet)
@@ -399,6 +425,24 @@ class Venster(QMainWindow):
         self.actionOver_Edith.triggered.connect(self.over_edith)
 
         self.maak_statusbar()
+
+    def on_text_changed(self):
+        self.unsaved_changes = True
+        self.statusbar.showMessage("Onopgeslagen wijzigingen")
+
+    def closeEvent(self, event):
+        if self.unsaved_changes:
+            reply = QMessageBox.question(self, 'Waarschuwing', 
+                                         'Huidig bestand is nog niet opgeslagen. Wilt u de wijzigingen opslaan?')
+            if reply == QMessageBox.StandardButton.Yes:
+                self.opslaan()
+                event.accept()
+            elif reply == QMessageBox.StandardButton.No:
+                event.accept()
+            else:
+                event.ignore()
+        else:
+            event.accept()
 
     def maak_statusbar(self):
         self.statusbar = QStatusBar()
@@ -420,6 +464,8 @@ class Venster(QMainWindow):
                 try:
                     with open(self.current_path, 'w') as f:
                         f.write(htmltext)
+                    self.unsaved_changes = False
+                    self.statusbar.showMessage("Bestand opgeslagen")
                 except Exception as e:
                     self.dialog_critical(str(e))
                 return
@@ -429,6 +475,8 @@ class Venster(QMainWindow):
                 try:
                     with open(self.current_path, 'w') as f:
                         f.write(mdtext)
+                    self.unsaved_changes = False
+                    self.statusbar.showMessage("Bestand opgeslagen")
                 except Exception as e:
                     self.dialog_critical(str(e))
                 return
@@ -441,6 +489,8 @@ class Venster(QMainWindow):
             try:
                 with open(self.current_path, 'w') as f:
                     f.write(filetext)
+                self.unsaved_changes = False
+                self.statusbar.showMessage("Bestand opgeslagen")
             except Exception as e:
                 self.dialog_critical(str(e))
         else:
@@ -449,74 +499,86 @@ class Venster(QMainWindow):
     def opslaan_als(self):
         print("opslaan als")
         try:
-            pathname = QFileDialog.getSaveFileName(self, 'Bestand opslaan', 'Documenten', 'Tekst bestanden (*.txt)')
+            pathname = QFileDialog.getSaveFileName(self, 'Bestand opslaan', self.docs, 'Tekst bestanden (*.txt)')
             print(pathname[0])
             filetext = self.textEdit.toPlainText()
             with open(pathname[0], 'w') as f:
                 f.write(filetext)
             self.current_path = pathname[0]
             self.setWindowTitle(pathname[0])
+            self.unsaved_changes = False
+            self.statusbar.showMessage("Bestand opgeslagen")
         except Exception as e:
             self.dialog_critical(str(e))
 
     def opslaan_als_html(self):
         print("opslaan als html")
         try:
-            pathname = QFileDialog.getSaveFileName(self, 'Bestand opslaan als HTML', 'Documenten', 'HTML bestanden (*.html *.htm)')
+            pathname = QFileDialog.getSaveFileName(self, 'Bestand opslaan als HTML', self.docs, 'HTML bestanden (*.html *.htm)')
             print(pathname[0])
             htmltext = self.textEdit.toHtml()
             with open(pathname[0], 'w') as f:
                 f.write(htmltext)
+            self.unsaved_changes = False
+            self.statusbar.showMessage("Bestand opgeslagen")
         except Exception as e:
             self.dialog_critical(str(e))
 
     def opslaan_als_markdown(self):
         print("opslaan als markdown")
         try:
-            pathname = QFileDialog.getSaveFileName(self, 'Bestand opslaan als Markdown', 'Documenten', 'Markdown bestanden (*.md *.markdown)')
+            pathname = QFileDialog.getSaveFileName(self, 'Bestand opslaan als Markdown', self.docs, 'Markdown bestanden (*.md *.markdown)')
             print(pathname[0])
             mdtext = self.textEdit.toMarkdown()
             with open(pathname[0], 'w') as f:
                 f.write(mdtext)
+            self.unsaved_changes = False
+            self.statusbar.showMessage("Bestand opgeslagen")
         except Exception as e:
             self.dialog_critical(str(e))
 
     def open(self):
         print("open")
         try:
-            fname = QFileDialog.getOpenFileName(self, 'Open bestand', 'Documenten', 'Tekst bestanden (*.txt *.md *.markdown *.html *.htm);;Alle bestanden (*)')
+            fname = QFileDialog.getOpenFileName(self, 'Open bestand', self.docs, 'Tekst bestanden (*.txt *.md *.markdown *.html *.htm);;Alle bestanden (*)')
             print(fname[0]) # gekozen bestand
             self.setWindowTitle(fname[0])
             with open(fname[0], 'r') as f:
                 filetext = f.read()
                 self.textEdit.setText(filetext)
             self.current_path = fname[0]
+            self.unsaved_changes = False
+            self.statusbar.showMessage("Bestand geopend")
         except Exception as e:
             self.dialog_critical(str(e))
 
     def open_HTML(self):
         print("open html")
         try:
-            fname = QFileDialog.getOpenFileName(self, 'Open HTML bestand', 'Documenten', 'HTML bestanden (*.html *.htm);;Alle bestanden (*)')
+            fname = QFileDialog.getOpenFileName(self, 'Open HTML bestand', self.docs, 'HTML bestanden (*.html *.htm);;Alle bestanden (*)')
             print(fname[0]) # gekozen bestand
             self.setWindowTitle(fname[0])
             with open(fname[0], 'r') as f:
                 htmltext = f.read()
                 self.textEdit.setHtml(htmltext)
             self.current_path = fname[0]
+            self.unsaved_changes = False
+            self.statusbar.showMessage("Bestand geopend")
         except Exception as e:
             self.dialog_critical(str(e))
 
     def open_Markdown(self):
         print("open markdown")
         try:
-            fname = QFileDialog.getOpenFileName(self, 'Open Markdown bestand', 'Documenten', 'Markdown bestanden (*.md *.markdown);;Alle bestanden (*)')
+            fname = QFileDialog.getOpenFileName(self, 'Open Markdown bestand', self.docs, 'Markdown bestanden (*.md *.markdown);;Alle bestanden (*)')
             print(fname[0]) # gekozen bestand
             self.setWindowTitle(fname[0])
             with open(fname[0], 'r') as f:
                 mdtext = f.read()
                 self.textEdit.setMarkdown(mdtext)
             self.current_path = fname[0]
+            self.unsaved_changes = False
+            self.statusbar.showMessage("Bestand geopend")
         except Exception as e:
             self.dialog_critical(str(e))
 
@@ -531,7 +593,7 @@ class Venster(QMainWindow):
             self.dialog_critical(str(e))
 
     def sluiten(self):
-        sys.exit()
+        self.close()
 
     def kopieren(self):
         self.textEdit.copy()
@@ -574,8 +636,13 @@ class Venster(QMainWindow):
         cursor = self.textEdit.textCursor()
         if cursor.hasSelection():
             selectie = cursor.selectedText()
-            genormaliseerde_tekst = '.\n'.join(selectie.split('.'))
+            tussenstap = ' '.join(selectie.split('\n'))
+            #print(f'tussenstap: {tussenstap}')
+            genormaliseerde_tekst = '.\n'.join(tussenstap.split('.'))
+            #print(f'genormaliseerde tekst:\n {genormaliseerde_tekst}')
             cursor.insertText(genormaliseerde_tekst)
+
+
 
     def gebruik_donkere_modus(self):
         global DARKMODE
@@ -625,19 +692,39 @@ class Venster(QMainWindow):
         nu = datetime.datetime.now()
         datum_nu = nu.strftime("%Y-%m-%d")
         print(f"datum: {datum_nu}")
-        self.textEdit.insertPlainText(datum_nu)
+        #self.textEdit.insertPlainText(datum_nu)
+        self.textEdit.insertHtml("<span style='color: #00FF00;'>"+datum_nu+"</span> ")
 
     def tijd(self):
         nu = datetime.datetime.now()
         tijd_nu = nu.strftime("%H:%M")
         print(f"tijd: {tijd_nu}")
-        self.textEdit.insertPlainText(tijd_nu)
+        #self.textEdit.insertPlainText(tijd_nu)
+        self.textEdit.insertHtml("<span style='color: #FF0000;'>"+tijd_nu+"</span> ")
 
     def vandaag(self):
         nu = datetime.datetime.now()
         datum_nu = nu.strftime("%Y-%m-%d")
         print(f"datum: {datum_nu}")
         self.textEdit.insertPlainText(datum_nu)
+
+    def md_afbeelding(self):
+        print("md afbeelding")
+        pathname = QFileDialog.getOpenFileName(self, 'Afbeelding openen', self.docs, 'Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)')
+        print(pathname[0]) # gekozen bestand
+        if pathname[0]:
+            bestandsnaam = pathname[0].split('/')[-1]
+            md_code = f"![{bestandsnaam}]({pathname[0]})"
+            self.textEdit.insertPlainText(md_code)
+
+    def md_link(self):
+        print("md link")
+        url, ok = QInputDialog.getText(self, 'Markdown Link', 'Voer de URL in:')
+        if ok and url:
+            link_tekst, ok2 = QInputDialog.getText(self, 'Link Tekst', 'Voer de link tekst in:')
+            if ok2 and link_tekst:
+                md_code = f"[{link_tekst}]({url})"
+                self.textEdit.insertPlainText(md_code)
 
     def cursief(self):
         print(f"cursief: {self.textEdit.fontItalic()}")
@@ -657,7 +744,7 @@ class Venster(QMainWindow):
             self.textEdit.setFontWeight(800)
 
     def onderstrepen(self):
-        print("onderstrepen")
+        print(f"onderstrepen: {self.textEdit.fontUnderline()}")
         if self.textEdit.fontUnderline():
             self.textEdit.setFontUnderline(False)
         else:

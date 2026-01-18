@@ -93,6 +93,8 @@
     </property>
     <addaction name="actionTijd"/>
     <addaction name="actionVandaag"/>
+    <addaction name="actionmd_afbeelding"/>
+    <addaction name="actionmd_link"/>
    </widget>
    <widget class="QMenu" name="menuOpmaak">
     <property name="title">
@@ -393,6 +395,16 @@
   <action name="actionOpen_Markdown">
    <property name="text">
     <string>Open Markdown</string>
+   </property>
+  </action>
+  <action name="actionmd_afbeelding">
+   <property name="text">
+    <string>md afbeelding</string>
+   </property>
+  </action>
+  <action name="actionmd_link">
+   <property name="text">
+    <string>md link</string>
    </property>
   </action>
  </widget>
