@@ -68,6 +68,8 @@
     <addaction name="actionAlles_selecteren"/>
     <addaction name="separator"/>
     <addaction name="actionNormaliseren"/>
+    <addaction name="separator"/>
+    <addaction name="actionPlatte_Tekst"/>
    </widget>
    <widget class="QMenu" name="menuBeeld">
     <property name="title">
@@ -116,6 +118,7 @@
     </property>
     <addaction name="actionOpen_memo"/>
     <addaction name="actionMemo_lijst"/>
+    <addaction name="actionNotitie"/>
    </widget>
    <addaction name="menuAlgemeen"/>
    <addaction name="menuBewerken"/>
@@ -401,10 +404,32 @@
    <property name="text">
     <string>md afbeelding</string>
    </property>
+   <property name="shortcut">
+    <string>Alt+A</string>
+   </property>
   </action>
   <action name="actionmd_link">
    <property name="text">
     <string>md link</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+L</string>
+   </property>
+  </action>
+  <action name="actionPlatte_Tekst">
+   <property name="text">
+    <string>Platte Tekst</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+P</string>
+   </property>
+  </action>
+  <action name="actionNotitie">
+   <property name="text">
+    <string>Notitie</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+N</string>
    </property>
   </action>
  </widget>
