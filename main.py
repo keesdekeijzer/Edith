@@ -14,12 +14,8 @@ import sqlite3
 
 # Pad naar de database : instelbaar maken?
 
+from config import DATABASE, DARKMODE, OPSLAGLOCATIE
 
-DATABASE = "/home/kees/Data/memo.db"
-
-DARKMODE = False
-
-OPSLAGLOCATIE = "/home/kees/Data/"
 
 class Notitie(QMainWindow):
     def __init__(self):
@@ -49,6 +45,8 @@ class Notitie(QMainWindow):
         self.actionRedo.triggered.connect(self.redo)
 
         self.actionAlles_selecteren.triggered.connect(self.alles_selecteren)
+
+        self.actionNormaliseren.triggered.connect(self.normaliseren)
 
         #self.actiondonkere_modus.triggered.connect(self.gebruik_donkere_modus)
         #self.actionlichte_modus.triggered.connect(self.gebruik_lichte_modus)
@@ -162,6 +160,14 @@ class Notitie(QMainWindow):
 
     def alles_selecteren(self):
         self.plainTextEdit.selectAll()
+
+    def normaliseren(self):
+        print("normaliseren")
+        cursor = self.plainTextEdit.textCursor()
+        volledige_tekst = self.plainTextEdit.toPlainText()
+        tussenstap = ' '.join(volledige_tekst.split('\n'))
+        genormaliseerde_tekst = '.\n'.join(tussenstap.split('.'))
+        self.plainTextEdit.setPlainText(genormaliseerde_tekst)
 
     def datum(self): # todo
         nu = datetime.datetime.now()
@@ -817,17 +823,11 @@ class Venster(QMainWindow):
 
     def normaliseren(self):
         print("normaliseren")
-        # split() function divides the string into a list of words and join() reassembles them with a specified separator.
-        cursor = self.textEdit.textCursor()
-        if cursor.hasSelection():
-            selectie = cursor.selectedText()
-            tussenstap = ' '.join(selectie.split('\n'))
-            #print(f'tussenstap: {tussenstap}')
-            genormaliseerde_tekst = '.\n'.join(tussenstap.split('.'))
-            #print(f'genormaliseerde tekst:\n {genormaliseerde_tekst}')
-            cursor.insertText(genormaliseerde_tekst)
-
-
+        selectie = self.textEdit.toPlainText()
+        tussenstap = ' '.join(selectie.split('\n'))
+        genormaliseerde_tekst = '.\n'.join(tussenstap.split('.'))
+        self.textEdit.clear()
+        self.textEdit.insertPlainText(genormaliseerde_tekst)
 
     def gebruik_donkere_modus(self):
         global DARKMODE

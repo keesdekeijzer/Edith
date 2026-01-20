@@ -67,6 +67,8 @@
     <addaction name="separator"/>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
+    <addaction name="separator"/>
+    <addaction name="actionNormaliseren"/>
    </widget>
    <widget class="QMenu" name="menuInvoegen">
     <property name="title">
@@ -224,6 +226,14 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+H</string>
+   </property>
+  </action>
+  <action name="actionNormaliseren">
+   <property name="text">
+    <string>Normaliseren</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+N</string>
    </property>
   </action>
  </widget>
