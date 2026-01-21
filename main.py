@@ -25,6 +25,10 @@ class Notitie(QMainWindow):
         loadUi("plaintext.ui",self)
         self.setWindowTitle("Edith Notitie")
 
+        self.unsaved_changes = False
+        self.current_path = None
+        self.plainTextEdit.textChanged.connect(self.on_text_changed)
+
         self.check_dark_mode()
 
         self.actionNieuw.triggered.connect(self.nieuw)
@@ -48,6 +52,8 @@ class Notitie(QMainWindow):
 
         self.actionNormaliseren.triggered.connect(self.normaliseren)
 
+        self.actionGeen_hoofdletters.triggered.connect(self.geen_hoofdletters)
+
         #self.actiondonkere_modus.triggered.connect(self.gebruik_donkere_modus)
         #self.actionlichte_modus.triggered.connect(self.gebruik_lichte_modus)
 
@@ -62,6 +68,20 @@ class Notitie(QMainWindow):
 
         self.actionOver_Edith.triggered.connect(self.over_edith)
 
+    def closeEvent(self, event):
+        if self.unsaved_changes:
+            reply = QMessageBox.question(self, 'Waarschuwing', 
+                                         'Huidig bestand is nog niet opgeslagen. Wilt u de wijzigingen opslaan?')
+            if reply == QMessageBox.StandardButton.Yes:
+                self.opslaan()
+                event.accept()
+            elif reply == QMessageBox.StandardButton.No:
+                event.accept()
+            else:
+                event.ignore()
+        else:
+            event.accept()
+
     def check_dark_mode(self):
         dm = DARKMODE
         print(f'donkere modus voor memo: {dm}')
@@ -75,6 +95,10 @@ class Notitie(QMainWindow):
                     background-color: rgb(46,46,46);
                 }
                 ''')
+
+    def on_text_changed(self):
+        self.unsaved_changes = True
+        self.statusbar.showMessage("Onopgeslagen wijzigingen")
 
     def nieuw(self):
         print("nieuw")
@@ -125,6 +149,7 @@ class Notitie(QMainWindow):
             self.dialog_critical(str(e))
 
     def sluiten(self):
+
         self.close()   
 
     def kopieren(self):
@@ -168,6 +193,14 @@ class Notitie(QMainWindow):
         tussenstap = ' '.join(volledige_tekst.split('\n'))
         genormaliseerde_tekst = '.\n'.join(tussenstap.split('.'))
         self.plainTextEdit.setPlainText(genormaliseerde_tekst)
+
+    def geen_hoofdletters(self):
+        print("geen hoofdletters")
+        selectie = self.plainTextEdit.textCursor()
+        if selectie.hasSelection():
+            geselecteerde_tekst = selectie.selectedText()
+            kleine_tekst = geselecteerde_tekst.lower()
+            selectie.insertText(kleine_tekst)
 
     def datum(self): # todo
         nu = datetime.datetime.now()
@@ -588,6 +621,8 @@ class Venster(QMainWindow):
 
         self.actionPlatte_Tekst.triggered.connect(self.platteTekst)
 
+        self.actionGeen_hoofdletters.triggered.connect(self.geen_hoofdletters)
+
         self.actiondonkere_modus.triggered.connect(self.gebruik_donkere_modus)
         self.actionlichte_modus.triggered.connect(self.gebruik_lichte_modus)
 
@@ -828,6 +863,14 @@ class Venster(QMainWindow):
         genormaliseerde_tekst = '.\n'.join(tussenstap.split('.'))
         self.textEdit.clear()
         self.textEdit.insertPlainText(genormaliseerde_tekst)
+
+    def geen_hoofdletters(self):
+        print("geen hoofdletters")
+        selectie = self.textEdit.textCursor()
+        if selectie.hasSelection():
+            geselecteerde_tekst = selectie.selectedText()
+            kleine_tekst = geselecteerde_tekst.lower()
+            selectie.insertText(kleine_tekst)
 
     def gebruik_donkere_modus(self):
         global DARKMODE

@@ -69,6 +69,7 @@
     <addaction name="actionRedo"/>
     <addaction name="separator"/>
     <addaction name="actionNormaliseren"/>
+    <addaction name="actionGeen_hoofdletters"/>
    </widget>
    <widget class="QMenu" name="menuInvoegen">
     <property name="title">
@@ -234,6 +235,14 @@
    </property>
    <property name="shortcut">
     <string>Alt+N</string>
+   </property>
+  </action>
+  <action name="actionGeen_hoofdletters">
+   <property name="text">
+    <string>Geen hoofdletters</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+U</string>
    </property>
   </action>
  </widget>

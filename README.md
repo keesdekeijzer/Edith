@@ -1,3 +1,3 @@
 # Edith
 
-Begonnen met de GUI.
+Tekstbewerker met database.
