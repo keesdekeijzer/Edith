@@ -71,6 +71,7 @@
     <addaction name="separator"/>
     <addaction name="actionPlatte_Tekst"/>
     <addaction name="actionGeen_hoofdletters"/>
+    <addaction name="actionSchrift"/>
    </widget>
    <widget class="QMenu" name="menuBeeld">
     <property name="title">
@@ -439,6 +440,14 @@
    </property>
    <property name="shortcut">
     <string>Alt+U</string>
+   </property>
+  </action>
+  <action name="actionSchrift">
+   <property name="text">
+    <string>Schrift</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+S</string>
    </property>
   </action>
  </widget>

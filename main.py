@@ -162,6 +162,8 @@ class Venster(QMainWindow):
 
         self.actionGeen_hoofdletters.triggered.connect(self.geen_hoofdletters)
 
+        self.actionSchrift.triggered.connect(self.schrift)
+
         self.actiondonkere_modus.triggered.connect(self.gebruik_donkere_modus)
         self.actionlichte_modus.triggered.connect(self.gebruik_lichte_modus)
 
@@ -410,6 +412,22 @@ class Venster(QMainWindow):
             geselecteerde_tekst = selectie.selectedText()
             kleine_tekst = geselecteerde_tekst.lower()
             selectie.insertText(kleine_tekst)
+
+    def schrift(self):
+        print("0x1D4D0")
+        selectie = self.textEdit.textCursor()
+        if selectie.hasSelection():
+            geselecteerde_tekst = selectie.selectedText()
+            schrift_tekst = ''
+            for char in geselecteerde_tekst:
+                if 'A' <= char <= 'Z':
+                    schrift_char = chr(ord(char) + 0x1D4D0 - ord('A'))
+                elif 'a' <= char <= 'z':
+                    schrift_char = chr(ord(char) + 0x1D4EA - ord('a'))
+                else:
+                    schrift_char = char
+                schrift_tekst += schrift_char
+            selectie.insertText(schrift_tekst)
 
     def gebruik_donkere_modus(self):
         global configuratie
