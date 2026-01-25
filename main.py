@@ -414,7 +414,6 @@ class Venster(QMainWindow):
             selectie.insertText(kleine_tekst)
 
     def schrift(self):
-        print("0x1D4D0")
         selectie = self.textEdit.textCursor()
         if selectie.hasSelection():
             geselecteerde_tekst = selectie.selectedText()
