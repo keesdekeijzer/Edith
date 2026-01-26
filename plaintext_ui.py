@@ -64,6 +64,10 @@ class Ui_MainWindow(object):
         self.actionGeen_hoofdletters.setObjectName(u"actionGeen_hoofdletters")
         self.actionSchrift = QAction(MainWindow)
         self.actionSchrift.setObjectName(u"actionSchrift")
+        self.actionDonkere_modus = QAction(MainWindow)
+        self.actionDonkere_modus.setObjectName(u"actionDonkere_modus")
+        self.actionLichte_modus = QAction(MainWindow)
+        self.actionLichte_modus.setObjectName(u"actionLichte_modus")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.plainTextEdit = QPlainTextEdit(self.centralwidget)
@@ -85,6 +89,8 @@ class Ui_MainWindow(object):
         self.menuInvoegen.setObjectName(u"menuInvoegen")
         self.menuHelp = QMenu(self.menubar)
         self.menuHelp.setObjectName(u"menuHelp")
+        self.menuBeeld = QMenu(self.menubar)
+        self.menuBeeld.setObjectName(u"menuBeeld")
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
@@ -92,6 +98,7 @@ class Ui_MainWindow(object):
 
         self.menubar.addAction(self.menuAlgemeen.menuAction())
         self.menubar.addAction(self.menuBewerken.menuAction())
+        self.menubar.addAction(self.menuBeeld.menuAction())
         self.menubar.addAction(self.menuInvoegen.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
         self.menuAlgemeen.addAction(self.actionNieuw)
@@ -120,6 +127,8 @@ class Ui_MainWindow(object):
         self.menuInvoegen.addAction(self.actionmd_link)
         self.menuInvoegen.addAction(self.actionmd_afbeelding)
         self.menuHelp.addAction(self.actionOver_Edith)
+        self.menuBeeld.addAction(self.actionDonkere_modus)
+        self.menuBeeld.addAction(self.actionLichte_modus)
 
         self.retranslateUi(MainWindow)
 
@@ -208,9 +217,12 @@ class Ui_MainWindow(object):
 #if QT_CONFIG(shortcut)
         self.actionSchrift.setShortcut(QCoreApplication.translate("MainWindow", u"Alt+S", None))
 #endif // QT_CONFIG(shortcut)
+        self.actionDonkere_modus.setText(QCoreApplication.translate("MainWindow", u"Donkere modus", None))
+        self.actionLichte_modus.setText(QCoreApplication.translate("MainWindow", u"Lichte modus", None))
         self.menuAlgemeen.setTitle(QCoreApplication.translate("MainWindow", u"Algemeen", None))
         self.menuBewerken.setTitle(QCoreApplication.translate("MainWindow", u"Bewerken", None))
         self.menuInvoegen.setTitle(QCoreApplication.translate("MainWindow", u"Invoegen", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
+        self.menuBeeld.setTitle(QCoreApplication.translate("MainWindow", u"Beeld", None))
     # retranslateUi
 

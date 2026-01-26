@@ -54,6 +54,9 @@ class Notitie(QMainWindow):
 
         self.actionSchrift.triggered.connect(self.schrift)
 
+        self.actionDonkere_modus.triggered.connect(self.donkere_modus)
+        self.actionLichte_modus.triggered.connect(self.lichte_modus)
+
         #self.actiondonkere_modus.triggered.connect(self.gebruik_donkere_modus)
         #self.actionlichte_modus.triggered.connect(self.gebruik_lichte_modus)
 
@@ -246,6 +249,22 @@ class Notitie(QMainWindow):
             bestandsnaam = pathname[0].split('/')[-1]
             md_code = f"[{bestandsnaam}]({pathname[0]})"
             self.plainTextEdit.insertPlainText(md_code)
+
+    def donkere_modus(self):
+        configuratie["darkmode"] = True
+        self.setStyleSheet('''
+            QWidget{
+                background-color: rgb(33,33,33);
+                color: #FFFFFF;
+                }
+            QPlainTextEdit{
+                background-color: rgb(46,46,46);
+            }
+            ''')
+        
+    def lichte_modus(self):
+        configuratie["darkmode"] = False
+        self.setStyleSheet('')
 
     def over_edith(self):
         QMessageBox.about(self, "Over Edith", "Edith versie 1.0\nEen eenvoudige teksteditor met memo functionaliteit.")

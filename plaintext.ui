@@ -88,8 +88,16 @@
     </property>
     <addaction name="actionOver_Edith"/>
    </widget>
+   <widget class="QMenu" name="menuBeeld">
+    <property name="title">
+     <string>Beeld</string>
+    </property>
+    <addaction name="actionDonkere_modus"/>
+    <addaction name="actionLichte_modus"/>
+   </widget>
    <addaction name="menuAlgemeen"/>
    <addaction name="menuBewerken"/>
+   <addaction name="menuBeeld"/>
    <addaction name="menuInvoegen"/>
    <addaction name="menuHelp"/>
   </widget>
@@ -252,6 +260,16 @@
    </property>
    <property name="shortcut">
     <string>Alt+S</string>
+   </property>
+  </action>
+  <action name="actionDonkere_modus">
+   <property name="text">
+    <string>Donkere modus</string>
+   </property>
+  </action>
+  <action name="actionLichte_modus">
+   <property name="text">
+    <string>Lichte modus</string>
    </property>
   </action>
  </widget>
