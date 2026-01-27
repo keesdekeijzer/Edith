@@ -20,6 +20,32 @@ from memo import Memo
 
 from config import configuratie
 
+BLAUW = '''
+            QWidget{
+                background-color: #00BFFF;
+                color: #000000;
+                }
+            QTextEdit{
+                background-color: #000BFF;
+                color: #FFFFFF;
+                }
+            QMenuBar::item:selected{
+                color: #000000;
+                }               
+            '''
+
+DONKER = '''
+            QWidget{
+                background-color: rgb(33,33,33);
+                color: #FFFFFF;
+                }
+            QTextEdit{
+                background-color: rgb(46,46,46);
+                }
+            QMenuBar::item:selected{
+                color: #000000;
+                }               
+            '''
 
 
 class ZoekenVervangenDialoog(QDialog):
@@ -130,6 +156,8 @@ class Venster(QMainWindow):
 
         self.textEdit.textChanged.connect(self.on_text_changed)
 
+        self.check_dark_mode()
+
         self.actionNieuw.triggered.connect(self.nieuw)
         self.actionOpslaan.triggered.connect(self.opslaan)
         self.actionOpslaan_als.triggered.connect(self.opslaan_als)
@@ -166,6 +194,7 @@ class Venster(QMainWindow):
 
         self.actiondonkere_modus.triggered.connect(self.gebruik_donkere_modus)
         self.actionlichte_modus.triggered.connect(self.gebruik_lichte_modus)
+        self.actionblauwe_modus.triggered.connect(self.gebruik_blauwe_modus)
 
         self.actionletters_groter.triggered.connect(self.letters_groter)
         self.actionletters_kleiner.triggered.connect(self.letters_kleiner)
@@ -430,27 +459,21 @@ class Venster(QMainWindow):
 
     def gebruik_donkere_modus(self):
         global configuratie
-        configuratie["darkmode"] = True
+        configuratie["darkmode"] = 'dark'
         print(f"donkere modus: {configuratie['darkmode']}")
-        self.setStyleSheet('''
-            QWidget{
-                background-color: rgb(33,33,33);
-                color: #FFFFFF;
-                }
-            QTextEdit{
-                background-color: rgb(46,46,46);
-                }
-            QMenuBar::item:selected{
-                color: #000000;
-                }               
-            ''')
+        self.setStyleSheet(DONKER)
 
     def gebruik_lichte_modus(self):
-        configuratie["darkmode"] = False
+        configuratie["darkmode"] = 'light'
         self.setStyleSheet("")
 
         # laat het venster zien
         self.show()
+
+    def gebruik_blauwe_modus(self):
+        configuratie["darkmode"] = 'blue'
+        print(f"blauwe modus: {configuratie['darkmode']}")
+        self.setStyleSheet(BLAUW)
 
     def letters_groter(self):
         self.current_fontsize +=1
@@ -553,6 +576,16 @@ class Venster(QMainWindow):
         dlg.setText(s)
         dlg.setIcon(QMessageBox.Icon.Critical)
         dlg.show()
+
+    def check_dark_mode(self):
+        dm = configuratie["darkmode"]
+        print(f'donkere modus voor hoofdvenster: {dm}')
+        if dm == 'dark':
+            self.setStyleSheet(DONKER)
+        elif dm == 'light':
+            self.setStyleSheet('')
+        elif dm == 'blue':
+            self.setStyleSheet(BLAUW)
 
 
 if __name__ == "__main__":

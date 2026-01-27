@@ -14,6 +14,26 @@ from PyQt6.QtGui import QTextCursor
 
 from config import configuratie
 
+BLAUW = '''
+                QWidget{
+                    background-color: #00BFFF;
+                    color: #000000;
+                    }
+                QPlainTextEdit{  
+                    background-color: #000BFF;
+                    color: #FFFFFF;
+                    }
+                '''
+
+DONKER = '''
+            QWidget{
+                background-color: rgb(33,33,33);
+                color: #FFFFFF;
+                }
+            QPlainTextEdit{
+                background-color: rgb(46,46,46);
+            }
+            '''
 
 class Notitie(QMainWindow):
     def __init__(self):
@@ -56,6 +76,7 @@ class Notitie(QMainWindow):
 
         self.actionDonkere_modus.triggered.connect(self.donkere_modus)
         self.actionLichte_modus.triggered.connect(self.lichte_modus)
+        self.actionblauwe_modus.triggered.connect(self.blauwe_modus)
 
         #self.actiondonkere_modus.triggered.connect(self.gebruik_donkere_modus)
         #self.actionlichte_modus.triggered.connect(self.gebruik_lichte_modus)
@@ -88,16 +109,24 @@ class Notitie(QMainWindow):
     def check_dark_mode(self):
         dm = configuratie["darkmode"]
         print(f'donkere modus voor memo: {dm}')
-        if dm:
-            self.setStyleSheet('''
-                QWidget{
-                    background-color: rgb(33,33,33);
-                    color: #FFFFFF;
-                    }
-                QPlainTextEdit{
-                    background-color: rgb(46,46,46);
-                }
-                ''')
+        if dm == 'dark':
+            self.setStyleSheet(DONKER)
+        elif dm == 'light':
+            self.setStyleSheet('')
+        elif dm == 'blue':
+            self.setStyleSheet(BLAUW)
+
+    def blauwe_modus(self):
+        configuratie["darkmode"] = 'blue'
+        self.setStyleSheet(BLAUW)
+
+    def lichte_modus(self):
+        configuratie["darkmode"] = 'light'
+        self.setStyleSheet('')
+
+    def donkere_modus(self):
+        configuratie["darkmode"] = 'dark'
+        self.setStyleSheet(DONKER)
 
     def on_text_changed(self):
         self.unsaved_changes = True

@@ -94,6 +94,7 @@
     </property>
     <addaction name="actionDonkere_modus"/>
     <addaction name="actionLichte_modus"/>
+    <addaction name="actionblauwe_modus"/>
    </widget>
    <addaction name="menuAlgemeen"/>
    <addaction name="menuBewerken"/>
@@ -270,6 +271,11 @@
   <action name="actionLichte_modus">
    <property name="text">
     <string>Lichte modus</string>
+   </property>
+  </action>
+  <action name="actionblauwe_modus">
+   <property name="text">
+    <string>blauwe modus</string>
    </property>
   </action>
  </widget>

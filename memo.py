@@ -10,6 +10,43 @@ import sqlite3
 
 from config import configuratie
 
+DONKER = '''
+                QWidget{
+                    background-color: rgb(33,33,33);
+                    color: #FFFFFF;
+                    }
+                QPlainTextEdit{
+                    background-color: rgb(46,46,46);
+                    color: #FFFFFF;
+                }
+                QPushButton{
+                    background-color: rgb(70,70,70);
+                    color: #FFFFFF;
+                    }
+                QLineEdit{
+                    background-color: rgb(46,46,46);
+                    color: #FFFFFF;
+                    }'''
+
+BLAUW = '''
+                QWidget{
+                    background-color: #00BFFF;
+                    color: #000000;
+                    }
+                QPlainTextEdit{
+                    background-color: #000BFF;
+                    color: #FFFFFF;
+                }
+                QPushButton{
+                    background-color: #000BFF;
+                    color: #000000;
+                    }
+                QLineEdit{
+                    background-color: #000BFF;
+                    color: #FFFFFF;
+                    }'''
+
+
 class Memo(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -40,22 +77,13 @@ class Memo(QMainWindow):
     def check_dark_mode(self):
         dm = configuratie["darkmode"]
         print(f'donkere modus voor memo: {dm}')
-        if dm:
-            self.setStyleSheet('''
-                QWidget{
-                    background-color: rgb(33,33,33);
-                    color: #FFFFFF;
-                    }
-                QTextEdit{
-                    background-color: rgb(46,46,46);
-                }
-                QPushButton{
-                    background-color: rgb(70,70,70);
-                    color: #FFFFFF;
-                    }
-                QLineEdit{
-                    background-color: rgb(46,46,46);
-                    }''')
+        if dm == 'dark':
+            self.setStyleSheet(DONKER)
+        elif dm == 'light':
+            self.setStyleSheet('')
+        elif dm == 'blue':
+            self.setStyleSheet(BLAUW)
+
 
     def opslaan_memo(self):
         print('opslaan memo')

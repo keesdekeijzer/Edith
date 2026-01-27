@@ -79,6 +79,8 @@
     </property>
     <addaction name="actionlichte_modus"/>
     <addaction name="actiondonkere_modus"/>
+    <addaction name="actionblauwe_modus"/>
+    <addaction name="separator"/>
     <addaction name="actionletters_groter"/>
     <addaction name="actionletters_kleiner"/>
    </widget>
@@ -448,6 +450,11 @@
    </property>
    <property name="shortcut">
     <string>Alt+S</string>
+   </property>
+  </action>
+  <action name="actionblauwe_modus">
+   <property name="text">
+    <string>blauwe modus</string>
    </property>
   </action>
  </widget>
