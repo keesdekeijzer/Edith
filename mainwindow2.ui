@@ -17,9 +17,9 @@
    <widget class="QTextEdit" name="textEdit">
     <property name="geometry">
      <rect>
-      <x>0</x>
+      <x>10</x>
       <y>10</y>
-      <width>791</width>
+      <width>781</width>
       <height>531</height>
      </rect>
     </property>
@@ -83,6 +83,7 @@
     <addaction name="separator"/>
     <addaction name="actionletters_groter"/>
     <addaction name="actionletters_kleiner"/>
+    <addaction name="actionFont"/>
    </widget>
    <widget class="QMenu" name="menuUitlijnen">
     <property name="title">
@@ -118,7 +119,7 @@
    </widget>
    <widget class="QMenu" name="menuMemo">
     <property name="title">
-     <string>Memo</string>
+     <string>Apps</string>
     </property>
     <addaction name="actionOpen_memo"/>
     <addaction name="actionMemo_lijst"/>
@@ -455,6 +456,14 @@
   <action name="actionblauwe_modus">
    <property name="text">
     <string>blauwe modus</string>
+   </property>
+  </action>
+  <action name="actionFont">
+   <property name="text">
+    <string>Font</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+F</string>
    </property>
   </action>
  </widget>

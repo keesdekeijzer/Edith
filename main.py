@@ -198,6 +198,7 @@ class Venster(QMainWindow):
 
         self.actionletters_groter.triggered.connect(self.letters_groter)
         self.actionletters_kleiner.triggered.connect(self.letters_kleiner)
+        self.actionFont.triggered.connect(self.font_aanpassen)
 
         self.actionRechts.triggered.connect(self.rechts)
         self.actionMidden.triggered.connect(self.midden)
@@ -482,6 +483,12 @@ class Venster(QMainWindow):
     def letters_kleiner(self):
         self.current_fontsize -=1
         self.textEdit.setFontPointSize(self.current_fontsize)
+
+    def font_aanpassen(self):
+        from PyQt6.QtWidgets import QFontDialog
+        font, ok = QFontDialog.getFont()
+        if ok:
+            self.textEdit.setCurrentFont(font)
 
     def rechts(self):
         self.textEdit.setAlignment(Qt.AlignmentFlag.AlignRight)

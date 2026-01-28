@@ -12,6 +12,28 @@ import sqlite3
 
 from config import configuratie
 
+DONKER = '''
+                QMenuBar::item:selected{
+                    color: #000000;}
+                QWidget{
+                    background-color: rgb(33,33,33);
+                    color: #FFFFFF;
+                    }
+                QTextBrowser{
+                    background-color: rgb(46,46,46);
+                    color: #FFFFFF;
+                    }'''
+
+BLAUW = '''
+                QWidget{
+                    background-color: #00BFFF;
+                    color: #000000;
+                    }
+                QTextBrowser{
+                    background-color: #000BFF;
+                    color: #FFFFFF;
+                }'''
+
 class MemoLijst(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -60,18 +82,10 @@ class MemoLijst(QMainWindow):
     def check_dark_mode(self):
         dm = configuratie["darkmode"]
         print(f'donkere modus voor memo lijst: {dm}')
-        if dm:
-            self.setStyleSheet('''
-                QMenuBar::item:selected{
-                    color: #000000;}
-                QWidget{
-                    background-color: rgb(33,33,33);
-                    color: #FFFFFF;
-                    }
-                QTextBrowser{
-                    background-color: rgb(46,46,46);
-                    color: #FFFFFF;
-                    }''')
+        if dm == 'dark':
+            self.setStyleSheet(DONKER)
+        elif dm == 'blue':
+            self.setStyleSheet(BLAUW)
         else:
             self.setStyleSheet("")
 
