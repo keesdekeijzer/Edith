@@ -78,6 +78,8 @@ class Notitie(QMainWindow):
         self.actionLichte_modus.triggered.connect(self.lichte_modus)
         self.actionblauwe_modus.triggered.connect(self.blauwe_modus)
 
+        self.actionFont.triggered.connect(self.font_aanpassen)
+
         #self.actiondonkere_modus.triggered.connect(self.gebruik_donkere_modus)
         #self.actionlichte_modus.triggered.connect(self.gebruik_lichte_modus)
 
@@ -127,6 +129,12 @@ class Notitie(QMainWindow):
     def donkere_modus(self):
         configuratie["darkmode"] = 'dark'
         self.setStyleSheet(DONKER)
+
+    def font_aanpassen(self):
+        from PyQt6.QtWidgets import QFontDialog
+        font, ok = QFontDialog.getFont()
+        if ok:
+            self.plainTextEdit.setFont(font)
 
     def on_text_changed(self):
         self.unsaved_changes = True

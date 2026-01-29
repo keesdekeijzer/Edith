@@ -95,6 +95,8 @@
     <addaction name="actionDonkere_modus"/>
     <addaction name="actionLichte_modus"/>
     <addaction name="actionblauwe_modus"/>
+    <addaction name="separator"/>
+    <addaction name="actionFont"/>
    </widget>
    <addaction name="menuAlgemeen"/>
    <addaction name="menuBewerken"/>
@@ -276,6 +278,14 @@
   <action name="actionblauwe_modus">
    <property name="text">
     <string>blauwe modus</string>
+   </property>
+  </action>
+  <action name="actionFont">
+   <property name="text">
+    <string>Font</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+F</string>
    </property>
   </action>
  </widget>

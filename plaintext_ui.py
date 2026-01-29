@@ -70,6 +70,8 @@ class Ui_MainWindow(object):
         self.actionLichte_modus.setObjectName(u"actionLichte_modus")
         self.actionblauwe_modus = QAction(MainWindow)
         self.actionblauwe_modus.setObjectName(u"actionblauwe_modus")
+        self.actionFont = QAction(MainWindow)
+        self.actionFont.setObjectName(u"actionFont")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.plainTextEdit = QPlainTextEdit(self.centralwidget)
@@ -132,6 +134,8 @@ class Ui_MainWindow(object):
         self.menuBeeld.addAction(self.actionDonkere_modus)
         self.menuBeeld.addAction(self.actionLichte_modus)
         self.menuBeeld.addAction(self.actionblauwe_modus)
+        self.menuBeeld.addSeparator()
+        self.menuBeeld.addAction(self.actionFont)
 
         self.retranslateUi(MainWindow)
 
@@ -223,6 +227,10 @@ class Ui_MainWindow(object):
         self.actionDonkere_modus.setText(QCoreApplication.translate("MainWindow", u"Donkere modus", None))
         self.actionLichte_modus.setText(QCoreApplication.translate("MainWindow", u"Lichte modus", None))
         self.actionblauwe_modus.setText(QCoreApplication.translate("MainWindow", u"blauwe modus", None))
+        self.actionFont.setText(QCoreApplication.translate("MainWindow", u"Font", None))
+#if QT_CONFIG(shortcut)
+        self.actionFont.setShortcut(QCoreApplication.translate("MainWindow", u"Alt+F", None))
+#endif // QT_CONFIG(shortcut)
         self.menuAlgemeen.setTitle(QCoreApplication.translate("MainWindow", u"Algemeen", None))
         self.menuBewerken.setTitle(QCoreApplication.translate("MainWindow", u"Bewerken", None))
         self.menuInvoegen.setTitle(QCoreApplication.translate("MainWindow", u"Invoegen", None))
