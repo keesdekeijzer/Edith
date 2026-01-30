@@ -457,6 +457,9 @@ class Venster(QMainWindow):
                     schrift_char = char
                 schrift_tekst += schrift_char
             selectie.insertText(schrift_tekst)
+        else:
+            print("Geen tekst geselecteerd voor schrift conversie")
+            QMessageBox.about(self, "Geen Selectie", "Selecteer eerst tekst om om te zetten naar schrift.")
 
     def gebruik_donkere_modus(self):
         global configuratie
