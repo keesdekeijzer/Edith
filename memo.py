@@ -30,8 +30,8 @@ DONKER = '''
 
 BLAUW = '''
                 QWidget{
-                    background-color: #00BFFF;
-                    color: #000000;
+                    background-color: #0000AA;
+                    color: #FFFFFF;
                     }
                 QPlainTextEdit{
                     background-color: #000BFF;

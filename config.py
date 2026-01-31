@@ -2,7 +2,7 @@
 
 DATABASE = "/home/kees/Data/memo.db"
 
-DARKMODE = 'dark'  # opties: 'dark', 'light', 'blue'
+DARKMODE = 'blue'  # opties: 'dark', 'light', 'blue'
 
 OPSLAGLOCATIE = "/home/kees/Data/"
 

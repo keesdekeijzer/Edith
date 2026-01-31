@@ -26,8 +26,8 @@ DONKER = '''
 
 BLAUW = '''
                 QWidget{
-                    background-color: #00BFFF;
-                    color: #000000;
+                    background-color: #0000AA;
+                    color: #FFFFFF;
                     }
                 QTextBrowser{
                     background-color: #000BFF;
