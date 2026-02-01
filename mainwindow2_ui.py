@@ -309,7 +309,7 @@ class Ui_MainWindow(object):
 #endif // QT_CONFIG(shortcut)
         self.actionOver_Efith.setText(QCoreApplication.translate("MainWindow", u"Over Edith", None))
         self.actionOver_Edith.setText(QCoreApplication.translate("MainWindow", u"Over Edith", None))
-        self.actionOpen_memo.setText(QCoreApplication.translate("MainWindow", u"Open memo", None))
+        self.actionOpen_memo.setText(QCoreApplication.translate("MainWindow", u"Memo", None))
         self.actionOpslaan_als_HTML.setText(QCoreApplication.translate("MainWindow", u"Opslaan als HTML", None))
 #if QT_CONFIG(shortcut)
         self.actionOpslaan_als_HTML.setShortcut(QCoreApplication.translate("MainWindow", u"Ctrl+H", None))

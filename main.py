@@ -105,13 +105,12 @@ class ZoekenVervangenDialoog(QDialog):
         if not text:
             return
         gevonden = self.parent.textEdit.find(text)
-        if not gevonden:
+        if  gevonden == False:
             # weer naar boven
             cursor = self.parent.textEdit.textCursor()
             cursor.movePosition(QTextCursor.MoveOperation.Start)
             self.parent.textEdit.setTextCursor(cursor)
             gevonden = self.parent.textEdit.find(text)
-            print(f"'{text}' niet gevonden")
             if not gevonden:
                 term = text.replace('<','&lt;')
                 term = term.replace('>','&gt;')

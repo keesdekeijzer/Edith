@@ -363,7 +363,7 @@
   </action>
   <action name="actionOpen_memo">
    <property name="text">
-    <string>Open memo</string>
+    <string>Memo</string>
    </property>
   </action>
   <action name="actionOpslaan_als_HTML">
