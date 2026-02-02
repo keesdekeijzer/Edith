@@ -1,17 +1,16 @@
 import sys
 
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QRect, QSize
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from PyQt6.QtWidgets import QInputDialog
-# from mainwindow import Ui_MainWindow
 from PyQt6.uic import loadUi
 import datetime
-from PyQt6.QtGui import QTextCursor
+from PyQt6.QtGui import QTextCursor, QPainter, QColor, QTextFormat
 
-# pyuic6 -o mainwindow.py mainwindow.ui
+from PyQt6.QtWidgets import QWidget, QPlainTextEdit, QVBoxLayout, QTextEdit
 
-# Pad naar de database : instelbaar maken?
 
+# instellingen importeren
 from config import configuratie
 
 BLAUW = '''
@@ -35,6 +34,7 @@ DONKER = '''
             }
             '''
 
+
 class Notitie(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -48,6 +48,7 @@ class Notitie(QMainWindow):
         self.plainTextEdit.textChanged.connect(self.on_text_changed)
 
         self.check_dark_mode()
+
 
         self.actionNieuw.triggered.connect(self.nieuw)
         self.actionOpslaan.triggered.connect(self.opslaan)
@@ -79,16 +80,10 @@ class Notitie(QMainWindow):
         self.actionblauwe_modus.triggered.connect(self.blauwe_modus)
 
         self.actionFont.triggered.connect(self.font_aanpassen)
-
-        #self.actiondonkere_modus.triggered.connect(self.gebruik_donkere_modus)
-        #self.actionlichte_modus.triggered.connect(self.gebruik_lichte_modus)
-
-        #self.actionletters_groter.triggered.connect(self.letters_groter)
-        #self.actionletters_kleiner.triggered.connect(self.letters_kleiner)
+        self.actionLettergrootte.triggered.connect(self.font_aanpassen)
 
         self.actionDatum.triggered.connect(self.datum)
         self.actionTijd.triggered.connect(self.tijd)
-        #self.actionVandaag.triggered.connect(self.vandaag)
         self.actionmd_afbeelding.triggered.connect(self.md_afbeelding)
         self.actionmd_link.triggered.connect(self.md_link)
 
@@ -314,6 +309,8 @@ class Notitie(QMainWindow):
         dlg.setText(s)
         dlg.setIcon(QMessageBox.Icon.Critical)
         dlg.show()
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

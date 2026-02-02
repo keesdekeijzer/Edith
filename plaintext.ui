@@ -25,7 +25,8 @@
     </property>
     <property name="font">
      <font>
-      <family>Monospace</family>
+      <family>DejaVu Sans Mono</family>
+      <pointsize>14</pointsize>
      </font>
     </property>
     <property name="centerOnScroll">
@@ -97,6 +98,7 @@
     <addaction name="actionblauwe_modus"/>
     <addaction name="separator"/>
     <addaction name="actionFont"/>
+    <addaction name="actionLettergrootte"/>
    </widget>
    <addaction name="menuAlgemeen"/>
    <addaction name="menuBewerken"/>
@@ -286,6 +288,14 @@
    </property>
    <property name="shortcut">
     <string>Alt+F</string>
+   </property>
+  </action>
+  <action name="actionLettergrootte">
+   <property name="text">
+    <string>Lettergrootte</string>
+   </property>
+   <property name="shortcut">
+    <string>Alt+L</string>
    </property>
   </action>
  </widget>
