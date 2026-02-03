@@ -29,8 +29,24 @@
       <pointsize>14</pointsize>
      </font>
     </property>
+    <property name="styleSheet">
+     <string notr="true">padding-left:30px;</string>
+    </property>
     <property name="centerOnScroll">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QWidget" name="regelnummers" native="true">
+    <property name="geometry">
+     <rect>
+      <x>15</x>
+      <y>19</y>
+      <width>21</width>
+      <height>501</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(222, 221, 218);</string>
     </property>
    </widget>
   </widget>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'plaintext.ui'
+## Form generated from reading UI file 'plaintext2.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -85,7 +85,12 @@ class Ui_MainWindow(object):
         font.setFamilies([u"DejaVu Sans Mono"])
         font.setPointSize(14)
         self.plainTextEdit.setFont(font)
+        self.plainTextEdit.setStyleSheet(u"padding-left:30px;")
         self.plainTextEdit.setCenterOnScroll(True)
+        self.regelnummers = QWidget(self.centralwidget)
+        self.regelnummers.setObjectName(u"regelnummers")
+        self.regelnummers.setGeometry(QRect(15, 19, 21, 501))
+        self.regelnummers.setStyleSheet(u"background-color: rgb(222, 221, 218);")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")

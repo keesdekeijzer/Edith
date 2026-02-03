@@ -14,6 +14,7 @@ from notitie import Notitie
 from memolijst import MemoLijst
 from memo import Memo
 
+
 # pyuic6 -o mainwindow.py mainwindow.ui
 
 # Pad naar de database : instelbaar maken?

@@ -1,17 +1,20 @@
 import sys
 
-from PyQt6.QtCore import Qt, QRect, QSize
+#from PyQt6.QtCore import Qt, QRect, QSize
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from PyQt6.QtWidgets import QInputDialog
 from PyQt6.uic import loadUi
 import datetime
 from PyQt6.QtGui import QTextCursor, QPainter, QColor, QTextFormat
 
-from PyQt6.QtWidgets import QWidget, QPlainTextEdit, QVBoxLayout, QTextEdit
+#from PyQt6.QtWidgets import QWidget, QPlainTextEdit, QVBoxLayout, QTextEdit
 
 
 # instellingen importeren
 from config import configuratie
+
+
+
 
 BLAUW = '''
                 QWidget{
@@ -40,7 +43,7 @@ class Notitie(QMainWindow):
         super().__init__()
         self.setWindowTitle("Memo")
         self.setGeometry(100, 100, 600, 400)
-        loadUi("plaintext.ui",self)
+        loadUi("plaintext2.ui",self)
         self.setWindowTitle("Edith Notitie")
 
         self.unsaved_changes = False
@@ -86,6 +89,7 @@ class Notitie(QMainWindow):
         self.actionTijd.triggered.connect(self.tijd)
         self.actionmd_afbeelding.triggered.connect(self.md_afbeelding)
         self.actionmd_link.triggered.connect(self.md_link)
+        self.actionif_name_main.triggered.connect(self.if_name_main)
 
         self.actionOver_Edith.triggered.connect(self.over_edith)
 
@@ -266,6 +270,9 @@ class Notitie(QMainWindow):
         tijd_nu = nu.strftime("%H:%M")
         print(f"tijd: {tijd_nu}")
         self.plainTextEdit.insertPlainText(tijd_nu)
+
+    def if_name_main(self):
+        self.plainTextEdit.insertPlainText("if__name__ == '__main__':\n    ")   
 
     def md_afbeelding(self):
         print("md afbeelding")
