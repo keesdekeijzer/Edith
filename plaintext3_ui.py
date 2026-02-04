@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'plaintext2.ui'
+## Form generated from reading UI file 'plaintext3.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.2
 ##
@@ -17,13 +17,14 @@ from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
     QPainter, QPalette, QPixmap, QRadialGradient,
     QTransform)
 from PySide6.QtWidgets import (QApplication, QMainWindow, QMenu, QMenuBar,
-    QPlainTextEdit, QSizePolicy, QStatusBar, QWidget)
+    QPlainTextEdit, QSizePolicy, QStatusBar, QVBoxLayout,
+    QWidget)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
-        MainWindow.resize(800, 600)
+        MainWindow.resize(1200, 800)
         self.actionNieuw = QAction(MainWindow)
         self.actionNieuw.setObjectName(u"actionNieuw")
         self.actionOpen = QAction(MainWindow)
@@ -78,19 +79,23 @@ class Ui_MainWindow(object):
         self.actionif_name_main.setObjectName(u"actionif_name_main")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
-        self.plainTextEdit = QPlainTextEdit(self.centralwidget)
+        self.verticalLayoutWidget = QWidget(self.centralwidget)
+        self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
+        self.verticalLayoutWidget.setGeometry(QRect(9, 9, 1181, 750))
+        self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
+        self.verticalLayout.setSpacing(0)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.plainTextEdit = QPlainTextEdit(self.verticalLayoutWidget)
         self.plainTextEdit.setObjectName(u"plainTextEdit")
-        self.plainTextEdit.setGeometry(QRect(13, 19, 761, 521))
         font = QFont()
-        font.setFamilies([u"DejaVu Sans Mono"])
+        font.setFamilies([u"Monospace"])
         font.setPointSize(14)
+        font.setBold(True)
         self.plainTextEdit.setFont(font)
-        self.plainTextEdit.setStyleSheet(u"padding-left:30px;")
-        self.plainTextEdit.setCenterOnScroll(True)
-        self.regelnummers = QWidget(self.centralwidget)
-        self.regelnummers.setObjectName(u"regelnummers")
-        self.regelnummers.setGeometry(QRect(15, 19, 21, 501))
-        self.regelnummers.setStyleSheet(u"background-color: rgb(222, 221, 218);")
+
+        self.verticalLayout.addWidget(self.plainTextEdit)
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")

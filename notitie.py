@@ -2,11 +2,11 @@ import sys
 
 #from PyQt6.QtCore import Qt, QRect, QSize
 from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
-from PyQt6.QtWidgets import QInputDialog
+from PyQt6.QtWidgets import QInputDialog, QTextEdit, QWidget
 from PyQt6.uic import loadUi
 import datetime
 from PyQt6.QtGui import QTextCursor, QPainter, QColor, QTextFormat
-
+from PyQt6.QtCore import Qt, QRect, QSize
 #from PyQt6.QtWidgets import QWidget, QPlainTextEdit, QVBoxLayout, QTextEdit
 
 
@@ -37,13 +37,24 @@ DONKER = '''
             }
             '''
 
+class LineNumberArea(QWidget):
+    def __init__(self, notitie):
+        super().__init__(notitie)
+        self.notitie = notitie
+
+    def sizeHint(self):
+        return QSize(self.notitie.line_number_area_width(), 0)
+
+    def paintEvent(self, event):
+        self.notitie.line_number_area_paint_event(event)
 
 class Notitie(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Memo")
-        self.setGeometry(100, 100, 600, 400)
-        loadUi("plaintext2.ui",self)
+        
+        loadUi("plaintext3.ui",self)
+        #self.setGeometry(100, 100, 1200, 800)
         self.setWindowTitle("Edith Notitie")
 
         self.unsaved_changes = False
@@ -51,6 +62,8 @@ class Notitie(QMainWindow):
         self.plainTextEdit.textChanged.connect(self.on_text_changed)
 
         self.check_dark_mode()
+
+        self.regelnummers = LineNumberArea(self)
 
 
         self.actionNieuw.triggered.connect(self.nieuw)
@@ -92,6 +105,78 @@ class Notitie(QMainWindow):
         self.actionif_name_main.triggered.connect(self.if_name_main)
 
         self.actionOver_Edith.triggered.connect(self.over_edith)
+
+        print(self.regelnummers.sizeHint())
+
+        print(self.line_number_area_width())
+        self.plainTextEdit.blockCountChanged.connect(self.update_line_number_area_width)
+        self.plainTextEdit.updateRequest.connect(self.update_line_number_area)
+        self.plainTextEdit.cursorPositionChanged.connect(self.highlight_current_line)
+
+        self.update_line_number_area_width(0)
+
+    def line_number_area_width(self):
+        digits = len(str(self.plainTextEdit.blockCount()))
+        space = 30 + self.plainTextEdit.fontMetrics().horizontalAdvance('9') * digits
+        return space
+
+    def update_line_number_area_width(self, _):
+        # Set viewport margins: left, top, right, bottom
+        #self.plainTextEdit.setViewportMargins(self.line_number_area_width(), 20, 10, 20)
+        self.plainTextEdit.setViewportMargins(50, 15, 10, 25)
+
+    def update_line_number_area(self, rect, dy):
+        # Ensure that updateRequest is handled safely
+        if dy != 0:
+            self.regelnummers.scroll(0, dy)
+        else:
+            self.regelnummers.update(0, rect.y(), self.regelnummers.width(), rect.height())
+
+        # Ensure the area updates correctly if required
+        if rect.contains(self.plainTextEdit.viewport().rect()):
+            self.update_line_number_area_width(0)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        cr = self.contentsRect()
+        # Set the geometry of the window: x, y, width, height
+        self.regelnummers.setGeometry(QRect(cr.left()+20, cr.top()+50, self.line_number_area_width(), cr.height()-100))
+
+    def line_number_area_paint_event(self, event):
+        painter = QPainter(self.regelnummers)
+        #painter.fillRect(event.rect(), Qt.GlobalColor.lightGray)
+
+        block = self.plainTextEdit.firstVisibleBlock()
+        block_number = block.blockNumber()
+        top = self.plainTextEdit.blockBoundingGeometry(block).translated(self.plainTextEdit.contentOffset()).top()
+        bottom = top + self.plainTextEdit.blockBoundingRect(block).height()
+
+        while block.isValid() and top <= event.rect().bottom():
+            if block.isVisible() and bottom >= event.rect().top():
+                number = str(block_number + 1)
+                painter.setPen(Qt.GlobalColor.black)
+                painter.drawText(-3, int(top), self.regelnummers.width(), self.fontMetrics().height(),
+                                 Qt.AlignmentFlag.AlignRight, number)
+
+            block = block.next()
+            top = bottom
+            bottom = top + self.plainTextEdit.blockBoundingRect(block).height()
+            block_number += 1
+
+
+    def highlight_current_line(self):
+        extra_selections = []
+
+        selection = QTextEdit.ExtraSelection()
+        line_color = QColor(Qt.GlobalColor.yellow).lighter(160)
+        selection.format.setBackground(line_color)
+        selection.cursor = self.plainTextEdit.textCursor()
+        selection.cursor.clearSelection()
+        extra_selections.append(selection)
+
+        self.plainTextEdit.setExtraSelections(extra_selections)
+
+
 
     def closeEvent(self, event):
         if self.unsaved_changes:

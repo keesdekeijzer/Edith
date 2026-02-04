@@ -17,15 +17,15 @@
    <widget class="QPlainTextEdit" name="plainTextEdit">
     <property name="geometry">
      <rect>
-      <x>13</x>
-      <y>19</y>
+      <x>15</x>
+      <y>5</y>
       <width>761</width>
       <height>521</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>DejaVu Sans Mono</family>
+      <family>Monospace</family>
       <pointsize>14</pointsize>
      </font>
     </property>
