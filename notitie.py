@@ -225,6 +225,11 @@ class Notitie(QMainWindow):
         self.statusbar.showMessage("Onopgeslagen wijzigingen")
 
     def nieuw(self):
+        if self.unsaved_changes:
+            reply = QMessageBox.question(self, 'Waarschuwing', 
+                                         'Huidig bestand is nog niet opgeslagen. Wilt u de wijzigingen opslaan?')
+            if reply == QMessageBox.StandardButton.Yes:
+                self.opslaan()
         print("nieuw")
         self.plainTextEdit.clear()
         self.setWindowTitle("Geen naam")
@@ -259,6 +264,11 @@ class Notitie(QMainWindow):
             self.dialog_critical(str(e))
 
     def open(self):
+        if self.unsaved_changes:
+            reply = QMessageBox.question(self, 'Waarschuwing', 
+                                         'Huidig bestand is nog niet opgeslagen. Wilt u de wijzigingen opslaan?')
+            if reply == QMessageBox.StandardButton.Yes:
+                self.opslaan()
         print("open")
         try:
             fname = QFileDialog.getOpenFileName(self, 'Open bestand', configuratie["opslaglocatie"], 'Tekst bestanden (*.txt);;Alle bestanden (*)')
