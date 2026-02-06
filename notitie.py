@@ -105,6 +105,8 @@ class Notitie(QMainWindow):
         self.actionif_name_main.triggered.connect(self.if_name_main)
 
         self.actionOver_Edith.triggered.connect(self.over_edith)
+        self.actionSneltoetsen.triggered.connect(self.sneltoetsen)
+        self.actionSneltoetsen_Alt.triggered.connect(self.sneltoetsen_alt)
 
         print(self.regelnummers.sizeHint())
 
@@ -405,6 +407,12 @@ class Notitie(QMainWindow):
 
     def over_edith(self):
         QMessageBox.about(self, "Over Edith", "Edith versie 1.0\nEen eenvoudige teksteditor met memo functionaliteit.")
+
+    def sneltoetsen(self):
+        QMessageBox.about(self, "Sneltoetsen", "Ctrl+N: Nieuw\nCtrl+O: Openen\nCtrl+S: Opslaan\nCtrl+Shift+S: Opslaan als\nCtrl+Q: Sluiten\nCtrl+C: Kopiëren\nCtrl+X: Knippen\nCtrl+V: Plakken\nCtrl+F: Zoeken\nCtrl+Z: Ongedaan maken\nCtrl+Y: Opnieuw\nCtrl+A: Alles selecteren")
+
+    def sneltoetsen_alt(self):
+        QMessageBox.about(self, "Sneltoetsen Alt", "Alt+D: Datum\nAlt+T: Tijd\nAlt+L: md link\nAlt+A: md afbeelding\nAlt+N: Normaliseren\nAlt+U: Geen hoofdletters\nAlt+S: Schrift\nAlt+F: Font\nAlt+L: Lettergrootte\n")
 
     def dialog_critical(self, s):
         dlg = QMessageBox(self)

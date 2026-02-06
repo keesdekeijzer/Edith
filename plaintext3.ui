@@ -52,7 +52,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1200</width>
      <height>23</height>
     </rect>
    </property>
@@ -102,6 +102,8 @@
      <string>Help</string>
     </property>
     <addaction name="actionOver_Edith"/>
+    <addaction name="actionSneltoetsen"/>
+    <addaction name="actionSneltoetsen_Alt"/>
    </widget>
    <widget class="QMenu" name="menuBeeld">
     <property name="title">
@@ -142,7 +144,7 @@
     <string>Opslaan</string>
    </property>
    <property name="shortcut">
-    <string>Shift+S</string>
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="actionOpslaan_als">
@@ -315,6 +317,16 @@
   <action name="actionif_name_main">
    <property name="text">
     <string>if name == main</string>
+   </property>
+  </action>
+  <action name="actionSneltoetsen">
+   <property name="text">
+    <string>Sneltoetsen</string>
+   </property>
+  </action>
+  <action name="actionSneltoetsen_Alt">
+   <property name="text">
+    <string>Sneltoetsen (Alt)</string>
    </property>
   </action>
  </widget>
