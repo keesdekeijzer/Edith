@@ -5,9 +5,8 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 from PyQt6.QtWidgets import QInputDialog, QTextEdit, QWidget
 from PyQt6.uic import loadUi
 import datetime
-from PyQt6.QtGui import QTextCursor, QPainter, QColor, QTextFormat
+from PyQt6.QtGui import QTextCursor, QPainter, QColor
 from PyQt6.QtCore import Qt, QRect, QSize
-#from PyQt6.QtWidgets import QWidget, QPlainTextEdit, QVBoxLayout, QTextEdit
 
 
 # instellingen importeren
@@ -56,6 +55,7 @@ class Notitie(QMainWindow):
         loadUi("plaintext3.ui",self)
         #self.setGeometry(100, 100, 1200, 800)
         self.setWindowTitle("Edith Notitie")
+        self.setCentralWidget(self.plainTextEdit) # plainTextEdit is de naam van het widget in de ui file
 
         self.unsaved_changes = False
         self.current_path = None
@@ -108,9 +108,6 @@ class Notitie(QMainWindow):
         self.actionSneltoetsen.triggered.connect(self.sneltoetsen)
         self.actionSneltoetsen_Alt.triggered.connect(self.sneltoetsen_alt)
 
-        print(self.regelnummers.sizeHint())
-
-        print(self.line_number_area_width())
         self.plainTextEdit.blockCountChanged.connect(self.update_line_number_area_width)
         self.plainTextEdit.updateRequest.connect(self.update_line_number_area)
         self.plainTextEdit.cursorPositionChanged.connect(self.highlight_current_line)
@@ -119,13 +116,12 @@ class Notitie(QMainWindow):
 
     def line_number_area_width(self):
         digits = len(str(self.plainTextEdit.blockCount()))
-        space = 30 + self.plainTextEdit.fontMetrics().horizontalAdvance('9') * digits
+        space = 20 + self.plainTextEdit.fontMetrics().horizontalAdvance('9') * digits
         return space
 
     def update_line_number_area_width(self, _):
         # Set viewport margins: left, top, right, bottom
-        #self.plainTextEdit.setViewportMargins(self.line_number_area_width(), 20, 10, 20)
-        self.plainTextEdit.setViewportMargins(50, 15, 10, 25)
+        self.plainTextEdit.setViewportMargins(50, 25, 10, 25)
 
     def update_line_number_area(self, rect, dy):
         # Ensure that updateRequest is handled safely
@@ -146,7 +142,7 @@ class Notitie(QMainWindow):
 
     def line_number_area_paint_event(self, event):
         painter = QPainter(self.regelnummers)
-        #painter.fillRect(event.rect(), Qt.GlobalColor.lightGray)
+        painter.fillRect(event.rect(), Qt.GlobalColor.lightGray)
 
         block = self.plainTextEdit.firstVisibleBlock()
         block_number = block.blockNumber()
@@ -196,7 +192,6 @@ class Notitie(QMainWindow):
 
     def check_dark_mode(self):
         dm = configuratie["darkmode"]
-        print(f'donkere modus voor memo: {dm}')
         if dm == 'dark':
             self.setStyleSheet(DONKER)
         elif dm == 'light':
@@ -232,16 +227,13 @@ class Notitie(QMainWindow):
                                          'Huidig bestand is nog niet opgeslagen. Wilt u de wijzigingen opslaan?')
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
-        print("nieuw")
         self.plainTextEdit.clear()
         self.setWindowTitle("Geen naam")
         self.current_path = None   
     
     def opslaan(self):
-        print("opslaan")
         if self.current_path is not None:
             filetext = self.plainTextEdit.toPlainText()
-            print(filetext)
             try:
                 with open(self.current_path, 'w') as f:
                     f.write(filetext)
@@ -252,10 +244,8 @@ class Notitie(QMainWindow):
             self.opslaan_als()
 
     def opslaan_als(self):
-        print("opslaan als")
         try:
             pathname = QFileDialog.getSaveFileName(self, 'Bestand opslaan', configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
-            print(pathname[0])
             filetext = self.plainTextEdit.toPlainText()
             with open(pathname[0], 'w') as f:
                 f.write(filetext)
@@ -271,10 +261,8 @@ class Notitie(QMainWindow):
                                          'Huidig bestand is nog niet opgeslagen. Wilt u de wijzigingen opslaan?')
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
-        print("open")
         try:
             fname = QFileDialog.getOpenFileName(self, 'Open bestand', configuratie["opslaglocatie"], 'Tekst bestanden (*.txt);;Alle bestanden (*)')
-            print(fname[0]) # gekozen bestand
             self.setWindowTitle(fname[0])
             with open(fname[0], 'r') as f:
                 filetext = f.read()
@@ -307,7 +295,6 @@ class Notitie(QMainWindow):
                 cursor.movePosition(QTextCursor.MoveOperation.Start)
                 self.plainTextEdit.setTextCursor(cursor)
                 gevonden = self.plainTextEdit.find(text)
-                print(f"'{text}' niet gevonden")
                 if not gevonden:
                     term = text.replace('<','&lt;')
                     term = term.replace('>','&gt;')
@@ -323,7 +310,6 @@ class Notitie(QMainWindow):
         self.plainTextEdit.selectAll()
 
     def normaliseren(self):
-        print("normaliseren")
         cursor = self.plainTextEdit.textCursor()
         volledige_tekst = self.plainTextEdit.toPlainText()
         tussenstap = ' '.join(volledige_tekst.split('\n'))
@@ -331,7 +317,6 @@ class Notitie(QMainWindow):
         self.plainTextEdit.setPlainText(genormaliseerde_tekst)
 
     def geen_hoofdletters(self):
-        print("geen hoofdletters")
         selectie = self.plainTextEdit.textCursor()
         if selectie.hasSelection():
             geselecteerde_tekst = selectie.selectedText()
@@ -353,37 +338,30 @@ class Notitie(QMainWindow):
                 schrift_tekst += schrift_char
             selectie.insertText(schrift_tekst)
         else:
-            print("Geen tekst geselecteerd voor schrift conversie")
             QMessageBox.about(self, "Geen Selectie", "Selecteer eerst tekst om om te zetten naar schrift.")
 
-    def datum(self): # todo
+    def datum(self):
         nu = datetime.datetime.now()
         datum_nu = nu.strftime("%Y-%m-%d")
-        print(f"datum: {datum_nu}")
         self.plainTextEdit.insertPlainText(datum_nu)
 
     def tijd(self):
         nu = datetime.datetime.now()
         tijd_nu = nu.strftime("%H:%M")
-        print(f"tijd: {tijd_nu}")
         self.plainTextEdit.insertPlainText(tijd_nu)
 
     def if_name_main(self):
         self.plainTextEdit.insertPlainText("if__name__ == '__main__':\n    ")   
 
     def md_afbeelding(self):
-        print("md afbeelding")
         pathname = QFileDialog.getOpenFileName(self, 'Afbeelding openen', configuratie["opslaglocatie"], 'Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)')
-        print(pathname[0]) # gekozen bestand
         if pathname[0]:
             bestandsnaam = pathname[0].split('/')[-1]
             md_code = f"![{bestandsnaam}]({pathname[0]})"
             self.plainTextEdit.insertPlainText(md_code)
 
     def md_link(self):
-        print("md link")
         pathname = QFileDialog.getOpenFileName(self, 'Bestand openen', configuratie["opslaglocatie"], 'Alle bestanden (*)')
-        print(pathname[0]) # gekozen bestand
         if pathname[0]:
             bestandsnaam = pathname[0].split('/')[-1]
             md_code = f"[{bestandsnaam}]({pathname[0]})"
@@ -409,10 +387,10 @@ class Notitie(QMainWindow):
         QMessageBox.about(self, "Over Edith", "Edith versie 1.0\nEen eenvoudige teksteditor met memo functionaliteit.")
 
     def sneltoetsen(self):
-        QMessageBox.about(self, "Sneltoetsen", "Ctrl+N: Nieuw\nCtrl+O: Openen\nCtrl+S: Opslaan\nCtrl+Shift+S: Opslaan als\nCtrl+Q: Sluiten\nCtrl+C: Kopiëren\nCtrl+X: Knippen\nCtrl+V: Plakken\nCtrl+F: Zoeken\nCtrl+Z: Ongedaan maken\nCtrl+Y: Opnieuw\nCtrl+A: Alles selecteren")
+        QMessageBox.about(self, "Sneltoetsen", "Ctrl+N: Nieuw\nCtrl+O: Openen\nCtrl+S: Opslaan\nCtrl+Shift+S: Opslaan als\nCtrl+Q: Sluiten\nCtrl+C: Kopiëren\nCtrl+X: Knippen\nCtrl+V: Plakken\nCtrl+F: Zoeken\nCtrl+Z: Ongedaan maken\nCtrl+Y: Opnieuw doen\nCtrl+A: Alles selecteren")
 
     def sneltoetsen_alt(self):
-        QMessageBox.about(self, "Sneltoetsen Alt", "Alt+D: Datum\nAlt+T: Tijd\nAlt+L: md link\nAlt+A: md afbeelding\nAlt+N: Normaliseren\nAlt+U: Geen hoofdletters\nAlt+S: Schrift\nAlt+F: Font\nAlt+L: Lettergrootte\n")
+        QMessageBox.about(self, "Sneltoetsen Alt", "Invoegen:\nAlt+D: Datum\nAlt+T: Tijd\nAlt+L: md link\nAlt+A: md afbeelding\nBewerken:\nAlt+N: Normaliseren\nAlt+U: Geen hoofdletters\nAlt+S: Schrift\nBeeld:\nAlt+F: Font\nAlt+L: Lettergrootte\n")
 
     def dialog_critical(self, s):
         dlg = QMessageBox(self)

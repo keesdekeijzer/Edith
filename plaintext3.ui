@@ -205,7 +205,7 @@
   </action>
   <action name="actionUndo">
    <property name="text">
-    <string>Undo</string>
+    <string>Ongedaan maken</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
@@ -213,7 +213,7 @@
   </action>
   <action name="actionRedo">
    <property name="text">
-    <string>Redo</string>
+    <string>Opnieuw doen</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+R</string>

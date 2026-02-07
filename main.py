@@ -153,6 +153,7 @@ class Venster(QMainWindow):
         self.is_vet = False
         self.unsaved_changes = False
         self.docs = configuratie["opslaglocatie"]
+        
 
         self.textEdit.textChanged.connect(self.on_text_changed)
 
