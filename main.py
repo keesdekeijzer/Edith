@@ -178,7 +178,6 @@ class Venster(QMainWindow):
         self.actionPlakken.triggered.connect(self.plakken)
 
         self.actionZoeken.triggered.connect(self.zoeken)
-        #self.actionVervangen.triggered.connect(self.vervangen)
 
         self.actionUndo.triggered.connect(self.undo)
         self.actionRedo.triggered.connect(self.redo)
@@ -197,8 +196,6 @@ class Venster(QMainWindow):
         self.actionlichte_modus.triggered.connect(self.gebruik_lichte_modus)
         self.actionblauwe_modus.triggered.connect(self.gebruik_blauwe_modus)
 
-        self.actionletters_groter.triggered.connect(self.letters_groter)
-        self.actionletters_kleiner.triggered.connect(self.letters_kleiner)
         self.actionFont.triggered.connect(self.font_aanpassen)
 
         self.actionRechts.triggered.connect(self.rechts)

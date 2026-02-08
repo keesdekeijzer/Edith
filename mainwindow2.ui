@@ -81,8 +81,6 @@
     <addaction name="actiondonkere_modus"/>
     <addaction name="actionblauwe_modus"/>
     <addaction name="separator"/>
-    <addaction name="actionletters_groter"/>
-    <addaction name="actionletters_kleiner"/>
     <addaction name="actionFont"/>
    </widget>
    <widget class="QMenu" name="menuUitlijnen">
@@ -460,7 +458,7 @@
   </action>
   <action name="actionFont">
    <property name="text">
-    <string>Font</string>
+    <string>Font en Lettergrootte</string>
    </property>
    <property name="shortcut">
     <string>Alt+F</string>

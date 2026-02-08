@@ -142,7 +142,7 @@ class Notitie(QMainWindow):
 
     def line_number_area_paint_event(self, event):
         painter = QPainter(self.regelnummers)
-        painter.fillRect(event.rect(), Qt.GlobalColor.lightGray)
+        painter.fillRect(event.rect(), Qt.GlobalColor.transparent)
 
         block = self.plainTextEdit.firstVisibleBlock()
         block_number = block.blockNumber()
