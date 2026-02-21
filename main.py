@@ -146,7 +146,8 @@ class Venster(QMainWindow):
         super().__init__()
 
         # Hoofdvenster
-        loadUi("mainwindow2.ui",self)
+        loadUi("mainwindow3.ui",self)
+        self.setCentralWidget(self.textEdit)
 
         self.current_path = None
         self.current_fontsize = 12
