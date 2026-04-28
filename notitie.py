@@ -52,7 +52,7 @@ class Notitie(QMainWindow):
         super().__init__()
         self.setWindowTitle("Memo")
         
-        loadUi("plaintext3.ui",self)
+        loadUi("plaintext4.ui",self)
         #self.setGeometry(100, 100, 1200, 800)
         self.setWindowTitle("Edith Notitie")
         self.setCentralWidget(self.plainTextEdit) # plainTextEdit is de naam van het widget in de ui file
@@ -116,7 +116,7 @@ class Notitie(QMainWindow):
 
     def line_number_area_width(self):
         digits = len(str(self.plainTextEdit.blockCount()))
-        space = 20 + self.plainTextEdit.fontMetrics().horizontalAdvance('9') * digits
+        space = 15 + self.plainTextEdit.fontMetrics().horizontalAdvance('9') * digits
         return space
 
     def update_line_number_area_width(self, _):
@@ -138,7 +138,8 @@ class Notitie(QMainWindow):
         super().resizeEvent(event)
         cr = self.contentsRect()
         # Set the geometry of the window: x, y, width, height
-        self.regelnummers.setGeometry(QRect(cr.left()+20, cr.top()+50, self.line_number_area_width(), cr.height()-100))
+        aanvulling = 25 - int(self.width() * 0.02)  # Dynamische aanvulling op basis van de breedte van het venster
+        self.regelnummers.setGeometry(QRect(cr.left()+aanvulling, cr.top()+50, self.line_number_area_width(), cr.height()-100))
 
     def line_number_area_paint_event(self, event):
         painter = QPainter(self.regelnummers)
