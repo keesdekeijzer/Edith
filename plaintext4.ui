@@ -128,11 +128,20 @@
     <addaction name="actionFont"/>
     <addaction name="actionLettergrootte"/>
    </widget>
+   <widget class="QMenu" name="menuApps">
+    <property name="title">
+     <string>Apps</string>
+    </property>
+    <addaction name="actionMemo"/>
+    <addaction name="actionMemo_lijst"/>
+   </widget>
    <addaction name="menuAlgemeen"/>
    <addaction name="menuBewerken"/>
    <addaction name="menuBeeld"/>
    <addaction name="menuInvoegen"/>
+   <addaction name="menuApps"/>
    <addaction name="menuHelp"/>
+   
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNieuw">
@@ -339,6 +348,16 @@
   <action name="actionSneltoetsen_Alt">
    <property name="text">
     <string>Sneltoetsen (Alt)</string>
+   </property>
+  </action>
+  <action name="actionMemo">
+   <property name="text">
+    <string>Memo</string>
+   </property>
+  </action>
+  <action name="actionMemo_lijst">
+   <property name="text">
+    <string>Memo lijst</string>
    </property>
   </action>
  </widget>

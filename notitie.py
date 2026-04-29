@@ -11,6 +11,8 @@ from PyQt6.QtCore import Qt, QRect, QSize
 
 # instellingen importeren
 from config import configuratie
+from memo import Memo
+from memolijst import MemoLijst
 
 
 
@@ -103,6 +105,9 @@ class Notitie(QMainWindow):
         self.actionmd_afbeelding.triggered.connect(self.md_afbeelding)
         self.actionmd_link.triggered.connect(self.md_link)
         self.actionif_name_main.triggered.connect(self.if_name_main)
+
+        self.actionMemo.triggered.connect(self.open_memo)
+        self.actionMemo_lijst.triggered.connect(self.memo_lijst)
 
         self.actionOver_Edith.triggered.connect(self.over_edith)
         self.actionSneltoetsen.triggered.connect(self.sneltoetsen)
@@ -383,6 +388,16 @@ class Notitie(QMainWindow):
     def lichte_modus(self):
         configuratie["darkmode"] = False
         self.setStyleSheet('')
+
+    def open_memo(self):
+        print("open memo")
+        self.memo_venster = Memo()
+        self.memo_venster.show()
+
+    def memo_lijst(self):
+        print("memo lijst")
+        self.memo_lijst_venster = MemoLijst()
+        self.memo_lijst_venster.show()
 
     def over_edith(self):
         QMessageBox.about(self, "Over Edith", "Edith versie 1.0\nEen eenvoudige teksteditor met memo functionaliteit.")
