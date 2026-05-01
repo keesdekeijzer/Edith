@@ -3,11 +3,13 @@ import sys
 from PyQt6.QtCore import Qt, QRect, QSize
 from PyQt6.QtGui import QPainter, QColor, QPen, QTextFormat, QFont
 from line_numbers import LineNumberArea
-
+from highlighter_python import PythonHighlighter
+from themes import LIGHT_THEME, DARK_THEME
 
 class CodeEditor(QPlainTextEdit):
     def __init__(self, parent=None):
         super().__init__(parent)
+        self.highlighter = PythonHighlighter(self.document())
 
         self.lineNumberArea = LineNumberArea(self)
 
@@ -91,4 +93,3 @@ if __name__ == "__main__":
     window.resize(800, 600)
     window.show()
     sys.exit(app.exec())
-j
