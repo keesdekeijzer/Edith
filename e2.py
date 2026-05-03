@@ -148,6 +148,46 @@ class CodeEditor(QPlainTextEdit):
             if self._handle_smart_backspace(cursor):
                 return
         
+        # auto-closing triple quotes (''' of """)
+        cursor = self.textCursor()
+        text = event.text()
+
+        # Detecteer of de gebruiker een aanhalingsteken typt en of dit het begin is van een triple quote
+        if text in ("'", "\""):
+            block = cursor.block().text()
+            print(f"Block text: '{block}'")
+            pos = cursor.positionInBlock()
+            print(f"Cursor position in block: {pos}")
+
+            # Tekst vóór de cursor
+            maxpos = max(0, pos - 2)  # Zorg ervoor dat we niet buiten de grenzen van de string gaan
+            print("maxpos:", maxpos)
+            left3 = block[maxpos:pos] + text
+            print(f"Tekst vóór cursor (inclusief getypte aanhalingsteken) left3: |{left3}|")
+
+            if left3 in ("'''", '"""'):
+                # Verwijder de drie aanhalingstekens die we net hebben getypt
+                # voorkom dat de cursor een regel terugspringt als we de aanhalingstekens verwijderen
+
+                for _ in range(3):
+                    if cursor.positionInBlock() > 0:  # Controleer of we niet aan het begin van de regel zijn
+                        cursor.deletePreviousChar()
+
+                # Voeg de triple quotes toe en plaats de cursor ertussen
+                cursor.insertText(text * 6)  # Voeg 6 aanhalingstekens toe
+
+                cursor.movePosition(QTextCursor.MoveOperation.Left, 
+                                    QTextCursor.MoveMode.KeepAnchor, 3)  # Selecteer de middelste 3 aanhalingstekens
+
+                cursor.clearSelection()  # Verwijder de selectie, zodat de cursor tussen de triple quotes staat
+                self.setTextCursor(cursor)
+                return
+
+            
+        
+
+        
+
         # auto-closing voor haakjes, aanhalingstekens, etc.
         pairs = {
             "(": ")",
