@@ -147,7 +147,56 @@ class CodeEditor(QPlainTextEdit):
         if key == Qt.Key.Key_Backspace:
             if self._handle_smart_backspace(cursor):
                 return
+        
+        # auto-closing voor haakjes, aanhalingstekens, etc.
+        pairs = {
+            "(": ")",
+            "[": "]",
+            "{": "}",
+            "\"": "\"",
+            "'": "'"
+        }
+
+        text = event.text()
+
+        # 1. Als gebruiker een openings-teken typt
+        if text in pairs:
+            closing = pairs[text]
+
+            cursor = self.textCursor()
+
+            # Als er een selectie is, omring de selectie met het paar
+            if cursor.hasSelection():
+                selected = cursor.selectedText()
+                cursor.insertText(text + selected + closing)
+                return
             
+            # Als volgende karakter al de closing is, beweeg dan eroverheen in plaats van een nieuw paar toe te voegen
+            next_char = self._char_right_of_cursor(cursor)
+            if next_char == closing:
+                cursor.movePosition(QTextCursor.MoveOperation.Right)
+                self.setTextCursor(cursor)
+                return
+            
+            # Normaal gedrag: voeg het openings-teken toe en het bijbehorende sluit-teken
+            cursor.insertText(text + closing)
+            cursor.movePosition(QTextCursor.MoveOperation.Left)
+            self.setTextCursor(cursor)
+            return
+        
+        # 2. Slimme backspace voor haakjes en aanhalingstekens
+        if key == Qt.Key.Key_Backspace:
+            cursor = self.textCursor()
+            left = self._char_left_of_cursor(cursor)
+            right = self._char_right_of_cursor(cursor)
+
+            if left in pairs and pairs[left] == right:
+                cursor.deletePreviousChar()  # Verwijder het linker-teken
+                cursor.deleteChar()          # Verwijder het rechter-teken
+                return
+
+    
+
         # Default gedrag voor andere toetsen
         super().keyPressEvent(event)
 
@@ -198,6 +247,20 @@ class CodeEditor(QPlainTextEdit):
                 cursor.deletePreviousChar()
             return True
         return False
+    
+    def _char_left_of_cursor(self, cursor):
+        pos = cursor.positionInBlock()
+        if pos == 0:
+            return ""
+        block = cursor.block().text()
+        return block[pos - 1]
+    
+    def _char_right_of_cursor(self, cursor):
+        block = cursor.block().text()
+        pos = cursor.positionInBlock()
+        if pos >= len(block):
+            return ""
+        return block[pos]
 
 class Window(QWidget):
     def __init__(self):
