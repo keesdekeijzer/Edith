@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QLa
 import sys
 from PyQt6.QtCore import Qt, QRect, QSize
 from PyQt6.QtGui import QPainter, QColor, QPen, QTextFormat, QFont
+from highlighter_markdown import MarkdownHighlighter
 from line_numbers import LineNumberArea
 from highlighter_python import PythonHighlighter
 from themes import LIGHT_THEME, DARK_THEME
@@ -23,6 +24,10 @@ class CodeEditor(QPlainTextEdit):
         self.highlightCurrentLine()
 
         self.setTabStopDistance(4 * self.fontMetrics().horizontalAdvance(' '))
+
+        # tijdelijk
+        self.set_highlighter(MarkdownHighlighter)
+        
 
     def lineNumberAreaWidth(self):
         digits = len(str(max(1, self.blockCount())))
@@ -99,6 +104,7 @@ class CodeEditor(QPlainTextEdit):
                     indent += char
                 else:
                     break
+
 
 
             # Extra inspringing voor bepaalde tekens
@@ -301,6 +307,28 @@ class CodeEditor(QPlainTextEdit):
         if pos >= len(block):
             return ""
         return block[pos]
+    
+    def set_highlighter(self, highlighter_class, **kwargs):
+        # Verwijder de oude highlighter
+        if hasattr(self, 'highlighter'):
+            self.highlighter.setDocument(None)
+
+        # Maak een nieuwe highlighter aan en koppel deze aan het document
+        self.highlighter = highlighter_class(self.document(), **kwargs)
+
+    def load_file(self, path):
+        with open(path, 'r') as f:
+            content = f.read()
+            self.setPlainText(content)
+
+        if path.endswith('.py'):
+            self.set_highlighter(PythonHighlighter)
+        elif path.endswith('.md'):
+            from highlighter_markdown import MarkdownHighlighter
+            self.set_highlighter(MarkdownHighlighter)
+        else:
+            self.set_highlighter(None)
+
 
 class Window(QWidget):
     def __init__(self):
