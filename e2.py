@@ -8,6 +8,8 @@ from highlighter_python import PythonHighlighter
 from themes import LIGHT_THEME, DARK_THEME
 from PyQt6.QtGui import QTextCursor, QKeyEvent
 from PyQt6.QtCore import Qt
+from PyQt6.QtWebEngineWidgets import QWebEngineView
+
 
 class CodeEditor(QPlainTextEdit):
     def __init__(self, parent=None):
@@ -333,7 +335,11 @@ class CodeEditor(QPlainTextEdit):
 class Window(QWidget):
     def __init__(self):
         super().__init__()
+
         layout = QVBoxLayout(self)
+
+
+        
         self.editor = CodeEditor()
         layout.addWidget(self.editor)
         self.setWindowTitle("Code Editor with Line Numbers")
