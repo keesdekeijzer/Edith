@@ -34,10 +34,45 @@ class Markdown_Editor(QWidget):
         # Initial render
         self.update_preview()
 
+        self.editor.verticalScrollBar().valueChanged.connect(self.sync_scroll_to_preview)
+
+    def _editor_scroll_ratio(self):
+        sb = self.editor.verticalScrollBar()
+        if sb.maximum() == 0:
+            return 0
+        return sb.value() / sb.maximum()
+    
+    def sync_scroll_to_preview(self):
+        ratio = self._editor_scroll_ratio()
+        
+        js = f"""
+        (function() {{
+            let h = document.body.scrollHeight - window.innerHeight;
+            window.scrollTo(0, h * {ratio});
+        }})();
+        """
+
+        self.preview.page().runJavaScript(js)
+
     def update_preview(self):
         text = self.editor.toPlainText()
         html = render_markdown(text)
+        ratio = self._editor_scroll_ratio()
+
         self.preview.setHtml(html)
+
+        # Sroll herstellen zodra de pagina geladen is
+        def after_load(_):
+            js = f"""
+            (function() {{
+                let h = document.body.scrollHeight - window.innerHeight;
+                window.scrollTo(0, h * {ratio});
+            }})();
+            """
+            self.preview.page().runJavaScript(js)
+
+        self.preview.page().loadFinished.connect(lambda _: after_load(None))
+
         self.outline_panel.update_outline(self.parse_headings())
         
     def parse_headings(self):
