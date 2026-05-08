@@ -25,6 +25,12 @@ def render_markdown(text: str) -> str:
                 margin: 2rem;
                 line-height: 1.6;
             }}
+            img {{
+                max-width: 100%;
+                height: auto;
+                border-radius: 5px;
+                margin: 1rem 0;
+            }}
             pre {{
                 background-color: #f6f8fa;
                 padding: 1rem;

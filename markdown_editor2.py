@@ -5,6 +5,8 @@ from markdown_renderer import render_markdown
 from e2 import CodeEditor
 import re
 from outline_panel import OutlinePanel 
+from pathlib import Path
+from PyQt6.QtCore import QUrl
 
 class Markdown_Editor(QWidget):
     def __init__(self):
@@ -36,6 +38,7 @@ class Markdown_Editor(QWidget):
 
         self.editor.verticalScrollBar().valueChanged.connect(self.sync_scroll_to_preview)
 
+
     def _editor_scroll_ratio(self):
         sb = self.editor.verticalScrollBar()
         if sb.maximum() == 0:
@@ -59,7 +62,14 @@ class Markdown_Editor(QWidget):
         html = render_markdown(text)
         ratio = self._editor_scroll_ratio()
 
-        self.preview.setHtml(html)
+        # bepaal directory van het huidige bestand
+        base_path = getattr(self, "current_file_path", None)
+        if base_path:
+            base_url = Path(base_path).parent.as_uri() + "/"
+        else:
+            base_url = QUrl("file:///")  # fallback
+
+        self.preview.setHtml(html, baseUrl=base_url)
 
         # Sroll herstellen zodra de pagina geladen is
         def after_load(_):
