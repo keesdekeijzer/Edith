@@ -7,10 +7,17 @@ import re
 from outline_panel import OutlinePanel 
 from pathlib import Path
 from PyQt6.QtCore import QUrl
+from PyQt6.QtGui import QImage, QGuiApplication
+from PyQt6.QtCore import QStandardPaths
+import os
+
 
 class Markdown_Editor(QWidget):
     def __init__(self):
         super().__init__()
+
+        # tijdelijk
+        #self.current_file_path = "./test.md"
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
@@ -65,7 +72,7 @@ class Markdown_Editor(QWidget):
         # bepaal directory van het huidige bestand
         base_path = getattr(self, "current_file_path", None)
         if base_path:
-            base_url = Path(base_path).parent.as_uri() + "/"
+            base_url = QUrl((base_path))  # assets map in dezelfde directory)
         else:
             base_url = QUrl("file:///")  # fallback
 
@@ -105,3 +112,53 @@ class Markdown_Editor(QWidget):
         cursor.movePosition(cursor.MoveOperation.Down, n=line)
         self.editor.setTextCursor(cursor)
         self.editor.setFocus()
+
+    def insertFromMimeData(self, source):
+        # Controleer of de geplakte data een afbeelding bevat
+        if source.hasImage():
+            self._handle_paste_image(source)
+            return
+        else:
+            super().insertFromMimeData(source)
+
+    def _handle_paste_image(self, source):
+        image = source.imageData()
+        if not isinstance(image, QImage):
+            return
+
+        # Bepaal waar het huidige markdown-bestand staat
+        editor = self.parent().parent() # Assuming the parent of Markdown_Editor is the main window
+        base_path = getattr(editor, "current_file_path", None)
+
+        if base_path:
+            # geen bestand geopend, gebruik standaard afbeeldingenmap
+            save_dir = Path(QStandardPaths.writableLocation(QStandardPaths.StandardLocation.PicturesLocation))
+            
+        else:
+            # Gebruik dezelfde map als het markdown-bestand
+            save_dir = Path(base_path).parent / "assets"
+
+        save_dir.mkdir(parents=True, exist_ok=True)
+
+        # Genereer een unieke bestandsnaam
+        filename = f"pasted_{QGuiApplication.applicationPid()}_{id(image)}.png"
+        file_path = save_dir / filename
+
+        # Sla de afbeelding op
+        image.save(str(file_path))
+
+        # Voeg markdown-syntax toe voor de afbeelding
+        rel_path = file_path.relative_to(Path(base_path).parent) if base_path else file_path
+        self.insertPlainText(f"![{filename}]({rel_path.as_posix()})")
+
+    def load_markdown_file(self, file_path):
+        with open(file_path, "r", encoding="utf-8") as f:
+            content = f.read()
+            self.editor.setPlainText(content)
+            self.current_file_path = file_path
+            self.update_preview()
+
+    def to_file_uri(path_or_uri):    
+        if path_or_uri.startswith("file://"):        
+            return path_or_uri    
+        return Path(path_or_uri).resolve().as_uri()
