@@ -10,7 +10,7 @@ from PyQt6.QtCore import QUrl
 from PyQt6.QtGui import QImage, QGuiApplication
 from PyQt6.QtCore import QStandardPaths
 import os
-
+from frontmatter_panel import FrontmatterPanel
 
 class Markdown_Editor(QWidget):
     def __init__(self):
@@ -21,6 +21,9 @@ class Markdown_Editor(QWidget):
 
         layout = QHBoxLayout(self)
         layout.setContentsMargins(0, 0, 0, 0)
+
+        #self.frontmatter = FrontmatterPanel(self)
+        #layout.addWidget(self.frontmatter, 0)
 
         # Editor links
         self.editor = CodeEditor()
@@ -68,6 +71,8 @@ class Markdown_Editor(QWidget):
         text = self.editor.toPlainText()
         html = render_markdown(text)
         ratio = self._editor_scroll_ratio()
+
+        #self.frontmatter.load_frontmatter(text)
 
         # bepaal directory van het huidige bestand
         base_path = getattr(self, "current_file_path", None)
@@ -162,3 +167,23 @@ class Markdown_Editor(QWidget):
         if path_or_uri.startswith("file://"):        
             return path_or_uri    
         return Path(path_or_uri).resolve().as_uri()
+    
+    def update_frontmatter_from_panel(self, new_data):
+        text = self.editor.toPlainText()
+
+        # Vervang bestaande frontmatter
+        import yaml
+        new_yaml = yaml.safe_dump(new_data, sort_keys=False).strip()
+
+        new_frontmatter = f"---\n{new_yaml}\n---"
+        
+        # Vervang in document
+        import re
+        updated = re.sub(r"^---\n(.*?)\n---", new_frontmatter, text, flags=re.DOTALL)
+        
+        self.editor.blockSignals(True)
+        self.editor.setPlainText(updated)
+        self.editor.blockSignals(False)
+
+        # Preview opnieuw renderen
+        self.update_preview()
