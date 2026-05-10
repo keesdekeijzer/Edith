@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPlainTextEdit
+from PyQt6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from highlighter_markdown import MarkdownHighlighter
 from highlighter_python import PythonHighlighter
@@ -9,7 +9,7 @@ import re
 from outline_panel import OutlinePanel 
 from pathlib import Path
 from PyQt6.QtCore import QUrl
-from PyQt6.QtGui import QImage, QGuiApplication
+from PyQt6.QtGui import QImage, QGuiApplication, QAction
 from PyQt6.QtCore import QStandardPaths
 import os
 from frontmatter_panel import FrontmatterPanel
@@ -21,9 +21,94 @@ class Markdown_Editor(QWidget):
         # tijdelijk
         #self.current_file_path = "./test.md"
 
-        layout = QHBoxLayout(self)
+        # menu begin
+
+        # Maak acties        
+         
+        # Bestand - Nieuw, Openen, Opslaan, Opslaan als, Sluiten
+
+        nieuw_actie = QAction("Nieuw", self)        
+        nieuw_actie.setShortcut("Ctrl+N")        
+        nieuw_actie.triggered.connect(self.nieuw)
+        
+        openen_actie = QAction("Openen...", self)        
+        openen_actie.setShortcut("Ctrl+O")        
+        openen_actie.triggered.connect(self.openen)
+
+        opslaan_actie = QAction("Opslaan...", self)        
+        opslaan_actie.setShortcut("Ctrl+S")        
+        opslaan_actie.triggered.connect(self.opslaan)
+
+        opslaan_als_actie = QAction("Opslaan als...", self)        
+        opslaan_als_actie.setShortcut("Ctrl+Alt+S")        
+        opslaan_als_actie.triggered.connect(self.opslaan_als)
+        
+        afsluiten_actie = QAction("Afsluiten", self)        
+        afsluiten_actie.setShortcut("Ctrl+Q")        
+        afsluiten_actie.triggered.connect(self.close)
+
+        # Bewerken - Kopieren, Plakken, Knippen, Zoeken, Alles selecteren, Ongedaan maken, Opnieuw doen,
+        #     Normaliseren, Geen hoofdletters, Schrift
+
+        kopieren_actie = QAction("Kopieren...", self)        
+        kopieren_actie.setShortcut("Ctrl+C")        
+        kopieren_actie.triggered.connect(self.kopieren)
+
+        plakken_actie = QAction("Plakken...", self)        
+        plakken_actie.setShortcut("Ctrl+V")        
+        plakken_actie.triggered.connect(self.plakken)
+
+        knippen_actie = QAction("Knippen...", self)        
+        knippen_actie.setShortcut("Ctrl+X")        
+        knippen_actie.triggered.connect(self.knippen)
+
+        # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
+
+        # Invoegen - Datum, Tijd, md link, md afbeelding, if name == main
+
+        # Apps - Memo, Memolijst
+
+        # Help - Over Edith, Sneltoetsen, Sneltoetsen (Alt)
+        
+        over_actie = QAction("Over", self)        
+        over_actie.triggered.connect(self.over)
+        
+        # Maak menubalk en menu's        
+        
+        menubalk = QMenuBar(self)                 # maak menubalk widget
+        
+        bestand_menu = menubalk.addMenu("Bestand")        
+        bestand_menu.addAction(nieuw_actie)        
+        bestand_menu.addAction(openen_actie)
+        bestand_menu.addAction(opslaan_actie) 
+        bestand_menu.addAction(opslaan_als_actie)
+        bestand_menu.addSeparator()        
+        bestand_menu.addAction(afsluiten_actie)
+
+        bewerken_menu = menubalk.addMenu("Bewerken")
+        bewerken_menu.addAction(kopieren_actie)
+        bewerken_menu.addAction(knippen_actie)
+        bewerken_menu.addAction(plakken_actie)
+
+        beeld_menu = menubalk.addMenu("Beeld")
+
+        invoegen_menu = menubalk.addMenu("Invoegen")
+
+        apps_menu = menubalk.addMenu("Apps")
+        
+        hulp_menu = menubalk.addMenu("Help")        
+        hulp_menu.addAction(over_actie)
+
+        v_layout = QVBoxLayout(self)
+        v_layout.setMenuBar(menubalk)  
+
+        # menu einde
+
+        layout = QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
 
+
+        v_layout.addLayout(layout)
         #self.frontmatter = FrontmatterPanel(self)
         #layout.addWidget(self.frontmatter, 0)
 
@@ -202,3 +287,29 @@ class Markdown_Editor(QWidget):
             self.editor.set_highlighter(HtmlHighlighter)
         else:
             self.editor.set_highlighter(PythonHighlighter)
+
+    # menu acties
+
+    def nieuw(self):        
+        QMessageBox.information(self, "Nieuw", "Nieuw bestand aangezaakt (voorbeeld).")
+
+    def openen(self):        
+        QMessageBox.information(self, "Openen", "Open dialoog (voorbeeld).")
+
+    def opslaan(self):        
+        QMessageBox.information(self, "Opslaan", "Opslaan dialoog (voorbeeld).")
+
+    def opslaan_als(self):        
+        QMessageBox.information(self, "Opslaan als", "Opslaan als dialoog (voorbeeld).")
+
+    def kopieren(self):
+        QMessageBox.information(self, "Kopieren", "Kopieren dialoog (voorbeeld).")
+
+    def knippen(self):
+        QMessageBox.information(self, "Knippen", "Knippen dialoog (voorbeeld).")
+
+    def plakken(self):
+        QMessageBox.information(self, "Plakken", "Plakken dialoog (voorbeeld).")
+    
+    def over(self):        
+        QMessageBox.information(self, "Over", "Voorbeeldapp met PyQt6.")
