@@ -62,6 +62,34 @@ class Markdown_Editor(QWidget):
         knippen_actie.setShortcut("Ctrl+X")        
         knippen_actie.triggered.connect(self.knippen)
 
+        zoeken_actie = QAction("Zoeken...", self)        
+        zoeken_actie.setShortcut("Ctrl+F")        
+        zoeken_actie.triggered.connect(self.zoeken)
+
+        alles_selecteren_actie = QAction("Alles selecteren", self)        
+        alles_selecteren_actie.setShortcut("Ctrl+A")        
+        alles_selecteren_actie.triggered.connect(self.alles_selecteren)
+
+        ongedaan_maken_actie = QAction("Ongedaan maken", self)        
+        ongedaan_maken_actie.setShortcut("Ctrl+Z")        
+        ongedaan_maken_actie.triggered.connect(self.ongedaan_maken)
+
+        opnieuw_doen_actie = QAction("Opnieuw doen", self)        
+        opnieuw_doen_actie.setShortcut("Ctrl+R")        
+        opnieuw_doen_actie.triggered.connect(self.opnieuw_doen)
+
+        normaliseren_actie = QAction("Normaliseren", self)        
+        normaliseren_actie.setShortcut("Alt+N")
+        normaliseren_actie.triggered.connect(self.normaliseren)
+
+        geen_hoofdletters_actie = QAction("Geen hoofdletters", self)        
+        geen_hoofdletters_actie.setShortcut("Alt+U")        
+        geen_hoofdletters_actie.triggered.connect(self.geen_hoofdletters)
+
+        schrift_actie = QAction("Schrift", self)        
+        schrift_actie.setShortcut("Alt+S") 
+        schrift_actie.triggered.connect(self.schrift)
+
         # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
 
         # Invoegen - Datum, Tijd, md link, md afbeelding, if name == main
@@ -89,6 +117,13 @@ class Markdown_Editor(QWidget):
         bewerken_menu.addAction(kopieren_actie)
         bewerken_menu.addAction(knippen_actie)
         bewerken_menu.addAction(plakken_actie)
+        bewerken_menu.addAction(zoeken_actie)
+        bewerken_menu.addAction(alles_selecteren_actie)
+        bewerken_menu.addAction(ongedaan_maken_actie)
+        bewerken_menu.addAction(opnieuw_doen_actie)
+        bewerken_menu.addAction(normaliseren_actie)
+        bewerken_menu.addAction(geen_hoofdletters_actie)
+        bewerken_menu.addAction(schrift_actie)
 
         beeld_menu = menubalk.addMenu("Beeld")
 
@@ -313,3 +348,25 @@ class Markdown_Editor(QWidget):
     
     def over(self):        
         QMessageBox.information(self, "Over", "Voorbeeldapp met PyQt6.")
+
+    def zoeken(self):
+        QMessageBox.information(self, "Zoeken", "Zoeken in de tekst")
+
+    def alles_selecteren(self):
+        QMessageBox.information(self, "Alles selecteren", "Alles selecteren in de tekst")
+
+    def ongedaan_maken(self):
+        QMessageBox.information(self, "Ongedaan maken", "Ongedaan maken (undo)")
+
+    def opnieuw_doen(self):
+        QMessageBox.information(self, "Opnieuw doen", "Opnieuw doen (redo)")
+
+    def normaliseren(self):
+        QMessageBox.information(self, "Normaliseren", "Normaliseren")
+
+    def geen_hoofdletters(self):
+        QMessageBox.information(self, "Geen hoofdletters", "Geen hoofdletters, alles naar kleine letters")
+
+    def schrift(self):
+        QMessageBox.information(self, "Schrift", "Omzetten naar schrift")
+
