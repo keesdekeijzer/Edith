@@ -1,6 +1,8 @@
 from PyQt6.QtWidgets import QWidget, QHBoxLayout, QPlainTextEdit
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from highlighter_markdown import MarkdownHighlighter
+from highlighter_python import PythonHighlighter
+from highlighter_html import HtmlHighlighter
 from markdown_renderer import render_markdown
 from e2 import CodeEditor
 import re
@@ -187,3 +189,16 @@ class Markdown_Editor(QWidget):
 
         # Preview opnieuw renderen
         self.update_preview()
+
+    def load_file(self, path):
+        text = Path(path).read_text(encoding="utf-8")
+        self.editor.setPlainText(text)
+
+        if path.endswith(".py"):
+            self.editor.set_highlighter(PythonHighlighter)
+        elif path.endswith(".md"):
+            self.editor.set_highlighter(MarkdownHighlighter)
+        elif path.endswith(".html", ".htm"):
+            self.editor.set_highlighter(HtmlHighlighter)
+        else:
+            self.editor.set_highlighter(PythonHighlighter)
