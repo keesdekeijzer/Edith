@@ -22,73 +22,55 @@ class Markdown_Editor(QWidget):
         #self.current_file_path = "./test.md"
 
         # menu begin
+        actie = {}
+
+        def maak_menu_punt(self, naam_actie, naam_in_menu, sneltoets, functie):
+            actie[naam_actie] = QAction(naam_in_menu, self)
+            if len(sneltoets) > 1:
+                actie[naam_actie].setShortcut(sneltoets)
+            actie[naam_actie].triggered.connect(functie)
+            return
 
         # Maak acties        
          
         # Bestand - Nieuw, Openen, Opslaan, Opslaan als, Sluiten
 
-        nieuw_actie = QAction("Nieuw", self)        
-        nieuw_actie.setShortcut("Ctrl+N")        
-        nieuw_actie.triggered.connect(self.nieuw)
+        maak_menu_punt(self, "nieuw_actie", "Nieuw", "Ctrl+N", self.nieuw)
         
-        openen_actie = QAction("Openen...", self)        
-        openen_actie.setShortcut("Ctrl+O")        
-        openen_actie.triggered.connect(self.openen)
+        maak_menu_punt(self, "openen_actie", "Openen...", "Ctrl+O", self.openen)
 
-        opslaan_actie = QAction("Opslaan...", self)        
-        opslaan_actie.setShortcut("Ctrl+S")        
-        opslaan_actie.triggered.connect(self.opslaan)
+        maak_menu_punt(self, "opslaan_actie", "Opslaan", "Ctrl+S", self.opslaan)
 
-        opslaan_als_actie = QAction("Opslaan als...", self)        
-        opslaan_als_actie.setShortcut("Ctrl+Alt+S")        
-        opslaan_als_actie.triggered.connect(self.opslaan_als)
-        
-        afsluiten_actie = QAction("Afsluiten", self)        
-        afsluiten_actie.setShortcut("Ctrl+Q")        
-        afsluiten_actie.triggered.connect(self.close)
+        maak_menu_punt(self, "opslaan_als_actie", "Opslaan als...", "Ctrl+Alt+S", self.opslaan_als)
+
+        maak_menu_punt(self, "afsluiten_actie", "Afsluiten", "Ctrl+Q", self.afsluiten)
 
         # Bewerken - Kopieren, Plakken, Knippen, Zoeken, Alles selecteren, Ongedaan maken, Opnieuw doen,
         #     Normaliseren, Geen hoofdletters, Schrift
 
-        kopieren_actie = QAction("Kopieren...", self)        
-        kopieren_actie.setShortcut("Ctrl+C")        
-        kopieren_actie.triggered.connect(self.kopieren)
+        #kopieren_actie = QAction("Kopieren...", self)        
+        #kopieren_actie.setShortcut("Ctrl+C")        
+        #kopieren_actie.triggered.connect(self.kopieren)
 
-        plakken_actie = QAction("Plakken...", self)        
-        plakken_actie.setShortcut("Ctrl+V")        
-        plakken_actie.triggered.connect(self.plakken)
+        maak_menu_punt(self, "kopieren_actie", "Kopieren", "Ctrl+C", self.kopieren)
 
-        knippen_actie = QAction("Knippen...", self)        
-        knippen_actie.setShortcut("Ctrl+X")        
-        knippen_actie.triggered.connect(self.knippen)
+        maak_menu_punt(self, "plakken_actie", "Plakken", "Ctrl+V", self.plakken)
 
-        zoeken_actie = QAction("Zoeken...", self)        
-        zoeken_actie.setShortcut("Ctrl+F")        
-        zoeken_actie.triggered.connect(self.zoeken)
+        maak_menu_punt(self, "knippen_actie", "Knippen", "Ctrl+X", self.knippen)
 
-        alles_selecteren_actie = QAction("Alles selecteren", self)        
-        alles_selecteren_actie.setShortcut("Ctrl+A")        
-        alles_selecteren_actie.triggered.connect(self.alles_selecteren)
+        maak_menu_punt(self, "zoeken_actie", "Zoeken...", "Ctrl+F", self.zoeken)
 
-        ongedaan_maken_actie = QAction("Ongedaan maken", self)        
-        ongedaan_maken_actie.setShortcut("Ctrl+Z")        
-        ongedaan_maken_actie.triggered.connect(self.ongedaan_maken)
+        maak_menu_punt(self, "alles_selecteren_actie", "Alles selecteren", "Ctrl+A", self.alles_selecteren)
 
-        opnieuw_doen_actie = QAction("Opnieuw doen", self)        
-        opnieuw_doen_actie.setShortcut("Ctrl+R")        
-        opnieuw_doen_actie.triggered.connect(self.opnieuw_doen)
+        maak_menu_punt(self, "ongedaan_maken_actie", "Ongedaan maken", "Ctrl+Z", self.ongedaan_maken)
 
-        normaliseren_actie = QAction("Normaliseren", self)        
-        normaliseren_actie.setShortcut("Alt+N")
-        normaliseren_actie.triggered.connect(self.normaliseren)
+        maak_menu_punt(self, "opnieuw_doen_actie", "Opnieuw doen", "Ctrl+R", self.opnieuw_doen)
 
-        geen_hoofdletters_actie = QAction("Geen hoofdletters", self)        
-        geen_hoofdletters_actie.setShortcut("Alt+U")        
-        geen_hoofdletters_actie.triggered.connect(self.geen_hoofdletters)
+        maak_menu_punt(self, "normaliseren_actie", "Normaliseren", "Alt+N", self.normaliseren)
 
-        schrift_actie = QAction("Schrift", self)        
-        schrift_actie.setShortcut("Alt+S") 
-        schrift_actie.triggered.connect(self.schrift)
+        maak_menu_punt(self, "geen_hoofdletters_actie", "Geen hoofdletters", "Alt+U", self.geen_hoofdletters)
+
+        maak_menu_punt(self, "schrift_actie", "Schrift", "Alt+S", self.schrift)
 
         # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
 
@@ -98,32 +80,31 @@ class Markdown_Editor(QWidget):
 
         # Help - Over Edith, Sneltoetsen, Sneltoetsen (Alt)
         
-        over_actie = QAction("Over", self)        
-        over_actie.triggered.connect(self.over)
+        maak_menu_punt(self, "over_actie", "Over", "", self.over)
         
         # Maak menubalk en menu's        
         
         menubalk = QMenuBar(self)                 # maak menubalk widget
         
         bestand_menu = menubalk.addMenu("Bestand")        
-        bestand_menu.addAction(nieuw_actie)        
-        bestand_menu.addAction(openen_actie)
-        bestand_menu.addAction(opslaan_actie) 
-        bestand_menu.addAction(opslaan_als_actie)
+        bestand_menu.addAction(actie["nieuw_actie"])        
+        bestand_menu.addAction(actie["openen_actie"])
+        bestand_menu.addAction(actie["opslaan_actie"]) 
+        bestand_menu.addAction(actie["opslaan_als_actie"])
         bestand_menu.addSeparator()        
-        bestand_menu.addAction(afsluiten_actie)
+        bestand_menu.addAction(actie["afsluiten_actie"])
 
         bewerken_menu = menubalk.addMenu("Bewerken")
-        bewerken_menu.addAction(kopieren_actie)
-        bewerken_menu.addAction(knippen_actie)
-        bewerken_menu.addAction(plakken_actie)
-        bewerken_menu.addAction(zoeken_actie)
-        bewerken_menu.addAction(alles_selecteren_actie)
-        bewerken_menu.addAction(ongedaan_maken_actie)
-        bewerken_menu.addAction(opnieuw_doen_actie)
-        bewerken_menu.addAction(normaliseren_actie)
-        bewerken_menu.addAction(geen_hoofdletters_actie)
-        bewerken_menu.addAction(schrift_actie)
+        bewerken_menu.addAction(actie["kopieren_actie"])
+        bewerken_menu.addAction(actie["knippen_actie"])
+        bewerken_menu.addAction(actie["plakken_actie"])
+        bewerken_menu.addAction(actie["zoeken_actie"])
+        bewerken_menu.addAction(actie["alles_selecteren_actie"])
+        bewerken_menu.addAction(actie["ongedaan_maken_actie"])
+        bewerken_menu.addAction(actie["opnieuw_doen_actie"])
+        bewerken_menu.addAction(actie["normaliseren_actie"])
+        bewerken_menu.addAction(actie["geen_hoofdletters_actie"])
+        bewerken_menu.addAction(actie["schrift_actie"])
 
         beeld_menu = menubalk.addMenu("Beeld")
 
@@ -132,7 +113,7 @@ class Markdown_Editor(QWidget):
         apps_menu = menubalk.addMenu("Apps")
         
         hulp_menu = menubalk.addMenu("Help")        
-        hulp_menu.addAction(over_actie)
+        hulp_menu.addAction(actie["over_actie"])
 
         v_layout = QVBoxLayout(self)
         v_layout.setMenuBar(menubalk)  
@@ -336,6 +317,9 @@ class Markdown_Editor(QWidget):
 
     def opslaan_als(self):        
         QMessageBox.information(self, "Opslaan als", "Opslaan als dialoog (voorbeeld).")
+
+    def afsluiten(self):
+        QMessageBox.information(self, "Afsluiten", "Programma afsluiten.")
 
     def kopieren(self):
         QMessageBox.information(self, "Kopieren", "Kopieren dialoog (voorbeeld).")
