@@ -74,13 +74,29 @@ class Markdown_Editor(QWidget):
 
         # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
 
+        maak_menu_punt(self, "lichte_modus_actie", "Lichte modus", "", self.lichte_modus)
+
+        maak_menu_punt(self, "donkere_modus_actie", "Donkere modus", "", self.donkere_modus)
+
+        maak_menu_punt(self, "blauwe_modus_actie", "Blauwe modus", "", self.blauwe_modus)
+
+        maak_menu_punt(self, "font_actie", "Font...", "", self.font)
+
+        maak_menu_punt(self, "lettergrootte_actie", "Lettergrootte...", "", self.lettergrootte)
+
         # Invoegen - Datum, Tijd, md link, md afbeelding, if name == main
 
         # Apps - Memo, Memolijst
 
-        # Help - Over Edith, Sneltoetsen, Sneltoetsen (Alt)
+        # Help - Over Edith, Sneltoetsen, Sneltoetsen (Alt), Markdown
         
-        maak_menu_punt(self, "over_actie", "Over", "", self.over)
+        maak_menu_punt(self, "over_actie", "Over Edith", "", self.over)
+
+        maak_menu_punt(self, "sneltoetsen_actie", "Sneltoetsen", "", self.sneltoetsen)
+
+        maak_menu_punt(self, "sneltoetsen_alt_actie", "Sneltoetsen (Alt)", "", self.sneltoetsen_alt)
+
+        maak_menu_punt(self, "markdown_actie", "Markdown", "", self.markdown_overzicht)
         
         # Maak menubalk en menu's        
         
@@ -108,12 +124,21 @@ class Markdown_Editor(QWidget):
 
         beeld_menu = menubalk.addMenu("Beeld")
 
+        beeld_menu.addAction(actie["lichte_modus_actie"])
+        beeld_menu.addAction(actie["donkere_modus_actie"])
+        beeld_menu.addAction(actie["blauwe_modus_actie"])
+        beeld_menu.addAction(actie["font_actie"])
+        beeld_menu.addAction(actie["lettergrootte_actie"])
+
         invoegen_menu = menubalk.addMenu("Invoegen")
 
         apps_menu = menubalk.addMenu("Apps")
         
         hulp_menu = menubalk.addMenu("Help")        
         hulp_menu.addAction(actie["over_actie"])
+        hulp_menu.addAction(actie["sneltoetsen_actie"])
+        hulp_menu.addAction(actie["sneltoetsen_alt_actie"])
+        hulp_menu.addAction(actie["markdown_actie"])
 
         v_layout = QVBoxLayout(self)
         v_layout.setMenuBar(menubalk)  
@@ -329,9 +354,6 @@ class Markdown_Editor(QWidget):
 
     def plakken(self):
         QMessageBox.information(self, "Plakken", "Plakken dialoog (voorbeeld).")
-    
-    def over(self):        
-        QMessageBox.information(self, "Over", "Voorbeeldapp met PyQt6.")
 
     def zoeken(self):
         QMessageBox.information(self, "Zoeken", "Zoeken in de tekst")
@@ -353,4 +375,31 @@ class Markdown_Editor(QWidget):
 
     def schrift(self):
         QMessageBox.information(self, "Schrift", "Omzetten naar schrift")
+
+    def lichte_modus(self):
+        QMessageBox.information(self, "Lichte modus", "Lichte modus, zwarte tekst op witte achtegrond")
+
+    def donkere_modus(self):
+        QMessageBox.information(self, "Donkere modus", "Donkere modus, witte tekst, zwarte achtergrond")
+
+    def blauwe_modus(self):
+        QMessageBox.information(self, "Blauwe modus", "Blauwe modus, witte tekst, blauwe achtergrond")
+
+    def font(self):
+        QMessageBox.information(self, "Font", "Font instellen")
+
+    def lettergrootte(self):
+        QMessageBox.information(self, "Lettergrootte", "Lettergrootte instellen")
+    
+    def over(self):        
+        QMessageBox.information(self, "Over", "Voorbeeldapp met PyQt6.")
+
+    def sneltoetsen(self):
+        QMessageBox.information(self, "Sneltoetsen", "Sneltoetsen overzicht")
+
+    def sneltoetsen_alt(self):
+        QMessageBox.information(self, "Sneltoetsen (Alt)", "Sneltoetsen (Alt) overzicht")
+
+    def markdown_overzicht(self):
+        QMessageBox.information(self, "Markdown", "Markdown overzicht")
 
