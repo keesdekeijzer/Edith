@@ -84,7 +84,19 @@ class Markdown_Editor(QWidget):
 
         maak_menu_punt(self, "lettergrootte_actie", "Lettergrootte...", "", self.lettergrootte)
 
-        # Invoegen - Datum, Tijd, md link, md afbeelding, if name == main
+        # Invoegen - Datum, Tijd, md link, md afbeelding, if name == main, frontmatter
+
+        maak_menu_punt(self, "datum_actie", "Datum", "Alt+D", self.datum)
+
+        maak_menu_punt(self, "tijd_actie", "Tijd", "Alt+T", self.tijd)
+
+        maak_menu_punt(self, "md_link_actie", "md link", "Alt+L", self.md_link)
+
+        maak_menu_punt(self, "md_afbeelding_actie", "md afbeelding", "Alt+A", self.md_afbeelding)
+
+        maak_menu_punt(self, "if_name_is_main_actie", "if name == main", "Alt+I", self.if_name_is_main)
+
+        maak_menu_punt(self, "frontmatter_actie", "Frontmatter", "Alt+F", self.frontmatter)
 
         # Apps - Memo, Memolijst
 
@@ -131,6 +143,13 @@ class Markdown_Editor(QWidget):
         beeld_menu.addAction(actie["lettergrootte_actie"])
 
         invoegen_menu = menubalk.addMenu("Invoegen")
+        # Invoegen - Datum, Tijd, md link, md afbeelding, if name == main, frontmatter
+        invoegen_menu.addAction(actie["datum_actie"])
+        invoegen_menu.addAction(actie["tijd_actie"])
+        invoegen_menu.addAction(actie["md_link_actie"])
+        invoegen_menu.addAction(actie["md_afbeelding_actie"])
+        invoegen_menu.addAction(actie["if_name_is_main_actie"])
+        invoegen_menu.addAction(actie["frontmatter_actie"])
 
         apps_menu = menubalk.addMenu("Apps")
         
@@ -403,3 +422,20 @@ class Markdown_Editor(QWidget):
     def markdown_overzicht(self):
         QMessageBox.information(self, "Markdown", "Markdown overzicht")
 
+    def datum(self):
+        QMessageBox.information(self, "Datum", "Datum invoegen")
+
+    def tijd(self):
+        QMessageBox.information(self, "Tijd", "Tijf invoegen")
+
+    def md_link(self):
+        QMessageBox.information(self, "md link", "md link invoegen")
+
+    def md_afbeelding(self):
+        QMessageBox.information(self, "md afbeelding", "md afbeelding invoegen")
+
+    def if_name_is_main(self):
+        QMessageBox.information(self, "if name == main", "if name == main invoegen")
+
+    def frontmatter(self):
+        QMessageBox.information(self, "Frontmatter", "Frontmatter invoegen")
