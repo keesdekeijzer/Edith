@@ -1,4 +1,6 @@
-from PyQt6.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
+import datetime
+
+from PyQt6.QtWidgets import QFileDialog, QInputDialog, QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from highlighter_markdown import MarkdownHighlighter
 from highlighter_python import PythonHighlighter
@@ -9,10 +11,15 @@ import re
 from outline_panel import OutlinePanel 
 from pathlib import Path
 from PyQt6.QtCore import QUrl
-from PyQt6.QtGui import QImage, QGuiApplication, QAction
+from PyQt6.QtGui import QImage, QGuiApplication, QAction, QTextCursor
 from PyQt6.QtCore import QStandardPaths
 import os
 from frontmatter_panel import FrontmatterPanel
+
+# instellingen importeren
+from config import configuratie
+from memo import Memo
+from memolijst import MemoLijst
 
 class Markdown_Editor(QWidget):
     def __init__(self):
@@ -100,6 +107,10 @@ class Markdown_Editor(QWidget):
 
         # Apps - Memo, Memolijst
 
+        maak_menu_punt(self, "memo_actie", "Memo", "", self.memo)
+
+        maak_menu_punt(self, "memolijst_actie", "Memolijst", "", self.memolijst)
+
         # Help - Over Edith, Sneltoetsen, Sneltoetsen (Alt), Markdown
         
         maak_menu_punt(self, "over_actie", "Over Edith", "", self.over)
@@ -152,6 +163,8 @@ class Markdown_Editor(QWidget):
         invoegen_menu.addAction(actie["frontmatter_actie"])
 
         apps_menu = menubalk.addMenu("Apps")
+        apps_menu.addAction(actie["memo_actie"])
+        apps_menu.addAction(actie["memolijst_actie"])
         
         hulp_menu = menubalk.addMenu("Help")        
         hulp_menu.addAction(actie["over_actie"])
@@ -364,36 +377,83 @@ class Markdown_Editor(QWidget):
 
     def afsluiten(self):
         QMessageBox.information(self, "Afsluiten", "Programma afsluiten.")
+        self.close()
 
     def kopieren(self):
         QMessageBox.information(self, "Kopieren", "Kopieren dialoog (voorbeeld).")
+        self.editor.copy()
 
     def knippen(self):
         QMessageBox.information(self, "Knippen", "Knippen dialoog (voorbeeld).")
+        self.editor.cut()
 
     def plakken(self):
         QMessageBox.information(self, "Plakken", "Plakken dialoog (voorbeeld).")
+        self.editor.paste()
 
     def zoeken(self):
         QMessageBox.information(self, "Zoeken", "Zoeken in de tekst")
+        text, ok = QInputDialog.getText(self, 'Zoeken', 'Voer de zoekterm in:')
+        if ok and text:
+            gevonden = self.editor.find(text)
+            if not gevonden:
+                # weer naar boven
+                cursor = self.editor.textCursor()
+                cursor.movePosition(QTextCursor.MoveOperation.Start)
+                self.editor.setTextCursor(cursor)
+                gevonden = self.editor.find(text)
+                if not gevonden:
+                    term = text.replace('<','&lt;')
+                    term = term.replace('>','&gt;')
+                    QMessageBox.information(self, "Vinden", f"'{term}' niet gevonden")
 
     def alles_selecteren(self):
         QMessageBox.information(self, "Alles selecteren", "Alles selecteren in de tekst")
+        self.editor.selectAll()
 
     def ongedaan_maken(self):
         QMessageBox.information(self, "Ongedaan maken", "Ongedaan maken (undo)")
+        self.editor.undo()
 
     def opnieuw_doen(self):
         QMessageBox.information(self, "Opnieuw doen", "Opnieuw doen (redo)")
+        self.editor.redo()
 
     def normaliseren(self):
         QMessageBox.information(self, "Normaliseren", "Normaliseren")
+        cursor = self.editor.textCursor()
+        volledige_tekst = self.editor.toPlainText()
+        tussenstap = ' '.join(volledige_tekst.split('\n'))
+        genormaliseerde_tekst = '.\n'.join(tussenstap.split('.'))
+        self.editor.setPlainText(genormaliseerde_tekst)
 
     def geen_hoofdletters(self):
         QMessageBox.information(self, "Geen hoofdletters", "Geen hoofdletters, alles naar kleine letters")
+        selectie = self.editor.textCursor()
+        if selectie.hasSelection():
+            geselecteerde_tekst = selectie.selectedText()
+            kleine_tekst = geselecteerde_tekst.lower()
+            selectie.insertText(kleine_tekst)
+        else:
+            QMessageBox.about(self, "Geen Selectie", "Selecteer eerst tekst om om te zetten naar kleine letters.")
 
     def schrift(self):
         QMessageBox.information(self, "Schrift", "Omzetten naar schrift")
+        selectie = self.editor.textCursor()
+        if selectie.hasSelection():
+            geselecteerde_tekst = selectie.selectedText()
+            schrift_tekst = ''
+            for char in geselecteerde_tekst:
+                if 'A' <= char <= 'Z':
+                    schrift_char = chr(ord(char) + 0x1D4D0 - ord('A'))
+                elif 'a' <= char <= 'z':
+                    schrift_char = chr(ord(char) + 0x1D4EA - ord('a'))
+                else:
+                    schrift_char = char
+                schrift_tekst += schrift_char
+            selectie.insertText(schrift_tekst)
+        else:
+            QMessageBox.about(self, "Geen Selectie", "Selecteer eerst tekst om om te zetten naar schrift.")
 
     def lichte_modus(self):
         QMessageBox.information(self, "Lichte modus", "Lichte modus, zwarte tekst op witte achtegrond")
@@ -424,18 +484,41 @@ class Markdown_Editor(QWidget):
 
     def datum(self):
         QMessageBox.information(self, "Datum", "Datum invoegen")
+        nu = datetime.datetime.now()
+        datum_nu = nu.strftime("%Y-%m-%d")
+        self.editor.insertPlainText(datum_nu)
 
     def tijd(self):
-        QMessageBox.information(self, "Tijd", "Tijf invoegen")
+        QMessageBox.information(self, "Tijd", "Tijd invoegen")
+        nu = datetime.datetime.now()
+        tijd_nu = nu.strftime("%H:%M")
+        self.editor.insertPlainText(tijd_nu)
 
     def md_link(self):
         QMessageBox.information(self, "md link", "md link invoegen")
+        pathname = QFileDialog.getOpenFileName(self, 'Bestand openen', configuratie["opslaglocatie"], 'Alle bestanden (*)')
+        if pathname[0]:
+            bestandsnaam = pathname[0].split('/')[-1]
+            md_code = f"[{bestandsnaam}]({pathname[0]})"
+            self.editor.insertPlainText(md_code)
 
     def md_afbeelding(self):
         QMessageBox.information(self, "md afbeelding", "md afbeelding invoegen")
+        pathname = QFileDialog.getOpenFileName(self, 'Afbeelding openen', configuratie["opslaglocatie"], 'Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)')
+        if pathname[0]:
+            bestandsnaam = pathname[0].split('/')[-1]
+            md_code = f"![{bestandsnaam}]({pathname[0]})"
+            self.editor.insertPlainText(md_code)
 
     def if_name_is_main(self):
         QMessageBox.information(self, "if name == main", "if name == main invoegen")
+        self.editor.insertPlainText("if__name__ == '__main__':\n    ")
 
     def frontmatter(self):
         QMessageBox.information(self, "Frontmatter", "Frontmatter invoegen")
+
+    def memo(self):
+        QMessageBox.information(self, "Memo", "Memo toevoegen of bewerken.")
+
+    def memolijst(self):
+        QMessageBox.information(self, "Memolijst", "Memolijst, de lijst met de memo's.")
