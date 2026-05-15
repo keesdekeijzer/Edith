@@ -1,5 +1,6 @@
 import datetime
 
+from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QFileDialog, QInputDialog, QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from highlighter_markdown import MarkdownHighlighter
@@ -17,7 +18,7 @@ import os
 from frontmatter_panel import FrontmatterPanel
 
 # instellingen importeren
-from config import configuratie
+from config import FRONTMATTER_TEXT, configuratie
 from memo import Memo
 from memolijst import MemoLijst
 
@@ -27,6 +28,10 @@ class Markdown_Editor(QWidget):
 
         # tijdelijk
         #self.current_file_path = "./test.md"
+
+        self.unsaved_changes = False
+        self.current_path = None
+        
 
         # menu begin
         actie = {}
@@ -54,10 +59,6 @@ class Markdown_Editor(QWidget):
 
         # Bewerken - Kopieren, Plakken, Knippen, Zoeken, Alles selecteren, Ongedaan maken, Opnieuw doen,
         #     Normaliseren, Geen hoofdletters, Schrift
-
-        #kopieren_actie = QAction("Kopieren...", self)        
-        #kopieren_actie.setShortcut("Ctrl+C")        
-        #kopieren_actie.triggered.connect(self.kopieren)
 
         maak_menu_punt(self, "kopieren_actie", "Kopieren", "Ctrl+C", self.kopieren)
 
@@ -185,10 +186,16 @@ class Markdown_Editor(QWidget):
         #self.frontmatter = FrontmatterPanel(self)
         #layout.addWidget(self.frontmatter, 0)
 
+        self.statusbar = QtWidgets.QStatusBar()
+        v_layout.addWidget(self.statusbar, 0)
+        self.statusbar.showMessage("Ready", 3000)
+
         # Editor links
         self.editor = CodeEditor()
         self.editor.set_highlighter(MarkdownHighlighter)
         layout.addWidget(self.editor, 1)
+
+        self.editor.textChanged.connect(self.on_text_changed)
 
         # Outline panel
         self.outline_panel = OutlinePanel()
@@ -208,6 +215,10 @@ class Markdown_Editor(QWidget):
 
         self.editor.verticalScrollBar().valueChanged.connect(self.sync_scroll_to_preview)
 
+
+    def on_text_changed(self):
+        self.unsaved_changes = True
+        self.statusbar.showMessage("Onopgeslagen wijzigingen")
 
     def _editor_scroll_ratio(self):
         sb = self.editor.verticalScrollBar()
@@ -364,35 +375,74 @@ class Markdown_Editor(QWidget):
     # menu acties
 
     def nieuw(self):        
-        QMessageBox.information(self, "Nieuw", "Nieuw bestand aangezaakt (voorbeeld).")
+        QMessageBox.information(self, "Nieuw", "Nieuw bestand aangemaakt (voorbeeld).")
+        if self.unsaved_changes:
+            reply = QMessageBox.question(self, 'Waarschuwing', 
+                                         'Huidig bestand is nog niet opgeslagen. Wilt u de wijzigingen opslaan?')
+            if reply == QMessageBox.StandardButton.Yes:
+                self.opslaan()
+        self.editor.clear()
+        self.setWindowTitle("Geen naam")
+        self.current_path = None 
 
     def openen(self):        
         QMessageBox.information(self, "Openen", "Open dialoog (voorbeeld).")
+        if self.unsaved_changes:
+            reply = QMessageBox.question(self, 'Waarschuwing', 
+                                         'Huidig bestand is nog niet opgeslagen. Wilt u de wijzigingen opslaan?')
+            if reply == QMessageBox.StandardButton.Yes:
+                self.opslaan()
+        try:
+            fname = QFileDialog.getOpenFileName(self, 'Open bestand', configuratie["opslaglocatie"], 'Tekst bestanden (*.txt);;Alle bestanden (*)')
+            self.setWindowTitle(fname[0])
+            with open(fname[0], 'r') as f:
+                filetext = f.read()
+                self.editor.setPlainText(filetext)
+            self.current_path = fname[0]
+            self.statusbar.showMessage("Bestand geopend")
+        except Exception as e:
+            self.dialog_critical(str(e))
 
     def opslaan(self):        
         QMessageBox.information(self, "Opslaan", "Opslaan dialoog (voorbeeld).")
+        if self.current_path is not None:
+            filetext = self.editor.toPlainText()
+            try:
+                with open(self.current_path, 'w') as f:
+                    f.write(filetext)
+                self.statusbar.showMessage("Bestand opgeslagen")
+            except Exception as e:
+                self.dialog_critical(str(e))
+        else:
+            self.opslaan_als()
 
     def opslaan_als(self):        
         QMessageBox.information(self, "Opslaan als", "Opslaan als dialoog (voorbeeld).")
+        try:
+            pathname = QFileDialog.getSaveFileName(self, 'Bestand opslaan', configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
+            filetext = self.editor.toPlainText()
+            with open(pathname[0], 'w') as f:
+                f.write(filetext)
+            self.current_path = pathname[0]
+            self.setWindowTitle(pathname[0])
+            self.statusbar.showMessage("Bestand opgeslagen")
+        except Exception as e:
+            self.dialog_critical(str(e))
 
     def afsluiten(self):
         QMessageBox.information(self, "Afsluiten", "Programma afsluiten.")
-        self.close()
+        CodeEditor.close(self)
 
     def kopieren(self):
-        QMessageBox.information(self, "Kopieren", "Kopieren dialoog (voorbeeld).")
         self.editor.copy()
 
     def knippen(self):
-        QMessageBox.information(self, "Knippen", "Knippen dialoog (voorbeeld).")
         self.editor.cut()
 
     def plakken(self):
-        QMessageBox.information(self, "Plakken", "Plakken dialoog (voorbeeld).")
         self.editor.paste()
 
     def zoeken(self):
-        QMessageBox.information(self, "Zoeken", "Zoeken in de tekst")
         text, ok = QInputDialog.getText(self, 'Zoeken', 'Voer de zoekterm in:')
         if ok and text:
             gevonden = self.editor.find(text)
@@ -408,19 +458,15 @@ class Markdown_Editor(QWidget):
                     QMessageBox.information(self, "Vinden", f"'{term}' niet gevonden")
 
     def alles_selecteren(self):
-        QMessageBox.information(self, "Alles selecteren", "Alles selecteren in de tekst")
         self.editor.selectAll()
 
     def ongedaan_maken(self):
-        QMessageBox.information(self, "Ongedaan maken", "Ongedaan maken (undo)")
         self.editor.undo()
 
     def opnieuw_doen(self):
-        QMessageBox.information(self, "Opnieuw doen", "Opnieuw doen (redo)")
         self.editor.redo()
 
     def normaliseren(self):
-        QMessageBox.information(self, "Normaliseren", "Normaliseren")
         cursor = self.editor.textCursor()
         volledige_tekst = self.editor.toPlainText()
         tussenstap = ' '.join(volledige_tekst.split('\n'))
@@ -428,7 +474,6 @@ class Markdown_Editor(QWidget):
         self.editor.setPlainText(genormaliseerde_tekst)
 
     def geen_hoofdletters(self):
-        QMessageBox.information(self, "Geen hoofdletters", "Geen hoofdletters, alles naar kleine letters")
         selectie = self.editor.textCursor()
         if selectie.hasSelection():
             geselecteerde_tekst = selectie.selectedText()
@@ -438,7 +483,6 @@ class Markdown_Editor(QWidget):
             QMessageBox.about(self, "Geen Selectie", "Selecteer eerst tekst om om te zetten naar kleine letters.")
 
     def schrift(self):
-        QMessageBox.information(self, "Schrift", "Omzetten naar schrift")
         selectie = self.editor.textCursor()
         if selectie.hasSelection():
             geselecteerde_tekst = selectie.selectedText()
@@ -471,31 +515,41 @@ class Markdown_Editor(QWidget):
         QMessageBox.information(self, "Lettergrootte", "Lettergrootte instellen")
     
     def over(self):        
-        QMessageBox.information(self, "Over", "Voorbeeldapp met PyQt6.")
+        QMessageBox.information(self, "Over Edith", "Markdown editor met preview.")
 
     def sneltoetsen(self):
-        QMessageBox.information(self, "Sneltoetsen", "Sneltoetsen overzicht")
+        QMessageBox.about(self, "Sneltoetsen", "Ctrl+N: Nieuw\nCtrl+O: Openen\nCtrl+S: Opslaan\n" \
+        "Ctrl+Shift+S: Opslaan als\nCtrl+Q: Sluiten\nCtrl+C: Kopiëren\nCtrl+X: Knippen\nCtrl+V: Plakken\n" \
+        "Ctrl+F: Zoeken\nCtrl+Z: Ongedaan maken\nCtrl+R: Opnieuw doen\nCtrl+A: Alles selecteren")
 
     def sneltoetsen_alt(self):
-        QMessageBox.information(self, "Sneltoetsen (Alt)", "Sneltoetsen (Alt) overzicht")
+        QMessageBox.about(self, "Sneltoetsen Alt", "Invoegen:\nAlt+D: Datum\nAlt+T: Tijd\nAlt+L: md link\n" \
+                          "Alt+A: md afbeelding\nAlt+I: if name == main\nAlt+F: Frontmatter\n\n" \
+                          "Bewerken:\nAlt+N: Normaliseren\nAlt+U: Geen hoofdletters\nAlt+S: Schrift\n\n")
+
 
     def markdown_overzicht(self):
-        QMessageBox.information(self, "Markdown", "Markdown overzicht")
+        QMessageBox.about(self, "Markdown", 
+                          "Koppen:\n" \
+                          "# H1\n## H2\n### H3\n\n" \
+                          "Vet (bold):\n**vet**\n\n" \
+                          "Schuin (italic):\n*schuin*\n\n" \
+                          "Blockquote:\n> blockquote\n\n" \
+                          "Genummerde lijst:\n1. eerste item\n2. tweede item\n3. derde item\n\n" \
+                          "Ongenummerde lijst:\n- item A\n- item B\n- item C\n\n" \
+                          "Highlight:\n==highlighted==\n")
 
     def datum(self):
-        QMessageBox.information(self, "Datum", "Datum invoegen")
         nu = datetime.datetime.now()
         datum_nu = nu.strftime("%Y-%m-%d")
         self.editor.insertPlainText(datum_nu)
 
     def tijd(self):
-        QMessageBox.information(self, "Tijd", "Tijd invoegen")
         nu = datetime.datetime.now()
         tijd_nu = nu.strftime("%H:%M")
         self.editor.insertPlainText(tijd_nu)
 
     def md_link(self):
-        QMessageBox.information(self, "md link", "md link invoegen")
         pathname = QFileDialog.getOpenFileName(self, 'Bestand openen', configuratie["opslaglocatie"], 'Alle bestanden (*)')
         if pathname[0]:
             bestandsnaam = pathname[0].split('/')[-1]
@@ -503,7 +557,6 @@ class Markdown_Editor(QWidget):
             self.editor.insertPlainText(md_code)
 
     def md_afbeelding(self):
-        QMessageBox.information(self, "md afbeelding", "md afbeelding invoegen")
         pathname = QFileDialog.getOpenFileName(self, 'Afbeelding openen', configuratie["opslaglocatie"], 'Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)')
         if pathname[0]:
             bestandsnaam = pathname[0].split('/')[-1]
@@ -511,14 +564,23 @@ class Markdown_Editor(QWidget):
             self.editor.insertPlainText(md_code)
 
     def if_name_is_main(self):
-        QMessageBox.information(self, "if name == main", "if name == main invoegen")
         self.editor.insertPlainText("if__name__ == '__main__':\n    ")
 
     def frontmatter(self):
-        QMessageBox.information(self, "Frontmatter", "Frontmatter invoegen")
+        fm = FRONTMATTER_TEXT
+        self.editor.insertPlainText(fm)
+
 
     def memo(self):
-        QMessageBox.information(self, "Memo", "Memo toevoegen of bewerken.")
+        self.memo_venster = Memo()
+        self.memo_venster.show()
 
     def memolijst(self):
-        QMessageBox.information(self, "Memolijst", "Memolijst, de lijst met de memo's.")
+        self.memo_lijst_venster = MemoLijst()
+        self.memo_lijst_venster.show()
+
+    def dialog_critical(self, s):
+        dlg = QMessageBox(self)
+        dlg.setText(s)
+        dlg.setIcon(QMessageBox.Icon.Critical)
+        dlg.show()
