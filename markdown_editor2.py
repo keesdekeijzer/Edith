@@ -27,9 +27,6 @@ class Markdown_Editor(QWidget):
     def __init__(self):
         super().__init__()
 
-        # tijdelijk
-        #self.current_file_path = "./test.md"
-
         self.unsaved_changes = False
         self.current_path = None
         
@@ -91,8 +88,6 @@ class Markdown_Editor(QWidget):
 
         maak_menu_punt(self, "font_actie", "Font...", "", self.font)
 
-        maak_menu_punt(self, "lettergrootte_actie", "Lettergrootte...", "", self.lettergrootte)
-
         # Invoegen - Datum, Tijd, md link, md afbeelding, if name == main, frontmatter
 
         maak_menu_punt(self, "datum_actie", "Datum", "Alt+D", self.datum)
@@ -126,6 +121,9 @@ class Markdown_Editor(QWidget):
         # Maak menubalk en menu's        
         
         menubalk = QMenuBar(self)                 # maak menubalk widget
+        menubalk.setStyleSheet("padding: 8px;")
+        menubalk.setMinimumHeight(30)
+        menubalk.setMaximumHeight(60)
         
         bestand_menu = menubalk.addMenu("Bestand")        
         bestand_menu.addAction(actie["nieuw_actie"])        
@@ -148,15 +146,12 @@ class Markdown_Editor(QWidget):
         bewerken_menu.addAction(actie["schrift_actie"])
 
         beeld_menu = menubalk.addMenu("Beeld")
-
         beeld_menu.addAction(actie["lichte_modus_actie"])
         beeld_menu.addAction(actie["donkere_modus_actie"])
         beeld_menu.addAction(actie["blauwe_modus_actie"])
         beeld_menu.addAction(actie["font_actie"])
-        beeld_menu.addAction(actie["lettergrootte_actie"])
 
         invoegen_menu = menubalk.addMenu("Invoegen")
-        # Invoegen - Datum, Tijd, md link, md afbeelding, if name == main, frontmatter
         invoegen_menu.addAction(actie["datum_actie"])
         invoegen_menu.addAction(actie["tijd_actie"])
         invoegen_menu.addAction(actie["md_link_actie"])
@@ -270,6 +265,16 @@ class Markdown_Editor(QWidget):
 
         # Sroll herstellen zodra de pagina geladen is
         def after_load(_):
+            """
+            Dit berekent de maximale verticale scrollafstand (in pixels) die de gebruiker kan scrollen op de pagina.
+
+            Uitleg kort:
+            - document.body.scrollHeight = totale hoogte van de inhoud van de pagina.
+            - window.innerHeight = hoogte van het zichtbare venster (viewport).
+            - h = document.body.scrollHeight - window.innerHeight = 
+            het verschil tussen inhoudshoogte en viewport‑hoogte → de maximale scrollTop-waarde (0 tot h). 
+            Als h ≤ 0 is, is er niks om te scrollen.
+            """
             js = f"""
             (function() {{
                 let h = document.body.scrollHeight - window.innerHeight;
@@ -373,23 +378,24 @@ class Markdown_Editor(QWidget):
         # Preview opnieuw renderen
         self.update_preview()
 
-    def load_file(self, path):
-        text = Path(path).read_text(encoding="utf-8")
-        self.editor.setPlainText(text)
+    def load_highlighter(self):
+        path = ""
+        i = self.current_path.rfind(".")  # index van de laatste punt       
+        if i != -1:
+            path = self.current_path[i:]
 
-        if path.endswith(".py"):
+        if path == ".py":
             self.editor.set_highlighter(PythonHighlighter)
-        elif path.endswith(".md"):
+        elif path == ".md":
             self.editor.set_highlighter(MarkdownHighlighter)
-        elif path.endswith(".html", ".htm"):
+        elif path == ".html" or path == ".htm":
             self.editor.set_highlighter(HtmlHighlighter)
         else:
-            self.editor.set_highlighter(PythonHighlighter)
+            self.editor.set_highlighter(MarkdownHighlighter)
 
     # menu acties
 
     def nieuw(self):        
-        QMessageBox.information(self, "Nieuw", "Nieuw bestand aangemaakt (voorbeeld).")
         if self.unsaved_changes:
             reply = QMessageBox.question(self, 'Waarschuwing', 
                                          'Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?')
@@ -398,40 +404,43 @@ class Markdown_Editor(QWidget):
         self.editor.clear()
         self.setWindowTitle("Geen naam")
         self.current_path = None 
+        self.statusbar.showMessage("Nieuw Bestand")
+        self.file_label.setText("?")
 
     def openen(self):        
-        QMessageBox.information(self, "Openen", "Open dialoog (voorbeeld).")
         if self.unsaved_changes:
             reply = QMessageBox.question(self, 'Waarschuwing', 
                                          'Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?')
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
         try:
-            fname = QFileDialog.getOpenFileName(self, 'Open bestand', configuratie["opslaglocatie"], 'Tekst bestanden (*.txt);;Alle bestanden (*)')
+            fname = QFileDialog.getOpenFileName(self, 'Open bestand', configuratie["opslaglocatie"], 'Alle bestanden (*)')
             self.setWindowTitle(fname[0])
+            self.file_label.setText(fname[0])
+            
             with open(fname[0], 'r') as f:
                 filetext = f.read()
                 self.editor.setPlainText(filetext)
             self.current_path = fname[0]
+            self.load_highlighter()
             self.statusbar.showMessage("Bestand geopend")
         except Exception as e:
             self.dialog_critical(str(e))
 
     def opslaan(self):        
-        QMessageBox.information(self, "Opslaan", "Opslaan dialoog (voorbeeld).")
         if self.current_path is not None:
             filetext = self.editor.toPlainText()
             try:
                 with open(self.current_path, 'w') as f:
                     f.write(filetext)
                 self.statusbar.showMessage("Bestand opgeslagen")
+                self.file_label.setText()
             except Exception as e:
                 self.dialog_critical(str(e))
         else:
             self.opslaan_als()
 
     def opslaan_als(self):        
-        QMessageBox.information(self, "Opslaan als", "Opslaan als dialoog (voorbeeld).")
         try:
             pathname = QFileDialog.getSaveFileName(self, 'Bestand opslaan', configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
             filetext = self.editor.toPlainText()
@@ -439,9 +448,11 @@ class Markdown_Editor(QWidget):
                 f.write(filetext)
             self.current_path = pathname[0]
             self.setWindowTitle(pathname[0])
+            self.file_label.setText(pathname[0])
             self.statusbar.showMessage("Bestand opgeslagen")
         except Exception as e:
-            self.dialog_critical(str(e))
+            errortekst = "Bestand niet opgeslagen!\n" + str(e)
+            self.dialog_critical(errortekst)
 
     def afsluiten(self):
         QMessageBox.information(self, "Afsluiten", "Programma afsluiten.")
@@ -514,12 +525,10 @@ class Markdown_Editor(QWidget):
             QMessageBox.about(self, "Geen Selectie", "Selecteer eerst tekst om om te zetten naar schrift.")
 
     def lichte_modus(self):
-        QMessageBox.information(self, "Lichte modus", "Lichte modus, zwarte tekst op witte achtegrond")
         configuratie["darkmode"] = 'light'
         self.setStyleSheet('')
 
     def donkere_modus(self):
-        QMessageBox.information(self, "Donkere modus", "Donkere modus, witte tekst, zwarte achtergrond")
         configuratie["darkmode"] = 'dark'
         self.setStyleSheet('''
             QWidget{
@@ -533,7 +542,6 @@ class Markdown_Editor(QWidget):
             ''')
 
     def blauwe_modus(self):
-        QMessageBox.information(self, "Blauwe modus", "Blauwe modus, witte tekst, blauwe achtergrond")
         configuratie["darkmode"] = 'blue'
         self.setStyleSheet('''
                 QWidget{
@@ -547,11 +555,11 @@ class Markdown_Editor(QWidget):
                 ''')
 
     def font(self):
-        QMessageBox.information(self, "Font", "Font instellen")
+        from PyQt6.QtWidgets import QFontDialog
+        font, ok = QFontDialog.getFont()
+        if ok:
+            self.editor.setFont(font)
 
-    def lettergrootte(self):
-        QMessageBox.information(self, "Lettergrootte", "Lettergrootte instellen")
-    
     def over(self):        
         QMessageBox.information(self, "Over Edith", "Markdown editor met preview.")
 
@@ -570,12 +578,12 @@ class Markdown_Editor(QWidget):
         QMessageBox.about(self, "Markdown", 
                           "Koppen:\n" \
                           "# H1\n## H2\n### H3\n\n" \
-                          "Vet (bold):\n**vet**\n\n" \
-                          "Schuin (italic):\n*schuin*\n\n" \
+                          "Vet (bold):\t**vet**\n\n" \
+                          "Schuin (italic):\t*schuin*\n\n" \
                           "Blockquote:\n> blockquote\n\n" \
                           "Genummerde lijst:\n1. eerste item\n2. tweede item\n3. derde item\n\n" \
                           "Ongenummerde lijst:\n- item A\n- item B\n- item C\n\n" \
-                          "Highlight:\n==highlighted==\n")
+                          "Highlight:\t==highlighted==\n")
 
     def datum(self):
         nu = datetime.datetime.now()

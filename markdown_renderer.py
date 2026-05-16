@@ -32,13 +32,13 @@ def render_markdown(text: str) -> str:
                 margin: 1rem 0;
             }}
             pre {{
-                background-color: #f6f8fa;
+                background-color: #CCCCCC;
                 padding: 1rem;
                 border-radius: 5px;
                 overflow-x: auto;
             }}
             code {{
-                background-color: #f6f8fa;
+                background-color: #CCCCCC;
                 padding: 2px 4px;
                 border-radius: 3px;
             }}
