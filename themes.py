@@ -3,7 +3,7 @@ LIGHT_THEME = {
     "foreground": "#000000",
     "line_highlight": "#F0F0F0",
     "line_number_bg": "#E0E0E0",
-    "line_number_text": "#000000",
+    "line_number_text": "#131FA5",
 }
 
 DARK_THEME = {

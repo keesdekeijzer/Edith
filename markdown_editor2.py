@@ -1,7 +1,8 @@
 import datetime
 
 from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QFileDialog, QInputDialog, QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
+from PyQt6.QtWidgets import QFileDialog, QInputDialog, QLabel, QMainWindow
+from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from highlighter_markdown import MarkdownHighlighter
 from highlighter_python import PythonHighlighter
@@ -176,6 +177,15 @@ class Markdown_Editor(QWidget):
         v_layout = QVBoxLayout(self)
         v_layout.setMenuBar(menubalk)  
 
+        self.file_label = QLabel("file label")
+        self.file_label.setStyleSheet("padding: 8px;")
+        self.file_label.setMinimumHeight(30)
+        self.file_label.setMaximumHeight(60)
+
+
+        v_layout.addWidget(self.file_label, 0)
+
+
         # menu einde
 
         layout = QHBoxLayout()
@@ -187,6 +197,10 @@ class Markdown_Editor(QWidget):
         #layout.addWidget(self.frontmatter, 0)
 
         self.statusbar = QtWidgets.QStatusBar()
+        self.statusbar.setStyleSheet("padding: 8px;")
+        self.statusbar.setMinimumHeight(30)
+        self.statusbar.setMaximumHeight(60)
+
         v_layout.addWidget(self.statusbar, 0)
         self.statusbar.showMessage("Ready", 3000)
 
@@ -378,7 +392,7 @@ class Markdown_Editor(QWidget):
         QMessageBox.information(self, "Nieuw", "Nieuw bestand aangemaakt (voorbeeld).")
         if self.unsaved_changes:
             reply = QMessageBox.question(self, 'Waarschuwing', 
-                                         'Huidig bestand is nog niet opgeslagen. Wilt u de wijzigingen opslaan?')
+                                         'Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?')
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
         self.editor.clear()
@@ -389,7 +403,7 @@ class Markdown_Editor(QWidget):
         QMessageBox.information(self, "Openen", "Open dialoog (voorbeeld).")
         if self.unsaved_changes:
             reply = QMessageBox.question(self, 'Waarschuwing', 
-                                         'Huidig bestand is nog niet opgeslagen. Wilt u de wijzigingen opslaan?')
+                                         'Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?')
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
         try:
@@ -501,12 +515,36 @@ class Markdown_Editor(QWidget):
 
     def lichte_modus(self):
         QMessageBox.information(self, "Lichte modus", "Lichte modus, zwarte tekst op witte achtegrond")
+        configuratie["darkmode"] = 'light'
+        self.setStyleSheet('')
 
     def donkere_modus(self):
         QMessageBox.information(self, "Donkere modus", "Donkere modus, witte tekst, zwarte achtergrond")
+        configuratie["darkmode"] = 'dark'
+        self.setStyleSheet('''
+            QWidget{
+                background-color: rgb(33,33,33);
+                color: #FFFFFF;
+                }
+            QPlainTextEdit{
+                background-color: rgb(46,46,46);
+                color: #FFFFFF;
+            }
+            ''')
 
     def blauwe_modus(self):
         QMessageBox.information(self, "Blauwe modus", "Blauwe modus, witte tekst, blauwe achtergrond")
+        configuratie["darkmode"] = 'blue'
+        self.setStyleSheet('''
+                QWidget{
+                    background-color: #0000AA;
+                    color: #FFFFFF;
+                    }
+                QPlainTextEdit{  
+                    background-color: #000BFF;
+                    color: #FFFFFF;
+                    }
+                ''')
 
     def font(self):
         QMessageBox.information(self, "Font", "Font instellen")

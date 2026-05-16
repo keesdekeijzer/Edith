@@ -5,7 +5,7 @@ from PyQt6.QtGui import QPainter, QColor, QPen, QTextFormat, QFont
 from highlighter_markdown import MarkdownHighlighter
 from line_numbers import LineNumberArea
 from highlighter_python import PythonHighlighter
-from themes import LIGHT_THEME, DARK_THEME
+from themes import LIGHT_THEME, DARK_THEME  # not used
 from PyQt6.QtGui import QTextCursor, QKeyEvent
 from PyQt6.QtCore import Qt
 from PyQt6.QtWebEngineWidgets import QWebEngineView
@@ -75,6 +75,7 @@ class CodeEditor(QPlainTextEdit):
         
         selection = QTextEdit.ExtraSelection()
         selection.format.setBackground(QColor(232, 232, 255))
+        selection.format.setForeground(QColor(33, 33, 33))
         selection.format.setProperty(QTextFormat.Property.FullWidthSelection, True)
         selection.cursor = self.textCursor()
         selection.cursor.clearSelection()
