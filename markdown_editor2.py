@@ -17,6 +17,7 @@ from PyQt6.QtGui import QImage, QGuiApplication, QAction, QTextCursor
 from PyQt6.QtCore import QStandardPaths
 import os
 from frontmatter_panel import FrontmatterPanel
+import pdfplumber
 
 # instellingen importeren
 from config import FRONTMATTER_TEXT, configuratie
@@ -52,6 +53,8 @@ class Markdown_Editor(QWidget):
         maak_menu_punt(self, "opslaan_actie", "Opslaan", "Ctrl+S", self.opslaan)
 
         maak_menu_punt(self, "opslaan_als_actie", "Opslaan als...", "Ctrl+Alt+S", self.opslaan_als)
+
+        maak_menu_punt(self, "importeer_pdf_als_tekst_actie", "Importeer pdf als tekst", "", self.import_pdf_as_text)
 
         maak_menu_punt(self, "afsluiten_actie", "Afsluiten", "Ctrl+Q", self.afsluiten)
 
@@ -130,17 +133,21 @@ class Markdown_Editor(QWidget):
         bestand_menu.addAction(actie["openen_actie"])
         bestand_menu.addAction(actie["opslaan_actie"]) 
         bestand_menu.addAction(actie["opslaan_als_actie"])
-        bestand_menu.addSeparator()        
+        bestand_menu.addSeparator()
+        bestand_menu.addAction(actie["importeer_pdf_als_tekst_actie"])
+        bestand_menu.addSeparator()
         bestand_menu.addAction(actie["afsluiten_actie"])
 
         bewerken_menu = menubalk.addMenu("Bewerken")
         bewerken_menu.addAction(actie["kopieren_actie"])
         bewerken_menu.addAction(actie["knippen_actie"])
         bewerken_menu.addAction(actie["plakken_actie"])
+        bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["zoeken_actie"])
         bewerken_menu.addAction(actie["alles_selecteren_actie"])
         bewerken_menu.addAction(actie["ongedaan_maken_actie"])
         bewerken_menu.addAction(actie["opnieuw_doen_actie"])
+        bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["normaliseren_actie"])
         bewerken_menu.addAction(actie["geen_hoofdletters_actie"])
         bewerken_menu.addAction(actie["schrift_actie"])
@@ -149,6 +156,7 @@ class Markdown_Editor(QWidget):
         beeld_menu.addAction(actie["lichte_modus_actie"])
         beeld_menu.addAction(actie["donkere_modus_actie"])
         beeld_menu.addAction(actie["blauwe_modus_actie"])
+        beeld_menu.addSeparator()
         beeld_menu.addAction(actie["font_actie"])
 
         invoegen_menu = menubalk.addMenu("Invoegen")
@@ -172,7 +180,7 @@ class Markdown_Editor(QWidget):
         v_layout = QVBoxLayout(self)
         v_layout.setMenuBar(menubalk)  
 
-        self.file_label = QLabel("file label")
+        self.file_label = QLabel("?")  # bestandsnaam
         self.file_label.setStyleSheet("padding: 8px;")
         self.file_label.setMinimumHeight(30)
         self.file_label.setMaximumHeight(60)
@@ -630,3 +638,34 @@ class Markdown_Editor(QWidget):
         dlg.setText(s)
         dlg.setIcon(QMessageBox.Icon.Critical)
         dlg.show()
+
+    def pdf_to_text(self, path):
+        text = []
+        with pdfplumber.open(path) as pdf:
+            for page in pdf.pages:
+                text.append(page.extract_text() or "")
+        return "\n\n".join(text)
+    
+    def open_pdf_as_text(self, path):
+        text = self.pdf_to_text(path)
+        self.editor.setPlainText(text)
+
+    def open_pdf_as_markdown(self, path):
+        text = self.pdf_to_text(path)
+        md = text.replace("\n", "  \n")
+        self.editor.setPlainText(md)
+
+    def import_pdf_as_text(self):
+        path, _ = QFileDialog.getOpenFileName(self, "Kies een pdf om te importeren", "", "PDF-bestanden (*.pdf)")
+        if not path:
+            return
+        try:
+            text = self.pdf_to_text(path)
+        except Exception as e:
+            QMessageBox.critical(self, "Fout bij importeren", str(e))
+            return
+        # Plaats tekst in editor
+        self.editor.setPlainText(text)
+
+        self.current_file_path = None
+        self.file_label.setText("?")
