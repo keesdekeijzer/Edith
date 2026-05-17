@@ -26,3 +26,9 @@ tags: [post,]
 summary: 
 ---
 """
+
+font_sizes = {
+    "H1": 20,
+    "H2": 18,
+    "H3": 16
+}

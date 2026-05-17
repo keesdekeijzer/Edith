@@ -20,7 +20,7 @@ from frontmatter_panel import FrontmatterPanel
 import pdfplumber
 
 # instellingen importeren
-from config import FRONTMATTER_TEXT, configuratie
+from config import FRONTMATTER_TEXT, configuratie, font_sizes
 from memo import Memo
 from memolijst import MemoLijst
 
@@ -55,6 +55,8 @@ class Markdown_Editor(QWidget):
         maak_menu_punt(self, "opslaan_als_actie", "Opslaan als...", "Ctrl+Alt+S", self.opslaan_als)
 
         maak_menu_punt(self, "importeer_pdf_als_tekst_actie", "Importeer pdf als tekst", "", self.import_pdf_as_text)
+
+        maak_menu_punt(self, "importeer_pdf_als_md_actie", "Importeer pdf als md", "", self.import_pdf_as_md)
 
         maak_menu_punt(self, "afsluiten_actie", "Afsluiten", "Ctrl+Q", self.afsluiten)
 
@@ -135,6 +137,7 @@ class Markdown_Editor(QWidget):
         bestand_menu.addAction(actie["opslaan_als_actie"])
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["importeer_pdf_als_tekst_actie"])
+        bestand_menu.addAction(actie["importeer_pdf_als_md_actie"])
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["afsluiten_actie"])
 
@@ -669,3 +672,87 @@ class Markdown_Editor(QWidget):
 
         self.current_file_path = None
         self.file_label.setText("?")
+
+    def import_pdf_as_md(self):
+        path, _ = QFileDialog.getOpenFileName(self, "Kies een pdf om te importeren", "", "PDF-bestanden (*.pdf)")
+        if not path:
+            return
+        try:
+            text = self.pdf_to_markdown(path)
+        except Exception as e:
+            QMessageBox.critical(self, "Fout bij importeren", str(e))
+            return
+        # Plaats tekst in editor
+        self.editor.setPlainText(text)
+
+        self.current_file_path = None
+        self.file_label.setText("?")
+
+    def pdf_to_markdown(self, path: str) -> str:
+        md_lines = []
+
+        with pdfplumber.open(path) as pdf:
+            for page in pdf.pages:
+                chars = page.chars  # individuele tekstfragmenten met font info
+                lines = self.group_chars_into_lines(chars)
+                md_lines.extend(self.convert_lines_to_md(lines))
+
+        return "\n".join(md_lines)
+    
+    def group_chars_into_lines(self, chars):
+        lines = {}
+        for ch in chars:
+            y = round(ch["top"], 1)
+            lines.setdefault(y, []).append(ch)
+
+        # sorteer op Y (boven naar beneden)
+        sorted_lines = []
+        for y in sorted(lines.keys()):
+            line = sorted(lines[y], key=lambda c: c["x0"])
+            sorted_lines.append(line)
+        return sorted_lines
+    
+    def detect_heading_level(self, font_size):
+        if font_size >= font_sizes["H1"]:
+            return 1
+        if font_size >= font_sizes["H2"]:
+            return 2
+        if font_size >= font_sizes["H3"]:
+            return 3
+        return None
+    
+    def style_text(self, text, fontname):
+        if "Bold" in fontname:
+            return f"**{text}**"
+        if "Italic" in fontname or "Oblique" in fontname:
+            return f"*{text}"
+        return text
+    
+    def convert_lines_to_md(self, lines):
+        md = []
+
+        for line in lines:
+            # combineer chars
+            text = "".join(ch["text"] for ch in line).strip()
+            if not text:
+                md.append("")
+                continue
+
+            # detecteer heading
+            avg_size = sum(ch["size"] for ch in line) / len(line)
+            level = self.detect_heading_level(avg_size)
+            if level:
+                md.append("#" * level + " " + text)
+                continue
+
+            # detecteer bullet list
+            if text.startswith(("•", "-", "◦", "‣")):
+                md.append("- " + text.lstrip("•-◦‣ "))
+                continue
+
+            # detecteer bold/italic per char
+            styled = "".join(self.style_text(ch["text"], ch["fontname"]) for ch in line)
+            md.append(styled)
+
+        return md
+    
