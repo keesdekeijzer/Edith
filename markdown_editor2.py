@@ -18,6 +18,10 @@ from PyQt6.QtCore import QStandardPaths
 import os
 from frontmatter_panel import FrontmatterPanel
 import pdfplumber
+import pytesseract
+from PIL import Image
+
+from _fontsize import fontsize_counts
 
 # instellingen importeren
 from config import FRONTMATTER_TEXT, configuratie, font_sizes
@@ -56,7 +60,7 @@ class Markdown_Editor(QWidget):
 
         maak_menu_punt(self, "importeer_pdf_als_tekst_actie", "Importeer pdf als tekst", "", self.import_pdf_as_text)
 
-        maak_menu_punt(self, "importeer_pdf_als_md_actie", "Importeer pdf als md", "", self.import_pdf_as_md)
+        maak_menu_punt(self, "importeer_pdf_als_md_actie", "Importeer pdf als markdown", "", self.import_pdf_as_md)
 
         maak_menu_punt(self, "afsluiten_actie", "Afsluiten", "Ctrl+Q", self.afsluiten)
 
@@ -642,6 +646,12 @@ class Markdown_Editor(QWidget):
         dlg.setIcon(QMessageBox.Icon.Critical)
         dlg.show()
 
+    # self.import_pdf_as_text
+    # > self.pdf_to_text(path)
+
+    # self.import_pdf_as_md
+
+
     def pdf_to_text(self, path):
         text = []
         with pdfplumber.open(path) as pdf:
@@ -663,7 +673,7 @@ class Markdown_Editor(QWidget):
         if not path:
             return
         try:
-            text = self.pdf_to_text(path)
+            text = self.pdf_to_text(path)  # self.pdf_to_text_with_ocr(path)
         except Exception as e:
             QMessageBox.critical(self, "Fout bij importeren", str(e))
             return
@@ -678,7 +688,7 @@ class Markdown_Editor(QWidget):
         if not path:
             return
         try:
-            text = self.pdf_to_markdown(path)
+            text = self.pdf_to_markdown(path)  # self.pdf_to_markdown_with_ocr
         except Exception as e:
             QMessageBox.critical(self, "Fout bij importeren", str(e))
             return
@@ -689,6 +699,50 @@ class Markdown_Editor(QWidget):
         self.file_label.setText("?")
 
     def pdf_to_markdown(self, path: str) -> str:
+        # fontsizes
+        # counts_by_page, dict(total_counter) = fontsize_counts(path)
+        per_page, totaal  = fontsize_counts(path)
+        print("Per pagina (pagina, {fontsize: count}):")
+        for pnum, ctr in per_page:
+            print(f"Pagina {pnum}: {ctr}")
+
+        print("\nTotaal over hele document (fontsize: count):")
+        # Sorteer op fontsize oplopend
+        grootste_font_aantal = 0
+        grootste_font_size = 0
+        for size in sorted(totaal):
+            print(f"{size}: {totaal[size]}")
+            fontmaat = size
+            fontaantal = totaal[size]
+            
+            if fontaantal > grootste_font_aantal:
+                grootste_font_aantal = fontaantal
+                grootste_font_size = fontmaat
+        print("meest gebruikte font maat: ", grootste_font_size)
+
+        kop_fonts = {}
+        for size in sorted(totaal):
+            if size > grootste_font_size:
+                kop_fonts[size] = totaal[size]
+        lengte = len(kop_fonts)
+        print("lengte: ",lengte)
+        volgende = "H1"
+        for fontmaat in (sorted(kop_fonts, reverse=True)):
+            print(fontmaat)
+            if lengte > 0:
+                font_sizes[volgende] = fontmaat - 0.1
+                if volgende == "H3":
+                    lengte = 0
+                if volgende == "H2":
+                    volgende = "H3"
+                if volgende == "H1":
+                    volgende = "H2"
+        print(font_sizes)
+
+
+
+
+        #
         md_lines = []
 
         with pdfplumber.open(path) as pdf:
@@ -756,3 +810,33 @@ class Markdown_Editor(QWidget):
 
         return md
     
+    def page_needs_ocr(self, page):
+        text = page.extract_text()
+        return not text or text.strip() == ""
+    
+    def ocr_page(self, page):
+        # Render PDF-pagina als afbeelding
+        img = page.to_image(resolution=300).original
+        pil_img = Image.fromarray(img)
+        return pytesseract.image_to_string(pil_img)
+    
+    def pdf_to_text_with_ocr(self, path):
+        pages_text = []
+
+        with pdfplumber.open(path) as pdf:
+            for page in pdf.pages:
+                text = page.extract_text()
+
+                if not text or text.strip() == "":
+                    # OCR fallback
+                    text = self.ocr_page(page)
+
+                pages_text.append(text or "")
+
+        return "\n\n".join(pages_text)
+    
+    def pdf_to_markdown_with_ocr(self, path):
+        raw_text = self.pdf_to_text_with_ocr(path)
+        return self.pdf_to_markdown(raw_text)
+    
+

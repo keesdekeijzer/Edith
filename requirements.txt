@@ -2,6 +2,7 @@ cffi==2.0.0
 charset-normalizer==3.4.7
 cryptography==48.0.0
 markdown==3.10.2
+packaging==26.2
 pdfminer-six==20251230
 pdfplumber==0.11.9
 pillow==12.2.0
@@ -12,4 +13,5 @@ pyqt6-qt6==6.11.0
 pyqt6-sip==13.11.1
 pyqt6-webengine==6.11.0
 pyqt6-webengine-qt6==6.11.0
+pytesseract==0.3.13
 pyyaml==6.0.3
