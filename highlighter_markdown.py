@@ -1,6 +1,7 @@
 from PyQt6.QtCore import QRegularExpression, QRegularExpression, Qt
-from PyQt6.QtGui import QFont, QSyntaxHighlighter, QTextCursor, QTextCharFormat, QColor
-
+from PyQt6.QtGui import QFont, QSyntaxHighlighter, QTextCursor, QTextCharFormat, QColor, QTextCharFormat
+#from markdown_editor2 import SpellChecker
+#import language_tool_python
 
 class MarkdownHighlighter(QSyntaxHighlighter):
     def __init__(self, document, theme=None):
@@ -16,6 +17,11 @@ class MarkdownHighlighter(QSyntaxHighlighter):
             'link_url': QColor('#0000cd'),   # MediumBlue
             'frontmatter': QColor('#800080'),  # Purple
         }
+
+        
+        #self.spell_format = QTextCharFormat()
+        #self.spell_format.setUnderlineColor(QColor("#ff5555"))
+        #self.spell_format.setUnderlineStyle(QTextCharFormat.UnderlineStyle.SpellCheckUnderline)
 
         self.rules = []
 
@@ -68,6 +74,19 @@ class MarkdownHighlighter(QSyntaxHighlighter):
         return fmt
     
     def highlightBlock(self, text):
+        #spellchecker = SpellChecker()
+        #super().highlightBlock(text)
+        #print("2")
+        
+        #errors = spellchecker.check(text)
+        #print("errors:", errors)
+        
+        #for err in errors:
+            #start = err.offset
+            #length = err.errorLength
+            #length = err.error_length
+            #self.setFormat(start, length, self.spell_format)
+
         # Frontmatter handling
         if text.strip() == '---':
             self.in_frontmatter = not self.in_frontmatter
@@ -84,3 +103,5 @@ class MarkdownHighlighter(QSyntaxHighlighter):
                 match = it.next()
                 start, length = match.capturedStart(1), match.capturedLength(1)
                 self.setFormat(start, length, fmt)
+
+

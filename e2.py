@@ -29,6 +29,33 @@ class CodeEditor(QPlainTextEdit):
 
         # tijdelijk
         self.set_highlighter(MarkdownHighlighter)
+
+
+    """
+    def contextMenuEvent(self, event):
+        
+        menu = self.createStandardContextMenu()
+        
+
+        cursor = self.cursorForPosition(event.pos())
+        cursor.select(cursor.SelectionType.WordUnderCursor)
+        word = cursor.selectedText()
+
+        
+        suggestions = self.window().spellchecker.suggestions_for(word)
+
+        if suggestions:
+            menu.addSeparator()
+            for s in suggestions[:5]:
+                action = menu.addAction(f"Vervang door: {s}")
+                action.triggered.connect(lambda _, w=s: self.replace_word(cursor, w))
+
+        menu.exec(event.globalPos())
+        """
+        
+
+    def replace_word(self, cursor, new_word):
+        cursor.insertText(new_word)
         
 
     def lineNumberAreaWidth(self):

@@ -20,6 +20,8 @@ from frontmatter_panel import FrontmatterPanel
 import pdfplumber
 import pytesseract
 from PIL import Image
+from langdetect import detect, LangDetectException
+#import language_tool_python
 
 from _fontsize import fontsize_counts
 
@@ -34,6 +36,15 @@ class Markdown_Editor(QWidget):
 
         self.unsaved_changes = False
         self.current_path = None
+
+        LANG_MAP = {
+            "nl": "nld",
+            "en": "eng",
+            "fr": "fra",
+            "de": "deu",
+            "es": "spa",
+            "it": "ita",
+        }
         
 
         # menu begin
@@ -817,7 +828,7 @@ class Markdown_Editor(QWidget):
     def ocr_page(self, page):
         # Render PDF-pagina als afbeelding
         img = page.to_image(resolution=300).original
-        pil_img = Image.fromarray(img)
+        pil_img = Image.fromarray(img)  # gaat fou als er geen array is
         return pytesseract.image_to_string(pil_img)
     
     def pdf_to_text_with_ocr(self, path):
@@ -839,4 +850,55 @@ class Markdown_Editor(QWidget):
         raw_text = self.pdf_to_text_with_ocr(path)
         return self.pdf_to_markdown(raw_text)
     
+    def detect_language(self, text: str) -> str:
+        try:
+            return detect(text)
+        except LangDetectException:
+            return "unknown"
+        
+    def ocr_page_with_lang(self, page):
+        # Render PDF-pagima als afbeelding
+        img = page.to_image(resolution=300).original
+        pil_img = Image.fromarray(img)  # gaat fout als er geen array is
 
+        # Probeer eerst een kleine preview voor taal detectie
+        preview_text = pytesseract.image_to_string(pil_img, lang="eng")[:500]
+
+        lang = self.detect_language(preview_text)
+        tess_lang = self.LANG_MAP.get(lang, "eng")  # fallback naar Engels
+
+        # OCR met gedetecteerde taal
+        return pytesseract.image_to_string(pil_img, lang=tess_lang)
+
+    def pdf_to_text_with_auto_ocr(self, path):
+        pages_text = []
+
+        with pdfplumber.open(path) as pdf:
+            for page in pdf.pages:
+                text = page.extract_text()
+
+                if not text or text.strip() == "":
+                    # OCR fallback met automatische taal
+                    text = self.ocr_page_with_lang(page)
+
+                pages_text.append(text or "")
+
+        return "\n\n".join(pages_text)
+                
+"""
+# spellcheck is te langzaam, het vertraagd het programma enorm
+
+class SpellChecker:
+    def __init__(self, lang="nl"):
+        self.tool = language_tool_python.LanguageTool(lang)
+        
+
+    def check(self,text):
+        return self.tool.check(text)
+    
+    def suggestions_for(self, word):
+        matches = self.tool.check(word)
+        if matches:
+            return matches[0].replacements
+        return []
+"""
