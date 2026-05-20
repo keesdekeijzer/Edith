@@ -22,6 +22,8 @@ import pytesseract
 from PIL import Image
 from langdetect import detect, LangDetectException
 #import language_tool_python
+from PyQt6.QtGui import QTextDocument
+from PyQt6.QtPrintSupport import QPrinter
 
 from _fontsize import fontsize_counts
 
@@ -73,8 +75,10 @@ class Markdown_Editor(QWidget):
 
         maak_menu_punt(self, "importeer_pdf_als_md_actie", "Importeer pdf als markdown", "", self.import_pdf_as_md)
 
-        maak_menu_punt(self, "afsluiten_actie", "Afsluiten", "Ctrl+Q", self.afsluiten)
+        maak_menu_punt(self, "export_pdf_actie", "Exporteer als PDF", "", self.export_pdf)
 
+        maak_menu_punt(self, "afsluiten_actie", "Afsluiten", "Ctrl+Q", self.afsluiten)
+ 
         # Bewerken - Kopieren, Plakken, Knippen, Zoeken, Alles selecteren, Ongedaan maken, Opnieuw doen,
         #     Normaliseren, Geen hoofdletters, Schrift
 
@@ -153,6 +157,8 @@ class Markdown_Editor(QWidget):
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["importeer_pdf_als_tekst_actie"])
         bestand_menu.addAction(actie["importeer_pdf_als_md_actie"])
+        bestand_menu.addSeparator()
+        bestand_menu.addAction(actie["export_pdf_actie"])
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["afsluiten_actie"])
 
@@ -460,7 +466,7 @@ class Markdown_Editor(QWidget):
                 with open(self.current_path, 'w') as f:
                     f.write(filetext)
                 self.statusbar.showMessage("Bestand opgeslagen")
-                self.file_label.setText()
+                self.file_label.setText(self.current_path)
             except Exception as e:
                 self.dialog_critical(str(e))
         else:
@@ -884,7 +890,47 @@ class Markdown_Editor(QWidget):
                 pages_text.append(text or "")
 
         return "\n\n".join(pages_text)
-                
+
+    def export_markdown_to_pdf(self, md_text, output_path):
+        # 1. Markdown -> HTML
+        html = render_markdown(md_text)
+
+        # 2. HTML in QTextDocument
+        doc = QTextDocument()
+        doc.setHtml(html)
+
+        # 3. PDF printer instellen
+        printer = QPrinter()
+        printer.setOutputFormat(QPrinter.OutputFormat.PdfFormat)
+        printer.setOutputFileName(output_path)
+
+        # 4. Renderen
+        doc.print(printer)
+
+    def export_pdf(self):
+        path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Exporteer naar PDF",
+            "",
+            "PDF-bestanden (*.pdf)"
+        )
+
+        if not path:
+            return
+        
+        try:
+            md_text = self.editor.toPlainText()
+            self.export_markdown_to_pdf(md_text, path)
+        except Exception as e:
+            QMessageBox.critical(self, "Fout bij exporteren", str(e))
+            return
+        
+        QMessageBox.information(self, "Succes", "PDF succesvol opgeslagen!")
+
+
+
+
+
 """
 # spellcheck is te langzaam, het vertraagd het programma enorm
 
