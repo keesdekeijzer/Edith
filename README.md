@@ -8,3 +8,5 @@ Edith heeft de mogelijkheid om de tekst uit een pdf te importeren.
 
 De inhoud van een pdf kan worden geimporteerd als markdown.
 
+Er is ook een export naar Word-formaat mogelijk.
+

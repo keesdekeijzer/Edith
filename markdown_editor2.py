@@ -9,7 +9,7 @@ from highlighter_python import PythonHighlighter
 from highlighter_html import HtmlHighlighter
 from markdown_renderer import render_markdown
 from e2 import CodeEditor
-import re
+import re, yaml
 from outline_panel import OutlinePanel 
 from pathlib import Path
 from PyQt6.QtCore import QUrl
@@ -24,6 +24,11 @@ from langdetect import detect, LangDetectException
 #import language_tool_python
 from PyQt6.QtGui import QTextDocument
 from PyQt6.QtPrintSupport import QPrinter
+
+from docx import Document
+from bs4 import BeautifulSoup
+
+import hashlib
 
 from _fontsize import fontsize_counts
 
@@ -76,6 +81,8 @@ class Markdown_Editor(QWidget):
         maak_menu_punt(self, "importeer_pdf_als_md_actie", "Importeer pdf als markdown", "", self.import_pdf_as_md)
 
         maak_menu_punt(self, "export_pdf_actie", "Exporteer als PDF", "", self.export_pdf)
+
+        maak_menu_punt(self, "export_word_actie", "Exporteer naar Word", "", self.export_word)
 
         maak_menu_punt(self, "afsluiten_actie", "Afsluiten", "Ctrl+Q", self.afsluiten)
  
@@ -159,6 +166,7 @@ class Markdown_Editor(QWidget):
         bestand_menu.addAction(actie["importeer_pdf_als_md_actie"])
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["export_pdf_actie"])
+        bestand_menu.addAction(actie["export_word_actie"])
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["afsluiten_actie"])
 
@@ -926,6 +934,108 @@ class Markdown_Editor(QWidget):
             return
         
         QMessageBox.information(self, "Succes", "PDF succesvol opgeslagen!")
+
+    def html_to_docx(self, html, output_path):
+        doc = Document()
+        soup = BeautifulSoup(html, "html.parser")
+
+        for el in soup.recursiveChildGenerator():
+            if el.name == "h1":
+                doc.add_heading(el.get_text(), level=1)
+            elif el.name == "h2":
+                doc.add_heading(el.get_text(), level=2)
+            elif el.name == "h3":
+                doc.add_heading(el.get_text(), level=3)
+            elif el.name =="p":
+                doc.add_paragraph(el.get_text())
+            elif el.name == "pre":
+                doc.add_paragraph(el.get_text(), style="Intense Quote")
+            elif el.name == "code":
+                doc.add_paragraph(el.get_text(), style="Intense Quote")
+            elif el.name == "li":
+                doc.add_paragraph(el.get_text(), style="List Bullet")
+            elif el.name == "img":
+                src = el["src"]
+                doc.add_picture(src, width=None)  # optioneel: breedte instellen
+
+        doc.save(output_path)
+
+    def export_markdown_to_word(self, md_text, output_path):
+        # 1. Metadata
+        meta = self.extract_metadata(md_text)
+
+        # 2. Markdown -> HTML
+        html = render_markdown(md_text)
+
+        # 3. TOC genereren
+        headings = self.extract_headings(md_text)
+        toc_html = self.build_clickable_toc(headings)
+
+        # 4. TOC + body combineren
+        full_html = toc_html + "<hr>" + html
+
+        # 5. HTML -> DOCX
+        self.html_to_docx(full_html, output_path)
+
+    def extract_metadata(self, md_text):
+        """
+        Verwacht YAML frontmatter bovenaan het document.
+        """
+        fm = re.match(r"---\n(.*?)\n---", md_text, re.DOTALL)
+        if not fm:
+            return {}
+        
+        data = yaml.safe_load(fm.group(1))
+        return data or {}
+
+    def slugify(self, text):
+        # Unieke maar stabiele ID
+        base = re.sub(r"[^a-zA-Z0-9]+", "-", text).strip("-").lower()
+        h = hashlib.md5(text.encode()).hexdigest()[:6]
+        return f"{base}-{h}"
+
+    def extract_headings(self, md_text):
+        headings = []
+        HEADING_RE = re.compile(r"^(#{1,6})\s+(.*)", re.MULTILINE)
+        for match in HEADING_RE.finditer(md_text):
+            level = len(match.group(1))
+            title = match.group(2).strip()
+            anchor = self.slugify(title)
+            headings.append((level, title, anchor))
+        return headings
+
+    def build_clickable_toc(self, headings):
+        html = "<h1>Inhoudsopgave</h1><ul>"
+        prev_level = 1
+
+        for level, title, anchor in headings:
+            if level > prev_level:
+                html += "<ul>" * (level - prev_level)
+            elif level < prev_level:
+                html += "</ul>" * (prev_level - level)
+
+            html += f"<li><a href=\"#{anchor}\">{title}</a></li>"
+            prev_level = level
+
+        html += "</ul>" * prev_level
+        return html
+
+
+    def export_word(self):
+        path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Exporteer naar Word",
+            "",
+            "Word-bestanden (*.docx)"
+        )
+
+        if not path:
+            return
+        
+        md_text = self.editor.toPlainText()
+        self.export_markdown_to_word(md_text, path)
+
+        QMessageBox.information(self, "Succes", "Word-document opgeslagen!")
 
 
 
