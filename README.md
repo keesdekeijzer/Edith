@@ -10,3 +10,4 @@ De inhoud van een pdf kan worden geimporteerd als markdown.
 
 Er is ook een export naar Word-formaat mogelijk.
 
+Export naar epub is ook mogelijk.

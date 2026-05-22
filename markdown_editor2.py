@@ -29,6 +29,7 @@ from docx import Document
 from bs4 import BeautifulSoup
 
 import hashlib
+from ebooklib import epub
 
 from _fontsize import fontsize_counts
 
@@ -83,6 +84,8 @@ class Markdown_Editor(QWidget):
         maak_menu_punt(self, "export_pdf_actie", "Exporteer als PDF", "", self.export_pdf)
 
         maak_menu_punt(self, "export_word_actie", "Exporteer naar Word", "", self.export_word)
+
+        maak_menu_punt(self, "export_epub_actie", "Exporteer naar ePub", "", self.export_epub)
 
         maak_menu_punt(self, "afsluiten_actie", "Afsluiten", "Ctrl+Q", self.afsluiten)
  
@@ -167,6 +170,7 @@ class Markdown_Editor(QWidget):
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["export_pdf_actie"])
         bestand_menu.addAction(actie["export_word_actie"])
+        bestand_menu.addAction(actie["export_epub_actie"])
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["afsluiten_actie"])
 
@@ -1037,8 +1041,82 @@ class Markdown_Editor(QWidget):
 
         QMessageBox.information(self, "Succes", "Word-document opgeslagen!")
 
+    def export_markdown_to_epub(self, md_text, output_path):
+        # 1. Metadata
+        meta = self.extract_metadata(md_text)
+        title = meta.get("title", "Mijn Markdown Boek")
+        author = meta.get("author", "Onbekende Auteur")
 
+        # 2. Markdown -> HTML
+        html = render_markdown(md_text)
 
+        # 3. EPUB object aanmaken
+        book = epub.EpubBook()
+        book.set_identifier("id123456")
+        book.set_title(title)
+        #book.set_author(author)
+        book.set_language("nl")
+
+        # 4. Cover afbeelding (optioneel)
+        # cover_path = "path/to/cover.jpg"
+        # if os.path.exists(cover_path):
+        #     with open(cover_path, "rb") as f:
+        #         book.set_cover("cover.jpg", f.read())
+
+        # 5. TOC genereren
+        headings = self.extract_headings(md_text)
+        toc_html = self.build_clickable_toc(headings)
+
+        toc_item = epub.EpubHtml(title="Inhoudsopgave", file_name="toc.xhtml", lang="nl")
+        toc_item.content = toc_html
+        book.add_item(toc_item)
+
+        # 6. Body
+        body_item = epub.EpubHtml(title=title, file_name="body.xhtml", lang="nl")
+        body_item.content = html
+        book.add_item(body_item)
+
+        # TOC + spine
+        book.toc = (epub.Link("toc.xhtml", "Inhoudsopgave", "toc"), epub.Link("body.xhtml", title, "body"))
+
+        book.spine = ["nav", toc_item, body_item]
+
+        # 8. Navigatie
+        book.add_item(epub.EpubNcx())
+        book.add_item(epub.EpubNav())
+
+        # 9. CSS (optioneel)
+        style = """
+        body { font-family: Arial, sans-serif; line-height: 1.5; padding: 1em; }
+        h1 { font-size: 2em; margin-top: 1em; }
+        h2 { font-size: 1.5em; margin-top: 1em; }
+        h3 { font-size: 1.2em; margin-top: 1em; }
+        p { margin-bottom: 1em; }
+        pre { font-family: "Courier New", monospace; background: #f4f4f4; padding: 1em; overflow-x: auto; }
+        code { font-family: "Courier New", monospace; background: #f4f4f4; padding: 0.2em 0.4em; }
+        img { max-width: 100%; height: auto; }
+        """
+        css = epub.EpubItem(uid="style", file_name="style.css", media_type="text/css", content=style)
+        book.add_item(css)
+
+        # 10.EPUB opslaan
+        epub.write_epub(output_path, book, {})
+
+    def export_epub(self):
+        path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Exporteer naar EPUB",
+            "",
+            "EPUB-bestanden (*.epub)"
+        )
+
+        if not path:
+            return
+        
+        md_text = self.editor.toPlainText()
+        self.export_markdown_to_epub(md_text, path)
+
+        QMessageBox.information(self, "Succes", "EPUB-boek opgeslagen!")
 
 
 """
