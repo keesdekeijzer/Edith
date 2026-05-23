@@ -731,33 +731,26 @@ class Markdown_Editor(QWidget):
         # fontsizes
         # counts_by_page, dict(total_counter) = fontsize_counts(path)
         per_page, totaal  = fontsize_counts(path)
-        print("Per pagina (pagina, {fontsize: count}):")
-        for pnum, ctr in per_page:
-            print(f"Pagina {pnum}: {ctr}")
 
-        print("\nTotaal over hele document (fontsize: count):")
         # Sorteer op fontsize oplopend
         grootste_font_aantal = 0
         grootste_font_size = 0
         for size in sorted(totaal):
-            print(f"{size}: {totaal[size]}")
             fontmaat = size
             fontaantal = totaal[size]
             
             if fontaantal > grootste_font_aantal:
                 grootste_font_aantal = fontaantal
                 grootste_font_size = fontmaat
-        print("meest gebruikte font maat: ", grootste_font_size)
+
 
         kop_fonts = {}
         for size in sorted(totaal):
             if size > grootste_font_size:
                 kop_fonts[size] = totaal[size]
         lengte = len(kop_fonts)
-        print("lengte: ",lengte)
         volgende = "H1"
         for fontmaat in (sorted(kop_fonts, reverse=True)):
-            print(fontmaat)
             if lengte > 0:
                 font_sizes[volgende] = fontmaat - 0.1
                 if volgende == "H3":
@@ -766,7 +759,7 @@ class Markdown_Editor(QWidget):
                     volgende = "H3"
                 if volgende == "H1":
                     volgende = "H2"
-        print(font_sizes)
+
 
 
 
@@ -1041,7 +1034,7 @@ class Markdown_Editor(QWidget):
 
         QMessageBox.information(self, "Succes", "Word-document opgeslagen!")
 
-    def export_markdown_to_epub(self, md_text, output_path):
+    def export_markdown_to_epub_zonder_hoofdstukken(self, md_text, output_path):
         # 1. Metadata
         meta = self.extract_metadata(md_text)
         title = meta.get("title", "Mijn Markdown Boek")
@@ -1054,7 +1047,7 @@ class Markdown_Editor(QWidget):
         book = epub.EpubBook()
         book.set_identifier("id123456")
         book.set_title(title)
-        #book.set_author(author)
+        book.add_author(author)
         book.set_language("nl")
 
         # 4. Cover afbeelding (optioneel)
@@ -1117,6 +1110,115 @@ class Markdown_Editor(QWidget):
         self.export_markdown_to_epub(md_text, path)
 
         QMessageBox.information(self, "Succes", "EPUB-boek opgeslagen!")
+
+    def split_into_chapters(self, md_text):
+        regels = md_text.split("\n")
+        parts = []
+        hoofdstuk_inhoud = ""
+        for regel in regels:
+            if regel.startswith("# "):
+                if hoofdstuk_inhoud:
+                    parts.append(hoofdstuk_inhoud)
+                hoofstuktitel = regel[2:].strip()
+                parts.append(hoofstuktitel)
+                hoofdstuk_inhoud = ""
+            else:
+                hoofdstuk_inhoud += regel + "\n"
+                if hoofdstuk_inhoud.strip():
+                    hoofdstuk_inhoud += "\n"
+        if hoofdstuk_inhoud.strip():
+            parts.append(hoofdstuk_inhoud)
+        
+
+        chapters = []
+
+        for i in range(1, len(parts), 2):
+            title = parts[i].strip()
+            content = parts[i+1].strip() if i+1 < len(parts) else ""
+            chapters.append((title, content))
+
+        return chapters
+    
+    def chapters_to_html(self, chapters):
+        html_chapters = []
+        for title, md in chapters:
+            #html = self.markdown_to_html(md)
+            html = render_markdown(md)
+            html_chapters.append((title, html))
+        return html_chapters
+
+    def create_epub_chapters(self, book, html_chapters):
+        epub_chapters = []
+
+        for idx, (title, html) in enumerate(html_chapters, start=1):
+            
+            item = epub.EpubHtml(
+                title=title,
+                file_name=f"chapter_{idx}.xhtml", 
+                lang="nl")
+            item.content = html
+            book.add_item(item)
+            epub_chapters.append(item)
+
+        return epub_chapters
+
+    def build_epub_toc(self, epub_chapters):
+        return tuple(
+            epub.Link(item.file_name, item.title, f"chap{idx}")
+              for idx, item in enumerate(epub_chapters, start=0)
+              )
+    
+    def export_markdown_to_epub(self, md_text, output_path):
+        meta = self.extract_metadata(md_text)
+        title = meta.get("title", "Mijn Markdown Boek")
+        author = meta.get("author", "Onbekende Auteur")
+
+        # 1. Markdown -> hoofdstukken
+        chapters = self.split_into_chapters(md_text)
+        html_chapters = self.chapters_to_html(chapters)
+
+        # 2. EPUB object aanmaken
+        book = epub.EpubBook()
+        book.set_title(title)
+        book.add_author(author)
+        book.set_language("nl")
+
+        # 3. Hoofdstukken toevoegen
+        epub_items = self.create_epub_chapters(book, html_chapters)
+
+        # 4. TOC
+        book.toc = self.build_epub_toc(epub_items)
+
+        # 5. Spine
+        book.spine = ["nav"] + epub_items
+
+        # 6. Navigatie
+        book.add_item(epub.EpubNcx())
+
+        book.add_item(epub.EpubNav())
+
+        # remove
+        book.items = [i for i in book.get_items() if i.file_name not in ('nav.xhtml','toc.ncx')]
+        # add proper ones
+        book.add_item(epub.EpubNcx())
+        book.add_item(epub.EpubNav())
+
+
+        # 7. CSS (optioneel)
+        css = epub.EpubItem(uid="style", file_name="style.css", media_type="text/css", content="""
+        body { font-family: Arial, sans-serif; line-height: 1.5; padding: 1em; }
+        h1 { font-size: 2em; margin-top: 1em; }
+        h2 { font-size: 1.5em; margin-top: 1em; }
+        h3 { font-size: 1.2em; margin-top: 1em; }
+        p { margin-bottom: 1em; }
+        pre { font-family: "Courier New", monospace; background: #f4f4f4; padding: 1em; overflow-x: auto; }
+        code { font-family: "Courier New", monospace; background: #f4f4f4; padding: 0.2em 0.4em; }
+        img { max-width: 100%; height: auto; }
+        """)
+        book.add_item(css)
+
+        # 8. EPUB opslaan
+        epub.write_epub(output_path, book, {"pretty": True})            
 
 
 """
