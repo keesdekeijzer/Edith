@@ -12,14 +12,14 @@ from e2 import CodeEditor
 import re, yaml
 from outline_panel import OutlinePanel 
 from pathlib import Path
-from PyQt6.QtCore import QUrl
-from PyQt6.QtGui import QImage, QGuiApplication, QAction, QTextCursor
+from PyQt6.QtCore import QUrl, Qt
+from PyQt6.QtGui import QFont, QImage, QGuiApplication, QAction, QTextCharFormat, QTextCursor
 from PyQt6.QtCore import QStandardPaths
 import os
 from frontmatter_panel import FrontmatterPanel
 import pdfplumber
 import pytesseract
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from langdetect import detect, LangDetectException
 #import language_tool_python
 from PyQt6.QtGui import QTextDocument
@@ -37,6 +37,8 @@ from _fontsize import fontsize_counts
 from config import FRONTMATTER_TEXT, configuratie, font_sizes
 from memo import Memo
 from memolijst import MemoLijst
+
+
 
 class Markdown_Editor(QWidget):
     def __init__(self):
@@ -99,6 +101,8 @@ class Markdown_Editor(QWidget):
         maak_menu_punt(self, "knippen_actie", "Knippen", "Ctrl+X", self.knippen)
 
         maak_menu_punt(self, "zoeken_actie", "Zoeken...", "Ctrl+F", self.zoeken)
+
+        maak_menu_punt(self, "zoeken_en_vervangen_actie", "Zoeken en vervangen...", "Ctrl+H", self.zoeken_en_vervangen)
 
         maak_menu_punt(self, "alles_selecteren_actie", "Alles selecteren", "Ctrl+A", self.alles_selecteren)
 
@@ -180,6 +184,8 @@ class Markdown_Editor(QWidget):
         bewerken_menu.addAction(actie["plakken_actie"])
         bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["zoeken_actie"])
+        bewerken_menu.addAction(actie["zoeken_en_vervangen_actie"])
+        bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["alles_selecteren_actie"])
         bewerken_menu.addAction(actie["ongedaan_maken_actie"])
         bewerken_menu.addAction(actie["opnieuw_doen_actie"])
@@ -1217,9 +1223,306 @@ class Markdown_Editor(QWidget):
         """)
         book.add_item(css)
 
+        #cover_path = self.generate_epub_cover(meta, logo_path="assets/logo.png")
+        #cover_path = "assets/cover.jpg"
+
+        #with open(cover_path, "rb") as f:
+            #book.set_cover("cover.jpg", f.read())
+
         # 8. EPUB opslaan
         epub.write_epub(output_path, book, {"pretty": True})            
 
+    def closeEvent(self, event):
+        if self.unsaved_changes:
+            reply = QMessageBox.question(self, 'Waarschuwing', 
+                                         'Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?',
+                                         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No | QMessageBox.StandardButton.Cancel)
+            if reply == QMessageBox.StandardButton.Yes:
+                self.opslaan()
+                event.accept()
+            elif reply == QMessageBox.StandardButton.No:
+                event.accept()
+            else:
+                event.ignore()
+        else:
+            event.accept()
+
+    """
+
+    def keyPressEvent(self, event):
+        if event.modifiers() == Qt.KeyboardModifier.AltModifier:
+            if event.key() == Qt.Key.Key_D:
+                self.datum()
+            elif event.key() == Qt.Key.Key_T:
+                self.tijd()
+            elif event.key() == Qt.Key.Key_L:
+                self.md_link()
+            elif event.key() == Qt.Key.Key_A:
+                self.md_afbeelding()
+            elif event.key() == Qt.Key.Key_I:
+                self.if_name_is_main()
+            elif event.key() == Qt.Key.Key_F:
+                self.frontmatter()
+            elif event.key() == Qt.Key.Key_N:
+                self.normaliseren()
+            elif event.key() == Qt.Key.Key_U:
+                self.geen_hoofdletters()
+            elif event.key() == Qt.Key.Key_S:
+                self.schrift()
+        else:
+            super().keyPressEvent(event)
+
+    def resizeEvent(self, event):
+        super().resizeEvent(event)
+        self.update_preview()
+
+    def on_text_changed(self):
+        self.unsaved_changes = True
+        self.update_preview()
+
+    def update_preview(self):
+        md_text = self.editor.toPlainText()
+        html = render_markdown(md_text)
+        self.preview.setHtml(html)
+
+    def toggle_preview(self, checked):
+        self.preview.setVisible(checked)
+
+    def toggle_editor(self, checked):
+        self.editor.setVisible(checked)
+
+    def toggle_both(self, checked):
+        self.editor.setVisible(checked)
+        self.preview.setVisible(checked)
+
+    def toggle_split(self, checked):
+        self.editor.setVisible(True)
+        self.preview.setVisible(True)
+
+    def toggle_full_editor(self, checked):
+        self.editor.setVisible(True)
+        self.preview.setVisible(False)
+
+    def toggle_full_preview(self, checked):
+        self.editor.setVisible(False)
+        self.preview.setVisible(True)
+
+    def toggle_dark_mode(self, checked):
+        if checked:
+            self.donkere_modus()
+        else:
+            self.lichte_modus()
+
+    def toggle_blue_mode(self, checked):
+        if checked:
+            self.blauwe_modus()
+        else:
+            self.lichte_modus()
+
+    def toggle_font(self, checked):
+        if checked:
+            self.font()
+        else:
+            default_font = QFont()
+            self.editor.setFont(default_font)
+
+    def toggle_spellcheck(self, checked):
+        if checked:
+            self.spellcheck()
+        else:
+            self.disable_spellcheck()
+
+    def spellcheck(self):
+        self.spellchecker = SpellChecker()
+        text = self.editor.toPlainText()
+        matches = self.spellchecker.check(text)
+        for match in matches:
+            start = match.offset
+            end = match.offset + match.errorLength
+            cursor = self.editor.textCursor()
+            cursor.setPosition(start)
+            cursor.setPosition(end, QTextCursor.MoveMode.KeepAnchor)
+            fmt = cursor.charFormat()
+            fmt.setUnderlineColor(Qt.GlobalColor.red)
+            fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.SpellCheckUnderline)
+            cursor.setCharFormat(fmt)
+
+    def disable_spellcheck(self):
+        text = self.editor.toPlainText()
+        cursor = self.editor.textCursor()
+        cursor.setPosition(0)
+        cursor.setPosition(len(text), QTextCursor.MoveMode.KeepAnchor)
+        fmt = cursor.charFormat()
+        fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.NoUnderline)
+        cursor.setCharFormat(fmt)
+
+    def toggle_spellcheck(self, checked):
+        if checked:
+            self.spellcheck()
+        else:
+            self.disable_spellcheck()
+
+    def spellcheck(self):
+        if not hasattr(self, "spellchecker"):
+            self.spellchecker = SpellChecker()
+        text = self.editor.toPlainText()
+        matches = self.spellchecker.check(text)
+        for match in matches:
+            start = match.offset
+            end = match.offset + match.errorLength
+            cursor = self.editor.textCursor()
+            cursor.setPosition(start)
+            cursor.setPosition(end, QTextCursor.MoveMode.KeepAnchor)
+            fmt = cursor.charFormat()
+            fmt.setUnderlineColor(Qt.GlobalColor.red)
+            fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.SpellCheckUnderline)
+            cursor.setCharFormat(fmt)
+
+    def disable_spellcheck(self):
+        text = self.editor.toPlainText()
+        cursor = self.editor.textCursor()
+        cursor.setPosition(0)
+        cursor.setPosition(len(text), QTextCursor.MoveMode.KeepAnchor)
+        fmt = cursor.charFormat()
+        fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.NoUnderline)
+        cursor.setCharFormat(fmt)
+
+    def toggle_spellcheck(self, checked):
+        if checked:
+            self.spellcheck()
+        else:
+            self.disable_spellcheck()
+
+    def spellcheck(self):
+        if not hasattr(self, "spellchecker"):
+            self.spellchecker = SpellChecker()
+        text = self.editor.toPlainText()
+        matches = self.spellchecker.check(text)
+        for match in matches:
+            start = match.offset
+            end = match.offset + match.errorLength
+            cursor = self.editor.textCursor()
+            cursor.setPosition(start)
+            cursor.setPosition(end, QTextCursor.MoveMode.KeepAnchor)
+            fmt = cursor.charFormat()
+            fmt.setUnderlineColor(Qt.GlobalColor.red)
+            fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.SpellCheckUnderline)
+            cursor.setCharFormat(fmt)
+
+    def disable_spellcheck(self):
+        text = self.editor.toPlainText()
+        cursor = self.editor.textCursor()
+        cursor.setPosition(0)
+        cursor.setPosition(len(text), QTextCursor.MoveMode.KeepAnchor)
+        fmt = cursor.charFormat()
+        fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.NoUnderline)
+        cursor.setCharFormat(fmt)
+
+    def toggle_spellcheck(self, checked):
+        if checked:
+            self.spellcheck()
+        else:
+            self.disable_spellcheck()
+
+    def spellcheck(self):
+        if not hasattr(self, "spellchecker"):
+            self.spellchecker = SpellChecker()
+        text = self.editor.toPlainText()
+        matches = self.spellchecker.check(text)
+        for match in matches:
+            start = match.offset
+            end = match.offset + match.errorLength
+            cursor = self.editor.textCursor()
+            cursor.setPosition(start)
+            cursor.setPosition(end, QTextCursor.MoveMode.KeepAnchor)
+            fmt = cursor.charFormat()
+            fmt.setUnderlineColor(Qt.GlobalColor.red)
+            fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.SpellCheckUnderline)
+            cursor.setCharFormat(fmt)
+
+    def disable_spellcheck(self):
+        text = self.editor.toPlainText()
+        cursor = self.editor.textCursor()
+        cursor.setPosition(0)
+        cursor.setPosition(len(text), QTextCursor.MoveMode.KeepAnchor)
+        fmt = cursor.charFormat()
+        fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.NoUnderline)
+        cursor.setCharFormat(fmt)
+
+    def toggle_spellcheck(self, checked):
+        if checked:
+            self.spellcheck()
+        else:
+            self.disable_spellcheck()
+
+    """
+
+    def generate_epub_cover(self, meta, logo_path=None, output_path="cover.jpg"):
+        # Afmetingen volgens EPUB-conventies
+        width, height = 1600, 2560
+        bg_color = (245, 245, 245)  # Lichtgrijze achtergrond
+
+        img = Image.new("RGB", (width, height), color=bg_color)
+        draw = ImageDraw.Draw(img)
+
+
+        title = meta.get("title", "Mijn Markdown Boek")
+        author = meta.get("author", "Onbekende Auteur")
+
+        # Fonts
+        #title_font = ImageFont.truetype("arial.ttf", 40)
+        #author_font = ImageFont.truetype("arial.ttf", 30)
+        #small_font = ImageFont.truetype("arial.ttf", 20)
+
+        # Metadata
+        title = meta.get("title", "Mijn Markdown Boek")
+        author = meta.get("author", "Onbekende Auteur")
+        project = meta.get("project", "")
+        version = meta.get("version", "")
+
+        # Titel
+        #w, h = draw.textsize(title, font=title_font)
+        #w, h = draw.textsize(title)
+        w = draw.textlength(title)
+        #draw.text(((width - w) / 2, 200), title, fill="black", font=title_font)
+        draw.text(((width - w) / 2, 200), title, fill="black")
+
+        # Auteur
+        #author_font = ImageFont.truetype("arial.ttf", 30)
+        #w, h = draw.textsize(author, font=author_font)
+        #draw.text(((width - w) / 2, 300), author, fill="gray", font=author_font)
+        #w, h = draw.textsize(author)
+        w = draw.textlength(author)
+        draw.text(((width - w) / 2, 300), author, fill="gray")
+
+        # Project + versie
+        footer = f"{project} {version}".strip()
+        if footer:
+            #w, h = draw.textsize(footer, font=small_font)
+            #draw.text(((width - w) / 2, height - 50), footer, fill="gray", font=small_font)
+            w = draw.textlength(footer)
+            draw.text(((width - w) / 2, height - 50), footer, fill="gray")
+
+        # Logo (optioneel)
+        if logo_path and os.path.exists(logo_path):
+            logo = Image.open(logo_path).convert("RGBA")
+            # Schaal logo naar 20% breedte van de cover
+            target_w = int(width * 0.2)
+            aspect = logo.height / logo.width
+            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
+
+            # Plaats logo bovenaan
+            lx = (width - logo.width) // 2
+            ly = int(height * 0.10)
+            img.paste(logo, (lx, ly), logo)
+
+        img.save(output_path, "JPEG", quality=95)
+        return output_path
+
+    def zoeken_en_vervangen(self):
+        #self.zoek_venster = ZoekEnVervang()
+        #self.zoek_venster.show()
+        ...
 
 """
 # spellcheck is te langzaam, het vertraagd het programma enorm
