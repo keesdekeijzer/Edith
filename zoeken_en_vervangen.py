@@ -1,3 +1,4 @@
+from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import (
     QApplication, QWidget, QVBoxLayout, QHBoxLayout,
     QPlainTextEdit, QLineEdit, QPushButton, QCheckBox, QLabel
@@ -5,6 +6,7 @@ from PyQt6.QtWidgets import (
 from PyQt6.QtGui import QTextCursor, QTextCharFormat, QColor
 from PyQt6.QtCore import Qt
 import sys
+
 
 class SearchReplaceWidget(QWidget):
     def __init__(self):
@@ -85,6 +87,7 @@ class SearchReplaceWidget(QWidget):
         if not text:
             return
         doc = self.editor.document()
+        # flags = 0 if self.case_cb.isChecked() else QtCore.Qt.CaseInsensitive
         flags = 0 if self.case_cb.isChecked() else getattr(__import__('PyQt6.Qt', fromlist=['Qt']).Qt, 'CaseInsensitive', 0)
         cur = self.editor.textCursor()
         pos = cur.selectionStart() if cur.hasSelection() else cur.position()
@@ -140,6 +143,7 @@ class SearchReplaceWidget(QWidget):
         if find_text:
             doc = self.editor.document()
             flags = 0 if self.case_cb.isChecked() else getattr(__import__('PyQt6.Qt', fromlist=['Qt']).Qt, 'CaseInsensitive', 0)
+            #flags = 0
             it = doc.find(find_text, 0, flags)
             cursors = []
             while not it.isNull():

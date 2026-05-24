@@ -31,6 +31,8 @@ from bs4 import BeautifulSoup
 import hashlib
 from ebooklib import epub
 
+from markdownify import markdownify as md
+
 from _fontsize import fontsize_counts
 
 # instellingen importeren
@@ -82,6 +84,8 @@ class Markdown_Editor(QWidget):
         maak_menu_punt(self, "importeer_pdf_als_tekst_actie", "Importeer pdf als tekst", "", self.import_pdf_as_text)
 
         maak_menu_punt(self, "importeer_pdf_als_md_actie", "Importeer pdf als markdown", "", self.import_pdf_as_md)
+
+        maak_menu_punt(self, "importeer_epub_actie", "Importeer ePub", "", self.import_epub)
 
         maak_menu_punt(self, "export_pdf_actie", "Exporteer als PDF", "", self.export_pdf)
 
@@ -171,6 +175,7 @@ class Markdown_Editor(QWidget):
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["importeer_pdf_als_tekst_actie"])
         bestand_menu.addAction(actie["importeer_pdf_als_md_actie"])
+        bestand_menu.addAction(actie["importeer_epub_actie"])
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["export_pdf_actie"])
         bestand_menu.addAction(actie["export_word_actie"])
@@ -1226,6 +1231,8 @@ class Markdown_Editor(QWidget):
         #cover_path = self.generate_epub_cover(meta, logo_path="assets/logo.png")
         #cover_path = "assets/cover.jpg"
 
+        #cover_path = self.generate_epub_cover_with_background(meta, bg_path="assets/background.jpg", logo_path="assets/logo.png")
+
         #with open(cover_path, "rb") as f:
             #book.set_cover("cover.jpg", f.read())
 
@@ -1247,215 +1254,7 @@ class Markdown_Editor(QWidget):
         else:
             event.accept()
 
-    """
 
-    def keyPressEvent(self, event):
-        if event.modifiers() == Qt.KeyboardModifier.AltModifier:
-            if event.key() == Qt.Key.Key_D:
-                self.datum()
-            elif event.key() == Qt.Key.Key_T:
-                self.tijd()
-            elif event.key() == Qt.Key.Key_L:
-                self.md_link()
-            elif event.key() == Qt.Key.Key_A:
-                self.md_afbeelding()
-            elif event.key() == Qt.Key.Key_I:
-                self.if_name_is_main()
-            elif event.key() == Qt.Key.Key_F:
-                self.frontmatter()
-            elif event.key() == Qt.Key.Key_N:
-                self.normaliseren()
-            elif event.key() == Qt.Key.Key_U:
-                self.geen_hoofdletters()
-            elif event.key() == Qt.Key.Key_S:
-                self.schrift()
-        else:
-            super().keyPressEvent(event)
-
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
-        self.update_preview()
-
-    def on_text_changed(self):
-        self.unsaved_changes = True
-        self.update_preview()
-
-    def update_preview(self):
-        md_text = self.editor.toPlainText()
-        html = render_markdown(md_text)
-        self.preview.setHtml(html)
-
-    def toggle_preview(self, checked):
-        self.preview.setVisible(checked)
-
-    def toggle_editor(self, checked):
-        self.editor.setVisible(checked)
-
-    def toggle_both(self, checked):
-        self.editor.setVisible(checked)
-        self.preview.setVisible(checked)
-
-    def toggle_split(self, checked):
-        self.editor.setVisible(True)
-        self.preview.setVisible(True)
-
-    def toggle_full_editor(self, checked):
-        self.editor.setVisible(True)
-        self.preview.setVisible(False)
-
-    def toggle_full_preview(self, checked):
-        self.editor.setVisible(False)
-        self.preview.setVisible(True)
-
-    def toggle_dark_mode(self, checked):
-        if checked:
-            self.donkere_modus()
-        else:
-            self.lichte_modus()
-
-    def toggle_blue_mode(self, checked):
-        if checked:
-            self.blauwe_modus()
-        else:
-            self.lichte_modus()
-
-    def toggle_font(self, checked):
-        if checked:
-            self.font()
-        else:
-            default_font = QFont()
-            self.editor.setFont(default_font)
-
-    def toggle_spellcheck(self, checked):
-        if checked:
-            self.spellcheck()
-        else:
-            self.disable_spellcheck()
-
-    def spellcheck(self):
-        self.spellchecker = SpellChecker()
-        text = self.editor.toPlainText()
-        matches = self.spellchecker.check(text)
-        for match in matches:
-            start = match.offset
-            end = match.offset + match.errorLength
-            cursor = self.editor.textCursor()
-            cursor.setPosition(start)
-            cursor.setPosition(end, QTextCursor.MoveMode.KeepAnchor)
-            fmt = cursor.charFormat()
-            fmt.setUnderlineColor(Qt.GlobalColor.red)
-            fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.SpellCheckUnderline)
-            cursor.setCharFormat(fmt)
-
-    def disable_spellcheck(self):
-        text = self.editor.toPlainText()
-        cursor = self.editor.textCursor()
-        cursor.setPosition(0)
-        cursor.setPosition(len(text), QTextCursor.MoveMode.KeepAnchor)
-        fmt = cursor.charFormat()
-        fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.NoUnderline)
-        cursor.setCharFormat(fmt)
-
-    def toggle_spellcheck(self, checked):
-        if checked:
-            self.spellcheck()
-        else:
-            self.disable_spellcheck()
-
-    def spellcheck(self):
-        if not hasattr(self, "spellchecker"):
-            self.spellchecker = SpellChecker()
-        text = self.editor.toPlainText()
-        matches = self.spellchecker.check(text)
-        for match in matches:
-            start = match.offset
-            end = match.offset + match.errorLength
-            cursor = self.editor.textCursor()
-            cursor.setPosition(start)
-            cursor.setPosition(end, QTextCursor.MoveMode.KeepAnchor)
-            fmt = cursor.charFormat()
-            fmt.setUnderlineColor(Qt.GlobalColor.red)
-            fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.SpellCheckUnderline)
-            cursor.setCharFormat(fmt)
-
-    def disable_spellcheck(self):
-        text = self.editor.toPlainText()
-        cursor = self.editor.textCursor()
-        cursor.setPosition(0)
-        cursor.setPosition(len(text), QTextCursor.MoveMode.KeepAnchor)
-        fmt = cursor.charFormat()
-        fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.NoUnderline)
-        cursor.setCharFormat(fmt)
-
-    def toggle_spellcheck(self, checked):
-        if checked:
-            self.spellcheck()
-        else:
-            self.disable_spellcheck()
-
-    def spellcheck(self):
-        if not hasattr(self, "spellchecker"):
-            self.spellchecker = SpellChecker()
-        text = self.editor.toPlainText()
-        matches = self.spellchecker.check(text)
-        for match in matches:
-            start = match.offset
-            end = match.offset + match.errorLength
-            cursor = self.editor.textCursor()
-            cursor.setPosition(start)
-            cursor.setPosition(end, QTextCursor.MoveMode.KeepAnchor)
-            fmt = cursor.charFormat()
-            fmt.setUnderlineColor(Qt.GlobalColor.red)
-            fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.SpellCheckUnderline)
-            cursor.setCharFormat(fmt)
-
-    def disable_spellcheck(self):
-        text = self.editor.toPlainText()
-        cursor = self.editor.textCursor()
-        cursor.setPosition(0)
-        cursor.setPosition(len(text), QTextCursor.MoveMode.KeepAnchor)
-        fmt = cursor.charFormat()
-        fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.NoUnderline)
-        cursor.setCharFormat(fmt)
-
-    def toggle_spellcheck(self, checked):
-        if checked:
-            self.spellcheck()
-        else:
-            self.disable_spellcheck()
-
-    def spellcheck(self):
-        if not hasattr(self, "spellchecker"):
-            self.spellchecker = SpellChecker()
-        text = self.editor.toPlainText()
-        matches = self.spellchecker.check(text)
-        for match in matches:
-            start = match.offset
-            end = match.offset + match.errorLength
-            cursor = self.editor.textCursor()
-            cursor.setPosition(start)
-            cursor.setPosition(end, QTextCursor.MoveMode.KeepAnchor)
-            fmt = cursor.charFormat()
-            fmt.setUnderlineColor(Qt.GlobalColor.red)
-            fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.SpellCheckUnderline)
-            cursor.setCharFormat(fmt)
-
-    def disable_spellcheck(self):
-        text = self.editor.toPlainText()
-        cursor = self.editor.textCursor()
-        cursor.setPosition(0)
-        cursor.setPosition(len(text), QTextCursor.MoveMode.KeepAnchor)
-        fmt = cursor.charFormat()
-        fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.NoUnderline)
-        cursor.setCharFormat(fmt)
-
-    def toggle_spellcheck(self, checked):
-        if checked:
-            self.spellcheck()
-        else:
-            self.disable_spellcheck()
-
-    """
 
     def generate_epub_cover(self, meta, logo_path=None, output_path="cover.jpg"):
         # Afmetingen volgens EPUB-conventies
@@ -1524,20 +1323,507 @@ class Markdown_Editor(QWidget):
         #self.zoek_venster.show()
         ...
 
-"""
-# spellcheck is te langzaam, het vertraagd het programma enorm
+    def generate_epub_cover_with_background(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
+        # Afmetingen volgens EPUB-conventies
+        width, height = 1600, 2560
 
-class SpellChecker:
-    def __init__(self, lang="nl"):
-        self.tool = language_tool_python.LanguageTool(lang)
-        
+        # Achtergrond
+        if os.path.exists(bg_path):
+            bg = Image.open(bg_path).convert("RGB")
+            bg = bg.resize((width, height), Image.LANCZOS)
+        else:
+            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
 
-    def check(self,text):
-        return self.tool.check(text)
+        draw = ImageDraw.Draw(bg)
+
+        # Metadata
+        title = meta.get("title", "Mijn Markdown Boek")
+        author = meta.get("author", "Onbekende Auteur")
+        project = meta.get("project", "")
+        version = meta.get("version", "")
+
+        # Titel
+        w = draw.textlength(title)
+        draw.text(((width - w) / 2, 200), title, fill="white")
+
+        # Auteur
+        w = draw.textlength(author)
+        draw.text(((width - w) / 2, 300), author, fill="lightgray")
+
+        # Project + versie
+        footer = f"{project} {version}".strip()
+        if footer:
+            w = draw.textlength(footer)
+            draw.text(((width - w) / 2, height - 50), footer, fill="lightgray")
+
+        # Logo (optioneel)
+        if logo_path and os.path.exists(logo_path):
+            logo = Image.open(logo_path).convert("RGBA")
+            target_w = int(width * 0.2)
+            aspect = logo.height / logo.width
+            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
+
+            lx = (width - logo.width) // 2
+            ly = int(height * 0.10)
+            bg.paste(logo, (lx, ly), logo)
+
+        bg.save(output_path, "JPEG", quality=95)
+        return output_path
+
+    def generate_epub_cover_with_background_and_gradient(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
+        # Afmetingen volgens EPUB-conventies
+        width, height = 1600, 2560
+
+        # Achtergrond
+        if os.path.exists(bg_path):
+            bg = Image.open(bg_path).convert("RGB")
+            bg = bg.resize((width, height), Image.LANCZOS)
+        else:
+            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
+
+        # Gradient overlay
+        gradient = Image.new("L", (1, height), color=0xFF)
+        for y in range(height):
+            gradient.putpixel((0, y), int(255 * (1 - y / height)))  # van wit naar transparant
+        alpha_gradient = gradient.resize((width, height))
+        black_img = Image.new("RGBA", (width, height), color=(0, 0, 0, 255))
+        black_img.putalpha(alpha_gradient)
+        bg = Image.alpha_composite(bg.convert("RGBA"), black_img)
+
+        draw = ImageDraw.Draw(bg)
+
+        # Metadata
+        title = meta.get("title", "Mijn Markdown Boek")
+        author = meta.get("author", "Onbekende Auteur")
+        project = meta.get("project", "")
+        version = meta.get("version", "")
+
+        # Titel
+        w = draw.textlength(title)
+        draw.text(((width - w) / 2, 200), title, fill="white")
+
+        # Auteur
+        w = draw.textlength(author)
+        draw.text(((width - w) / 2, 300), author, fill="lightgray")
+
+        # Project + versie
+        footer = f"{project} {version}".strip()
+        if footer:
+            w = draw.textlength(footer)
+            draw.text(((width - w) / 2, height - 50), footer, fill="lightgray")
+
+        # Logo (optioneel)
+        if logo_path and os.path.exists(logo_path):
+            logo = Image.open(logo_path).convert("RGBA")
+            target_w = int(width * 0.2)
+            aspect = logo.height / logo.width
+            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
+
+            lx = (width - logo.width) // 2
+            ly = int(height * 0.10)
+            bg.paste(logo, (lx, ly), logo)
+
+        bg.save(output_path, "JPEG", quality=95)
+        return output_path
     
-    def suggestions_for(self, word):
-        matches = self.tool.check(word)
-        if matches:
-            return matches[0].replacements
-        return []
+    def generate_epub_cover_with_background_and_gradient_and_title_block(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
+        # Afmetingen volgens EPUB-conventies
+        width, height = 1600, 2560
+
+        # Achtergrond
+        if os.path.exists(bg_path):
+            bg = Image.open(bg_path).convert("RGB")
+            bg = bg.resize((width, height), Image.LANCZOS)
+        else:
+            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
+
+        # Gradient overlay
+        gradient = Image.new("L", (1, height), color=0xFF)
+        for y in range(height):
+            gradient.putpixel((0, y), int(255 * (1 - y / height)))  # van wit naar transparant
+        alpha_gradient = gradient.resize((width, height))
+        black_img = Image.new("RGBA", (width, height), color=(0, 0, 0, 255))
+        black_img.putalpha(alpha_gradient)
+        bg = Image.alpha_composite(bg.convert("RGBA"), black_img)
+
+        draw = ImageDraw.Draw(bg)
+
+        # Metadata
+        title = meta.get("title", "Mijn Markdown Boek")
+        author = meta.get("author", "Onbekende Auteur")
+        project = meta.get("project", "")
+        version = meta.get("version", "")
+
+        # Titelblok achtergrond
+        block_height = 400
+        block_color = (30, 30, 30, 200)  # Semi-transparant donkergrijs
+        block = Image.new("RGBA", (width, block_height), block_color)
+        bg.paste(block, (0, 200), block)
+        # Titel
+        w = draw.textlength(title)
+        draw.text(((width - w) / 2, 250), title, fill="white")
+        # Auteur
+        w = draw.textlength(author)
+        draw.text(((width - w) / 2, 350), author, fill="lightgray")
+        # Project + versie
+        footer = f"{project} {version}".strip()
+        if footer:
+            w = draw.textlength(footer)
+            draw.text(((width - w) / 2, 550), footer, fill="lightgray")
+        # Logo (optioneel)
+        if logo_path and os.path.exists(logo_path):
+            logo = Image.open(logo_path).convert("RGBA")
+            target_w = int(width * 0.2)
+            aspect = logo.height / logo.width
+            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
+
+            lx = (width - logo.width) // 2
+            ly = 200 + (block_height - logo.height) // 2
+            bg.paste(logo, (lx, ly), logo)
+        bg.save(output_path, "JPEG", quality=95)
+        return output_path
+    
+    def generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
+        # Afmetingen volgens EPUB-conventies
+        width, height = 1600, 2560
+
+        # Achtergrond
+        if os.path.exists(bg_path):
+            bg = Image.open(bg_path).convert("RGB")
+            bg = bg.resize((width, height), Image.LANCZOS)
+        else:
+            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
+
+        # Gradient overlay
+        gradient = Image.new("L", (1, height), color=0xFF)
+        for y in range(height):
+            gradient.putpixel((0, y), int(255 * (1 - y / height)))  # van wit naar transparant
+        alpha_gradient = gradient.resize((width, height))
+        black_img = Image.new("RGBA", (width, height), color=(0, 0, 0, 255))
+        black_img.putalpha(alpha_gradient)
+        bg = Image.alpha_composite(bg.convert("RGBA"), black_img)
+
+        draw = ImageDraw.Draw(bg)
+
+        # Metadata
+        title = meta.get("title", "Mijn Markdown Boek")
+        subtitle = meta.get("subtitle", "")
+        author = meta.get("author", "Onbekende Auteur")
+        project = meta.get("project", "")
+        version = meta.get("version", "")
+
+        # Titelblok achtergrond
+        block_height = 500
+        block_color = (30, 30, 30, 200)  # Semi-transparant donkergrijs
+        block = Image.new("RGBA", (width, block_height), block_color)
+        bg.paste(block, (0, 200), block)
+        # Titel
+        w = draw.textlength(title)
+        draw.text(((width - w) / 2, 250), title, fill="white")
+        # Subtitel
+        if subtitle:
+            w = draw.textlength(subtitle)
+            draw.text(((width - w) / 2, 320), subtitle, fill="lightgray")
+        # Auteur
+        w = draw.textlength(author)
+        draw.text(((width - w) / 2, 400), author, fill="lightgray")
+        # Project + versie
+        footer = f"{project} {version}".strip()
+        if footer:
+            w = draw.textlength(footer)
+            draw.text(((width - w) / 2, 550), footer, fill="lightgray")
+        # Logo (optioneel)
+        if logo_path and os.path.exists(logo_path):
+            logo = Image.open(logo_path).convert("RGBA")
+            target_w = int(width * 0.2)
+            aspect = logo.height / logo.width
+            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
+
+            lx = (width - logo.width) // 2
+            ly = 200 + (block_height - logo.height) // 2
+            bg.paste(logo, (lx, ly), logo)
+        bg.save(output_path, "JPEG", quality=95)
+        return output_path
+    
+    def generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
+        # Afmetingen volgens EPUB-conventies
+        width, height = 1600, 2560
+
+        # Achtergrond
+        if os.path.exists(bg_path):
+            bg = Image.open(bg_path).convert("RGB")
+            bg = bg.resize((width, height), Image.LANCZOS)
+        else:
+            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
+
+        # Gradient overlay
+        gradient = Image.new("L", (1, height), color=0xFF)
+        for y in range(height):
+            gradient.putpixel((0, y), int(255 * (1 - y / height)))  # van wit naar transparant
+        alpha_gradient = gradient.resize((width, height))
+        black_img = Image.new("RGBA", (width, height), color=(0, 0, 0, 255))
+        black_img.putalpha(alpha_gradient)
+        bg = Image.alpha_composite(bg.convert("RGBA"), black_img)
+
+        draw = ImageDraw.Draw(bg)
+
+        # Metadata
+        title = meta.get("title", "Mijn Markdown Boek")
+        subtitle = meta.get("subtitle", "")
+        author = meta.get("author", "Onbekende Auteur")
+        project = meta.get("project", "")
+        version = meta.get("version", "")
+
+        # Titelblok achtergrond
+        block_height = 500
+        block_color = (30, 30, 30, 200)  # Semi-transparant donkergrijs
+        block = Image.new("RGBA", (width, block_height), block_color)
+        bg.paste(block, (0, 200), block)
+        # Titel
+        w = draw.textlength(title)
+        draw.text(((width - w) / 2, 250), title, fill="white")
+        # Subtitel
+        if subtitle:
+            w = draw.textlength(subtitle)
+            draw.text(((width - w) / 2, 320), subtitle, fill="lightgray")
+        # Auteur
+        w = draw.textlength(author)
+        draw.text(((width - w) / 2, 400), author, fill="lightgray")
+        # Project + versie
+        footer = f"{project} {version}".strip()
+        if footer:
+            w = draw.textlength(footer)
+            draw.text(((width - w) / 2, 550), footer, fill="lightgray")
+        # Logo (optioneel)
+        if logo_path and os.path.exists(logo_path):
+            logo = Image.open(logo_path).convert("RGBA")
+            target_w = int(width * 0.2)
+            aspect = logo.height / logo.width
+            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
+
+            lx = (width - logo.width) // 2
+            ly = 200 + (block_height - logo.height) // 2
+            bg.paste(logo, (lx, ly), logo)
+        bg.save(output_path, "JPEG", quality=95)
+        return output_path
+
+    def generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author_and_project(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
+        # Afmetingen volgens EPUB-conventies
+        width, height = 1600, 2560
+
+        # Achtergrond
+        if os.path.exists(bg_path):
+            bg = Image.open(bg_path).convert("RGB")
+            bg = bg.resize((width, height), Image.LANCZOS)
+        else:
+            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
+
+        # Gradient overlay
+        gradient = Image.new("L", (1, height), color=0xFF)
+        for y in range(height):
+            gradient.putpixel((0, y), int(255 * (1 - y / height)))  # van wit naar transparant
+        alpha_gradient = gradient.resize((width, height))
+        black_img = Image.new("RGBA", (width, height), color=(0, 0, 0, 255))
+        black_img.putalpha(alpha_gradient)
+        bg = Image.alpha_composite(bg.convert("RGBA"), black_img)
+
+        draw = ImageDraw.Draw(bg)
+
+        # Metadata
+        title = meta.get("title", "Mijn Markdown Boek")
+        subtitle = meta.get("subtitle", "")
+        author = meta.get("author", "Onbekende Auteur")
+        project = meta.get("project", "")
+        version = meta.get("version", "")
+
+        # Titelblok achtergrond
+        block_height = 500
+        block_color = (30, 30, 30, 200)  # Semi-transparant donkergrijs
+        block = Image.new("RGBA", (width, block_height), block_color)
+        bg.paste(block, (0, 200), block)
+        # Titel
+        w = draw.textlength(title)
+        draw.text(((width - w) / 2, 250), title, fill="white")
+        # Subtitel
+        if subtitle:
+            w = draw.textlength(subtitle)
+            draw.text(((width - w) / 2, 320), subtitle, fill="lightgray")
+        # Auteur
+        w = draw.textlength(author)
+        draw.text(((width - w) / 2, 400), author, fill="lightgray")
+        # Project + versie
+        footer = f"{project} {version}".strip()
+        if footer:
+            w = draw.textlength(footer)
+            draw.text(((width - w) / 2, 550), footer, fill="lightgray")
+        # Logo (optioneel)
+        if logo_path and os.path.exists(logo_path):
+            logo = Image.open(logo_path).convert("RGBA")
+            target_w = int(width * 0.2)
+            aspect = logo.height / logo.width
+            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
+
+            lx = (width - logo.width) // 2
+            ly = 200 + (block_height - logo.height) // 2
+            bg.paste(logo, (lx, ly), logo)
+        bg.save(output_path, "JPEG", quality=95)
+        return output_path
+
+    def generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author_and_project_and_version(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
+        # Afmetingen volgens EPUB-conventies
+        width, height = 1600, 2560
+
+        # Achtergrond
+        if os.path.exists(bg_path):
+            bg = Image.open(bg_path).convert("RGB")
+            bg = bg.resize((width, height), Image.LANCZOS)
+        else:
+            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
+
+        # Gradient overlay
+        gradient = Image.new("L", (1, height), color=0xFF)
+        for y in range(height):
+            gradient.putpixel((0, y), int(255 * (1 - y / height)))  # van wit naar transparant
+        alpha_gradient = gradient.resize((width, height))
+        black_img = Image.new("RGBA", (width, height), color=(0, 0, 0, 255))
+        black_img.putalpha(alpha_gradient)
+        bg = Image.alpha_composite(bg.convert("RGBA"), black_img)
+
+        draw = ImageDraw.Draw(bg)
+
+        # Metadata
+        title = meta.get("title", "Mijn Markdown Boek")
+        subtitle = meta.get("subtitle", "")
+        author = meta.get("author", "Onbekende Auteur")
+        project = meta.get("project", "")
+        version = meta.get("version", "")
+
+        # Titelblok achtergrond
+        block_height = 500
+        block_color = (30, 30, 30, 200)  # Semi-transparant donkergrijs
+        block = Image.new("RGBA", (width, block_height), block_color)
+        bg.paste(block, (0, 200), block)
+        # Titel
+        w = draw.textlength(title)
+        draw.text(((width - w) / 2, 250), title, fill="white")
+        # Subtitel
+        if subtitle:
+            w = draw.textlength(subtitle)
+            draw.text(((width - w) / 2, 320), subtitle, fill="lightgray")
+        # Auteur
+        w = draw.textlength(author)
+        draw.text(((width - w) / 2, 400), author, fill="lightgray")
+        # Project + versie
+        footer = f"{project} {version}".strip()
+        if footer:
+            w = draw.textlength(footer)
+            draw.text(((width - w) / 2, 550), footer, fill="lightgray")
+        # Logo (optioneel)
+        if logo_path and os.path.exists(logo_path):
+            logo = Image.open(logo_path).convert("RGBA")
+            target_w = int(width * 0.2)
+            aspect = logo.height / logo.width
+            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
+
+            lx = (width - logo.width) // 2
+            ly = 200 + (block_height - logo.height) // 2
+            bg.paste(logo, (lx, ly), logo)
+        bg.save(output_path, "JPEG", quality=95)
+        return output_path
+    
+    def extract_epub_html(self, epub_path):
+        book = epub.read_epub(epub_path)
+        html_items = []
+
+        for item in book.get_items():
+            print(f"Item: {item.get_name()} - {item.get_type()}")
+            ct = self.content_type(item)
+            print(f"Content type: {ct}")
+
+            if ct == "application/xhtml+xml":
+                html_items.append((item.get_name(), item.get_content().decode("utf-8")))
+
+        return html_items, book
+
+    def content_type(self, item): 
+        if hasattr(item, 'get_content_type'): 
+            return item.get_content_type() 
+        if hasattr(item, 'media_type'): 
+            return item.media_type 
+        t = getattr(item, 'get_type', None) 
+        return t() if callable(t) else None
+    
+    def epub_metadata_to_frontmatter(self, book):
+        title = book.get_metadata("DC", "title")[0][0] if book.get_metadata("DC", "title") else "Mijn Markdown Boek"
+        author = book.get_metadata("DC", "creator")[0][0] if book.get_metadata("DC", "creator") else "Onbekende Auteur"
+        language = book.get_metadata("DC", "language")[0][0] if book.get_metadata("DC", "language") else "nl"
+        identifier = book.get_metadata("DC", "identifier")[0][0] if book.get_metadata("DC", "identifier") else "id123456"
+
+        fm = f"""---
+title: {title}
+author: {author}
+language: {language}
+identifier: {identifier}
+---
 """
+        return fm
+    
+    def html_to_markdown(self, html):
+        return md(html, headings_style="ATX")  #  heading of headings?
+    
+    def extract_images(self, book, output_dir):
+        mapping = {}
+
+        for item in book.get_items():
+            ct = self.content_type(item)
+            print(f"Item: {item.get_name()} - {item.get_type()} - {ct}")
+            if ct == "image/jpeg" or ct == "image/png" or ct.startswith("image/"):
+                filename = os.path.basename(item.file_name)
+                output_path = os.path.join(output_dir, filename)
+                with open(output_path, "wb") as f:
+                    f.write(item.get_content())
+                mapping[item.file_name] = output_path
+        return mapping
+
+    def rewrite_image_paths(self, md_text, mapping):
+        for epub_path, local_path in mapping.items():
+            md_text = md_text.replace(epub_path, local_path)
+        return md_text
+
+    def epub_to_markdown(self, epub_path, output_dir="imported_epub"):
+        html_items, book = self.extract_epub_html(epub_path)
+        fm = self.epub_metadata_to_frontmatter(book)
+
+        if not os.path.exists(output_dir):
+            os.makedirs(output_dir)
+
+        # afbeeldingen
+        img_map = self.extract_images(book, os.path.join(output_dir, "images"))
+
+        # hoofdstukken converteren
+        chapters_md = []
+        for filename, html in html_items:
+            md_text = self.html_to_markdown(html)
+            md_text = self.rewrite_image_paths(md_text, img_map)
+            chapters_md.append(md_text)
+
+        # samenvoegen
+        full_md = fm + "\n\n" + "\n\n".join(chapters_md)
+        return full_md
+
+    def import_epub(self):
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Importeer EPUB",
+            "",
+            "EPUB-bestanden (*.epub)"
+        )
+
+        if not path:
+            return
+        
+        md_text = self.epub_to_markdown(path)
+        self.editor.setPlainText(md_text)
+        QMessageBox.information(self, "Succes", "EPUB-boek geïmporteerd!")
+
+    
