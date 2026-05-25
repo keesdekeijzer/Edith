@@ -1,7 +1,8 @@
 import datetime
 
 from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QFileDialog, QInputDialog, QLabel, QMainWindow
+from PyQt6 import QtCore
+from PyQt6.QtWidgets import QCheckBox, QFileDialog, QInputDialog, QLabel, QLineEdit, QMainWindow, QPushButton
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from highlighter_markdown import MarkdownHighlighter
@@ -12,8 +13,8 @@ from e2 import CodeEditor
 import re, yaml
 from outline_panel import OutlinePanel 
 from pathlib import Path
-from PyQt6.QtCore import QUrl, Qt
-from PyQt6.QtGui import QFont, QImage, QGuiApplication, QAction, QTextCharFormat, QTextCursor
+from PyQt6.QtCore import QRegularExpression, QUrl, Qt
+from PyQt6.QtGui import QColor, QFont, QImage, QGuiApplication, QAction, QTextCharFormat, QTextCursor
 from PyQt6.QtCore import QStandardPaths
 import os
 from frontmatter_panel import FrontmatterPanel
@@ -250,6 +251,55 @@ class Markdown_Editor(QWidget):
         self.statusbar.setStyleSheet("padding: 8px;")
         self.statusbar.setMinimumHeight(30)
         self.statusbar.setMaximumHeight(60)
+
+        # zoken en vervangen panel
+        # Zoek- en vervang widgets
+        find_label = QLabel("Zoeken:")
+        self.find_input = QLineEdit()
+        self.case_cb = QCheckBox("Hoofdlettergevoelig")
+        next_btn = QPushButton("Volgende")
+        prev_btn = QPushButton("Vorige")
+
+        replace_label = QLabel("Vervangen door:")
+        self.replace_input = QLineEdit()
+        replace_btn = QPushButton("Vervangen")
+        replace_all_btn = QPushButton("Vervang alles")
+
+        # Layout
+        top_layout = QHBoxLayout()
+        top_layout.addWidget(find_label)
+        top_layout.addWidget(self.find_input)
+        top_layout.addWidget(self.case_cb)
+        top_layout.addWidget(prev_btn)
+        top_layout.addWidget(next_btn)
+
+        bottom_layout = QHBoxLayout()
+        bottom_layout.addWidget(replace_label)
+        bottom_layout.addWidget(self.replace_input)
+        bottom_layout.addWidget(replace_btn)
+        bottom_layout.addWidget(replace_all_btn)
+
+        main_layout = QVBoxLayout()
+        #main_layout.addWidget(self.editor)
+        main_layout.addLayout(top_layout)
+        main_layout.addLayout(bottom_layout)
+
+        v_layout.addLayout(main_layout)
+
+        # Signalen
+        next_btn.clicked.connect(self.find_next)
+        prev_btn.clicked.connect(self.find_previous)
+        replace_btn.clicked.connect(self.replace_one)
+        replace_all_btn.clicked.connect(self.replace_all)
+        self.find_input.textChanged.connect(self.update_highlight)
+        self.case_cb.stateChanged.connect(self.update_highlight)
+
+        # Highlight format
+        self.highlight_format = QTextCharFormat()
+        self.highlight_format.setBackground(QColor("#FFF59D"))  # lichtgeel
+        self.match_format = QTextCharFormat()
+        self.match_format.setBackground(QColor("#FFCC80"))  # geselecteerde match iets donkerder
+        #
 
         v_layout.addWidget(self.statusbar, 0)
         self.statusbar.showMessage("Ready", 3000)
@@ -1736,9 +1786,9 @@ class Markdown_Editor(QWidget):
         html_items = []
 
         for item in book.get_items():
-            print(f"Item: {item.get_name()} - {item.get_type()}")
+            #print(f"Item: {item.get_name()} - {item.get_type()}")
             ct = self.content_type(item)
-            print(f"Content type: {ct}")
+            #print(f"Content type: {ct}")
 
             if ct == "application/xhtml+xml":
                 html_items.append((item.get_name(), item.get_content().decode("utf-8")))
@@ -1769,14 +1819,14 @@ identifier: {identifier}
         return fm
     
     def html_to_markdown(self, html):
-        return md(html, headings_style="ATX")  #  heading of headings?
+        return md(html, heading_style="ATX")  #  heading zonder de "s"
     
     def extract_images(self, book, output_dir):
         mapping = {}
 
         for item in book.get_items():
             ct = self.content_type(item)
-            print(f"Item: {item.get_name()} - {item.get_type()} - {ct}")
+            #print(f"Item: {item.get_name()} - {item.get_type()} - {ct}")
             if ct == "image/jpeg" or ct == "image/png" or ct.startswith("image/"):
                 filename = os.path.basename(item.file_name)
                 output_path = os.path.join(output_dir, filename)
@@ -1803,7 +1853,8 @@ identifier: {identifier}
         # hoofdstukken converteren
         chapters_md = []
         for filename, html in html_items:
-            md_text = self.html_to_markdown(html)
+            # md_text = self.html_to_markdown(html)
+            md_text = self.html_with_footnotes_to_markdown(html)
             md_text = self.rewrite_image_paths(md_text, img_map)
             chapters_md.append(md_text)
 
@@ -1826,4 +1877,176 @@ identifier: {identifier}
         self.editor.setPlainText(md_text)
         QMessageBox.information(self, "Succes", "EPUB-boek geïmporteerd!")
 
+    def extract_footnotes_from_html(self, html):
+        soup = BeautifulSoup(html, "html.parser")
+        notes = {}
+
+        # typische structuur: <a href="#fn1">1</a> ... <div id="fn1">Voetnoot tekst</div>
+        for ref in soup.find_all("a", href=True):
+            href = ref["href"]
+            if ref["href"].startswith("#"):
+                target_id = href[1:]
+                target = soup.find(id=target_id)
+                if target:
+                    num = ref.get_text(strip=True)
+                    text = target.get_text(" ", strip=True)
+                    notes[num] = text
+        return notes
     
+    def replace_refs_with_markdown_footnotes(self, html):
+        soup = BeautifulSoup(html, "html.parser")
+
+        footnotes = self.extract_footnotes_from_html(html)
+
+        for ref in soup.find_all("a", href=True):
+            href = ref["href"]
+            if href.startswith("#"):
+                num = ref.get_text(strip=True)
+                if num in footnotes:
+                    md_ref = f"[^{num}]"
+                    ref.replace_with(md_ref)
+
+        return str(soup)
+
+    def html_with_footnotes_to_markdown(self, html):
+        # 1. footnotes extraheren en refs vervangen door markdown syntax
+        notes = self.extract_footnotes_from_html(html)
+
+        # 2. refs in HTML vervangen door markdown syntax
+        html_clean = self.replace_refs_with_markdown_footnotes(html)
+
+        # 3. HTML -> Markdown
+        body_md = self.html_to_markdown(html_clean)
+
+        # 4. footnotes toevoegen aan einde van markdown
+        if notes:
+            body_md += "\n\n"
+            for num, text in notes.items():
+                body_md += f"[^{num}]: {text}\n"
+
+        return body_md
+
+    # zoeken en vervangen
+
+    def find_next(self):
+        text = self.find_input.text()    
+        if not text:
+            return
+        doc = self.editor.document()    
+        cursor = self.editor.textCursor()    
+        start_pos = cursor.selectionEnd() if cursor.hasSelection() else cursor.position()
+        if self.case_cb.isChecked():
+            # plain search from int position
+            it = doc.find(text, start_pos)        
+            if it.isNull():            
+                it = doc.find(text, 0)    
+            else:        
+                # regex with case-insensitive option        
+                regex = QRegularExpression(text)        
+                regex.setPatternOptions(QRegularExpression.PatternOption.CaseInsensitiveOption)
+                it = doc.find(regex, start_pos)        
+                if it.isNull():            
+                    it = doc.find(regex, 0)
+            if not it.isNull():        
+                self.editor.setTextCursor(it)        
+                self.update_highlight()
+
+
+    def find_previous(self):
+        # backwards search: iterate matches and pick last before current position
+        text = self.find_input.text()
+        if not text:
+            return
+        doc = self.editor.document()
+
+        cur = self.editor.textCursor()
+        pos = cur.selectionStart() if cur.hasSelection() else cur.position()
+
+        if self.case_cb.isChecked():
+            it = doc.find(text, 0)
+        else:
+            regex = QRegularExpression(text)
+            regex.setPatternOptions(QRegularExpression.PatternOption.CaseInsensitiveOption)
+            it = doc.find(regex, 0)
+
+        last = None
+        while not it.isNull() and it.selectionEnd() <= pos:
+            last = it
+            it = doc.find(text, it.selectionEnd())
+        if last:
+            self.editor.setTextCursor(last)
+        else:
+            # wrap to last match in document
+            it = doc.find(text, 0)
+            last = None
+            while not it.isNull():
+                last = it
+                it = doc.find(text, it.selectionEnd())
+            if last:
+                self.editor.setTextCursor(last)
+        self.update_highlight()
+
+    def replace_one(self):
+        cursor = self.editor.textCursor()
+        find_text = self.find_input.text()
+        if not find_text:
+            return
+        selected = cursor.selectedText()
+        if cursor.hasSelection() and ((self.case_cb.isChecked() and selected == find_text) or (not self.case_cb.isChecked() and selected.lower() == find_text.lower())):
+            cursor.insertText(self.replace_input.text())
+            self.editor.setTextCursor(cursor)
+        self.find_next()
+
+    def replace_all(self):
+        find_text = self.find_input.text()
+        if not find_text:
+            return
+        text = self.editor.toPlainText()
+        if self.case_cb.isChecked():
+            new_text = text.replace(find_text, self.replace_input.text())
+        else:
+            # case-insensitive replace preserving original case is complex; use simple lower-replace
+            import re
+            pattern = re.compile(re.escape(find_text), re.IGNORECASE)
+            new_text = pattern.sub(self.replace_input.text(), text)
+        self.editor.setPlainText(new_text)
+        self.update_highlight()
+
+    def update_highlight(self):
+        # Clear selections and add new extra selections for all matches.
+        find_text = self.find_input.text()
+        extra_selections = []
+
+        if find_text:
+            doc = self.editor.document()
+            #flags = 0 if self.case_cb.isChecked() else getattr(__import__('PyQt6.Qt', fromlist=['Qt']).Qt, 'CaseInsensitive', 0)
+            flags = 0
+            it = doc.find(find_text, 0)
+            cursors = []
+            while not it.isNull():
+                cursors.append(it)
+                it = doc.find(find_text, it.selectionEnd())
+
+            # Create ExtraSelection objects
+            for c in cursors:
+                sel = QTextCursor(c)
+                selection = QTextCursor(sel)
+                extra = self._make_extra(selection, self.highlight_format)
+                extra_selections.append(extra)
+
+            # If current cursor is on a match, make it highlighted differently
+            cur = self.editor.textCursor()
+            for i, c in enumerate(cursors):
+                if c.selectionStart() <= cur.position() <= c.selectionEnd():
+                    # mark this one with match_format
+                    extra_selections[i] = self._make_extra(QTextCursor(c), self.match_format)
+                    break
+
+        self.editor.setExtraSelections(extra_selections)
+
+    def _make_extra(self, cursor: QTextCursor, fmt: QTextCharFormat):
+        from PyQt6.QtWidgets import QTextEdit
+        extra = QTextEdit.ExtraSelection()
+        extra.cursor = cursor
+        extra.format = fmt
+        return extra

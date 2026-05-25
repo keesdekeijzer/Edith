@@ -12,5 +12,7 @@ Er is ook een export naar Word-formaat mogelijk.
 
 Export naar epub is ook mogelijk, staat default op lang=nl.
 
+Import van epub bestanden kan ook.
+
 
 
