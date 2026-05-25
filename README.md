@@ -14,5 +14,7 @@ Export naar epub is ook mogelijk, staat default op lang=nl.
 
 Import van epub bestanden kan ook.
 
+Markdown exporteren als platte tekst kan ook.
+
 
 

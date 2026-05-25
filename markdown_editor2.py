@@ -2,7 +2,7 @@ import datetime
 
 from PyQt6 import QtWidgets
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QCheckBox, QFileDialog, QInputDialog, QLabel, QLineEdit, QMainWindow, QPushButton
+from PyQt6.QtWidgets import QApplication, QCheckBox, QFileDialog, QInputDialog, QLabel, QLineEdit, QMainWindow, QPushButton
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 from highlighter_markdown import MarkdownHighlighter
@@ -28,6 +28,7 @@ from PyQt6.QtPrintSupport import QPrinter
 
 from docx import Document
 from bs4 import BeautifulSoup
+from markdown import markdown
 
 import hashlib
 from ebooklib import epub
@@ -78,6 +79,8 @@ class Markdown_Editor(QWidget):
         
         maak_menu_punt(self, "openen_actie", "Openen...", "Ctrl+O", self.openen)
 
+        maak_menu_punt(self, "invoegen_actie", "Invoegen...", "", self.invoegen)
+
         maak_menu_punt(self, "opslaan_actie", "Opslaan", "Ctrl+S", self.opslaan)
 
         maak_menu_punt(self, "opslaan_als_actie", "Opslaan als...", "Ctrl+Alt+S", self.opslaan_als)
@@ -93,6 +96,8 @@ class Markdown_Editor(QWidget):
         maak_menu_punt(self, "export_word_actie", "Exporteer naar Word", "", self.export_word)
 
         maak_menu_punt(self, "export_epub_actie", "Exporteer naar ePub", "", self.export_epub)
+
+        maak_menu_punt(self, "export_txt_actie", "Exporteer als tekst", "", self.export_txt)
 
         maak_menu_punt(self, "afsluiten_actie", "Afsluiten", "Ctrl+Q", self.afsluiten)
  
@@ -130,6 +135,12 @@ class Markdown_Editor(QWidget):
         maak_menu_punt(self, "blauwe_modus_actie", "Blauwe modus", "", self.blauwe_modus)
 
         maak_menu_punt(self, "font_actie", "Font...", "", self.font)
+
+        # Navigatie
+
+        maak_menu_punt(self, "naar_begin_actie", "Naar begin", "Ctrl+Home", self.naar_begin)
+
+        maak_menu_punt(self, "naar_einde_actie", "Naar einde", "Ctrl+End", self.naar_einde)
 
         # Invoegen - Datum, Tijd, md link, md afbeelding, if name == main, frontmatter
 
@@ -171,6 +182,7 @@ class Markdown_Editor(QWidget):
         bestand_menu = menubalk.addMenu("Bestand")        
         bestand_menu.addAction(actie["nieuw_actie"])        
         bestand_menu.addAction(actie["openen_actie"])
+        bestand_menu.addAction(actie["invoegen_actie"])
         bestand_menu.addAction(actie["opslaan_actie"]) 
         bestand_menu.addAction(actie["opslaan_als_actie"])
         bestand_menu.addSeparator()
@@ -181,6 +193,7 @@ class Markdown_Editor(QWidget):
         bestand_menu.addAction(actie["export_pdf_actie"])
         bestand_menu.addAction(actie["export_word_actie"])
         bestand_menu.addAction(actie["export_epub_actie"])
+        bestand_menu.addAction(actie["export_txt_actie"])
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["afsluiten_actie"])
 
@@ -189,9 +202,9 @@ class Markdown_Editor(QWidget):
         bewerken_menu.addAction(actie["knippen_actie"])
         bewerken_menu.addAction(actie["plakken_actie"])
         bewerken_menu.addSeparator()
-        bewerken_menu.addAction(actie["zoeken_actie"])
-        bewerken_menu.addAction(actie["zoeken_en_vervangen_actie"])
-        bewerken_menu.addSeparator()
+        # bewerken_menu.addAction(actie["zoeken_actie"])
+        # bewerken_menu.addAction(actie["zoeken_en_vervangen_actie"])
+        # bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["alles_selecteren_actie"])
         bewerken_menu.addAction(actie["ongedaan_maken_actie"])
         bewerken_menu.addAction(actie["opnieuw_doen_actie"])
@@ -206,6 +219,10 @@ class Markdown_Editor(QWidget):
         beeld_menu.addAction(actie["blauwe_modus_actie"])
         beeld_menu.addSeparator()
         beeld_menu.addAction(actie["font_actie"])
+
+        navigatie_menu = menubalk.addMenu("Navigatie")
+        navigatie_menu.addAction(actie["naar_begin_actie"])
+        navigatie_menu.addAction(actie["naar_einde_actie"])
 
         invoegen_menu = menubalk.addMenu("Invoegen")
         invoegen_menu.addAction(actie["datum_actie"])
@@ -532,6 +549,16 @@ class Markdown_Editor(QWidget):
         except Exception as e:
             self.dialog_critical(str(e))
 
+    def invoegen(self):
+        try:
+            fname = QFileDialog.getOpenFileName(self, 'Tekst of markdown bestand invoegen', configuratie["opslaglocatie"], 'Alle bestanden (*)')
+            with open(fname[0], 'r') as f:
+                filetext = f.read()
+                self.editor.insertPlainText(filetext)
+            self.statusbar.showMessage("Bestand ingevoegd")
+        except Exception as e:
+            self.dialog_critical(str(e))
+
     def opslaan(self):        
         if self.current_path is not None:
             filetext = self.editor.toPlainText()
@@ -561,7 +588,16 @@ class Markdown_Editor(QWidget):
 
     def afsluiten(self):
         QMessageBox.information(self, "Afsluiten", "Programma afsluiten.")
+        # waarschuwen bij onopgeslagen wijzigingen
+        if self.unsaved_changes:
+            reply = QMessageBox.question(self, 'Waarschuwing', 
+                                         'Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?')
+            if reply == QMessageBox.StandardButton.Yes:
+                self.opslaan()
         CodeEditor.close(self)
+        # Alle vensters sluiten
+        for widget in QApplication.topLevelWidgets():
+            widget.close()
 
     def kopieren(self):
         self.editor.copy()
@@ -664,6 +700,16 @@ class Markdown_Editor(QWidget):
         font, ok = QFontDialog.getFont()
         if ok:
             self.editor.setFont(font)
+
+    def naar_begin(self):
+        cursor = self.editor.textCursor()
+        cursor.movePosition(QTextCursor.MoveOperation.Start)
+        self.editor.setTextCursor(cursor)
+
+    def naar_einde(self):
+        cursor = self.editor.textCursor()
+        cursor.movePosition(QTextCursor.MoveOperation.End)
+        self.editor.setTextCursor(cursor)
 
     def over(self):        
         QMessageBox.information(self, "Over Edith", "Markdown editor met preview.")
@@ -2050,3 +2096,39 @@ identifier: {identifier}
         extra.cursor = cursor
         extra.format = fmt
         return extra
+
+    def markdown_to_plain_text(self, md_text, strip_frontmatter=True):
+
+        if strip_frontmatter:
+            md_text = re.sub(r"^---\n.*?\n---\n", "", md_text, flags=re.DOTALL)
+        html = markdown(md_text)
+        soup = BeautifulSoup(html, "html.parser")
+        text = soup.get_text("\n")
+
+        # Opschonen van meerdere nieuwe regels
+        lines = [line.strip() for line in text.splitlines()]
+
+        return "\n".join(lines).strip()
+    
+    def export_txt(self):
+        path, _ = QFileDialog.getSaveFileName(
+            self,
+            "Exporteer als Tekstbestand",
+            "",
+            "Tekstbestanden (*.txt)"
+        )
+
+        if not path:
+            return
+        
+        md_text = self.editor.toPlainText()
+        plain_text = self.markdown_to_plain_text(md_text)
+
+        try:
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(plain_text)
+        except Exception as e:
+            QMessageBox.critical(self, "Fout", f"Fout bij exporteren: {e}")
+        else:
+            QMessageBox.information(self, "Succes", "Bestand geëxporteerd als tekstbestand!")
+    
