@@ -5,6 +5,7 @@ from PyQt6 import QtCore
 from PyQt6.QtWidgets import QApplication, QCheckBox, QFileDialog, QInputDialog, QLabel, QLineEdit, QMainWindow, QPushButton
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
+import language_tool_python
 from highlighter_markdown import MarkdownHighlighter
 from highlighter_python import PythonHighlighter
 from highlighter_html import HtmlHighlighter
@@ -126,6 +127,8 @@ class Markdown_Editor(QWidget):
 
         maak_menu_punt(self, "schrift_actie", "Schrift", "Alt+S", self.schrift)
 
+        maak_menu_punt(self, "spellcheck_actie", "Spelling controleren", "F7", self.spellcheck)
+
         # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
 
         maak_menu_punt(self, "lichte_modus_actie", "Lichte modus", "", self.lichte_modus)
@@ -212,6 +215,8 @@ class Markdown_Editor(QWidget):
         bewerken_menu.addAction(actie["normaliseren_actie"])
         bewerken_menu.addAction(actie["geen_hoofdletters_actie"])
         bewerken_menu.addAction(actie["schrift_actie"])
+        bewerken_menu.addSeparator()
+        bewerken_menu.addAction(actie["spellcheck_actie"])
 
         beeld_menu = menubalk.addMenu("Beeld")
         beeld_menu.addAction(actie["lichte_modus_actie"])
@@ -2131,4 +2136,62 @@ identifier: {identifier}
             QMessageBox.critical(self, "Fout", f"Fout bij exporteren: {e}")
         else:
             QMessageBox.information(self, "Succes", "Bestand geëxporteerd als tekstbestand!")
+
+    def spellcheck(self):
+        QMessageBox.information(self, "Spellcheck", "Spelling controleren... (dit kan even duren)")
+        if not hasattr(self, "spellchecker"):
+            self.spellchecker = SpellChecker()
+        text = self.editor.toPlainText()
+        matches = self.spellchecker.check(text)
+        for match in matches:
+            line, column = match.get_line_and_column(text)
+            cursor = self.editor.textCursor()
+            block = self.editor.document().findBlockByNumber(line - 1)
+            if block.isValid():
+                pos = block.position() + column - 1
+            start = pos
+            end = pos + match.error_length
+            word = self.get_word_from_line_column(line, column, match.error_length)
+            print(f"\nFout: regel:{line} kolom:{column} {word}\nSuggesties: {match.replacements[:5]}")
+
+            cursor.setPosition(start)
+            cursor.setPosition(end, QTextCursor.MoveMode.KeepAnchor)
+            fmt = cursor.charFormat()
+            fmt.setUnderlineColor(Qt.GlobalColor.red)
+            fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.SpellCheckUnderline)
+            cursor.setCharFormat(fmt)
+        QMessageBox.information(self, "Spellcheck", f"Spellingcontrole voltooid! {len(matches)} fouten gevonden.")
     
+    def go_to_line_column(self, line, column):
+        cursor = self.editor.textCursor()
+        block = self.editor.document().findBlockByNumber(line - 1)
+        if block.isValid():
+            pos = block.position() + column - 1
+            cursor.setPosition(pos)
+            self.editor.setTextCursor(cursor)
+            self.editor.setFocus()
+
+    def get_word_from_line_column(self, line, column, length):
+        cursor = self.editor.textCursor()
+        block = self.editor.document().findBlockByNumber(line - 1)
+        if block.isValid():
+            pos = block.position() + column - 1
+            cursor.setPosition(pos)
+            cursor.setPosition(pos + length, QTextCursor.MoveMode.KeepAnchor)
+            return cursor.selectedText()
+        return ""
+
+
+class SpellChecker:
+    def __init__(self, lang="nl"):
+        self.tool = language_tool_python.LanguageTool(lang)
+        
+
+    def check(self,text):
+        return self.tool.check(text)
+    
+    def suggestions_for(self, word):
+        matches = self.tool.check(word)
+        if matches:
+            return matches[0].replacements
+        return []    
