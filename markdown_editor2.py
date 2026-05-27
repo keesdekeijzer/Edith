@@ -2138,11 +2138,12 @@ identifier: {identifier}
             QMessageBox.information(self, "Succes", "Bestand geëxporteerd als tekstbestand!")
 
     def spellcheck(self):
-        QMessageBox.information(self, "Spellcheck", "Spelling controleren... (dit kan even duren)")
+        QMessageBox.information(self, "Spellcheck", "Spelling controleren...\nDit kan lang duren, je kunt meldingen krijgen dat het programma niet meer reageert. \nHeb dan geduld.\nAls het klaar is krijg je daar een melding van.")
         if not hasattr(self, "spellchecker"):
             self.spellchecker = SpellChecker()
         text = self.editor.toPlainText()
         matches = self.spellchecker.check(text)
+        verslag = "Spellingcontrole verslag:\n\n"
         for match in matches:
             line, column = match.get_line_and_column(text)
             cursor = self.editor.textCursor()
@@ -2152,7 +2153,7 @@ identifier: {identifier}
             start = pos
             end = pos + match.error_length
             word = self.get_word_from_line_column(line, column, match.error_length)
-            print(f"\nFout: regel:{line} kolom:{column} {word}\nSuggesties: {match.replacements[:5]}")
+            verslag += f"Fout: regel:{line} kolom:{column} {word}\nSuggesties: {match.replacements[:5]}\n"
 
             cursor.setPosition(start)
             cursor.setPosition(end, QTextCursor.MoveMode.KeepAnchor)
@@ -2160,8 +2161,12 @@ identifier: {identifier}
             fmt.setUnderlineColor(Qt.GlobalColor.red)
             fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.SpellCheckUnderline)
             cursor.setCharFormat(fmt)
-        QMessageBox.information(self, "Spellcheck", f"Spellingcontrole voltooid! {len(matches)} fouten gevonden.")
-    
+        
+        verslaglocatie = configuratie["opslaglocatie"] + "/spellcheck_report.txt"
+        with open(verslaglocatie, "w") as f:
+            f.write(verslag)
+        QMessageBox.information(self, "Spellcheck", f"Spellingcontrole voltooid! {len(matches)} fouten gevonden.\nVerslag opgeslagen in {verslaglocatie}")
+
     def go_to_line_column(self, line, column):
         cursor = self.editor.textCursor()
         block = self.editor.document().findBlockByNumber(line - 1)

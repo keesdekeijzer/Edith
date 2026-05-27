@@ -16,5 +16,7 @@ Import van epub bestanden kan ook.
 
 Markdown exporteren als platte tekst kan ook.
 
+Spellingcontrole is op afroep beschikbaar, maar is wel langzaam.
+
 
 
