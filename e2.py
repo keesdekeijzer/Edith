@@ -149,9 +149,9 @@ class CodeEditor(QPlainTextEdit):
             # verplaats cursor naar nieuwe regel
             cursor = self.textCursor()
             # verplaats naar einde van huidige regel
-            cursor.movePosition(QTextCursor.MoveOperation.EndOfLine)
+            #cursor.movePosition(QTextCursor.MoveOperation.EndOfLine)
             # vervolgens naar volgende regel
-            cursor.movePosition(QTextCursor.MoveOperation.NextBlock)
+            #cursor.movePosition(QTextCursor.MoveOperation.NextBlock)
             self.setTextCursor(cursor)
 
             super().keyPressEvent(event)
@@ -181,8 +181,19 @@ class CodeEditor(QPlainTextEdit):
         
         # Backspace + slimme unindent
         if key == Qt.Key.Key_Backspace:
-            if self._handle_smart_backspace(cursor):
-                return
+            # move cursor to end of previous line if at start of line
+            if cursor.positionInBlock() == 0:
+                previous_block = cursor.block().previous()
+                if previous_block.isValid():
+                    previous_block_length = previous_block.length() - 1  # -1 omdat de block text eindigt met een newline
+                    cursor.setPosition(previous_block.position() + previous_block_length)
+                    self.setTextCursor(cursor)
+                    return
+                super().keyPressEvent(event)
+            else:
+                if self._handle_smart_backspace(cursor):
+                    return
+
         
         # auto-closing triple quotes (''' of """)
         cursor = self.textCursor()

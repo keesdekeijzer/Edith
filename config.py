@@ -12,7 +12,8 @@ OPSLAGLOCATIE = "/home/kees/Data/"
 configuratie = {
     'database': DATABASE,
     'darkmode': DARKMODE,
-    'opslaglocatie': OPSLAGLOCATIE
+    'opslaglocatie': OPSLAGLOCATIE,
+    'favoriete_font': ("Arial", 12)
 }
 
 nu = datetime.datetime.now()
