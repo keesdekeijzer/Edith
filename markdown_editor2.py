@@ -15,7 +15,7 @@ import re, yaml
 from outline_panel import OutlinePanel 
 from pathlib import Path
 from PyQt6.QtCore import QRegularExpression, QUrl, Qt
-from PyQt6.QtGui import QColor, QFont, QImage, QGuiApplication, QAction, QTextCharFormat, QTextCursor
+from PyQt6.QtGui import QColor, QFont, QImage, QGuiApplication, QAction, QTextCharFormat, QTextCursor, QWindow
 from PyQt6.QtCore import QStandardPaths
 import os
 from frontmatter_panel import FrontmatterPanel
@@ -37,6 +37,8 @@ from ebooklib import epub
 from markdownify import markdownify as md
 
 from _fontsize import fontsize_counts
+
+from spellcheck import SpellChecker
 
 # instellingen importeren
 from config import FRONTMATTER_TEXT, configuratie, font_sizes
@@ -575,6 +577,7 @@ class Markdown_Editor(QWidget):
                     f.write(filetext)
                 self.statusbar.showMessage("Bestand opgeslagen")
                 self.file_label.setText(self.current_path)
+                self.unsaved_changes = False
             except Exception as e:
                 self.dialog_critical(str(e))
         else:
@@ -590,6 +593,7 @@ class Markdown_Editor(QWidget):
             self.setWindowTitle(pathname[0])
             self.file_label.setText(pathname[0])
             self.statusbar.showMessage("Bestand opgeslagen")
+            self.unsaved_changes = False
         except Exception as e:
             errortekst = "Bestand niet opgeslagen!\n" + str(e)
             self.dialog_critical(errortekst)
@@ -2302,16 +2306,3 @@ identifier: {identifier}
         return ""
 
 
-class SpellChecker:
-    def __init__(self, lang="nl"):
-        self.tool = language_tool_python.LanguageTool(lang)
-        
-
-    def check(self,text):
-        return self.tool.check(text)
-    
-    def suggestions_for(self, word):
-        matches = self.tool.check(word)
-        if matches:
-            return matches[0].replacements
-        return []    

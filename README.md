@@ -18,5 +18,6 @@ Markdown exporteren als platte tekst kan ook.
 
 Spellingcontrole is op afroep beschikbaar, maar is wel langzaam.
 
+Een favoriet font is in te stellen in het config.py bestand.
 
 
