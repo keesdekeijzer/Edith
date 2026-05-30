@@ -188,6 +188,8 @@ class CodeEditor(QPlainTextEdit):
                     previous_block_length = previous_block.length() - 1  # -1 omdat de block text eindigt met een newline
                     cursor.setPosition(previous_block.position() + previous_block_length)
                     self.setTextCursor(cursor)
+                    # remove empty line if the current line is empty
+                    cursor.deleteChar()
                     return
                 super().keyPressEvent(event)
             else:

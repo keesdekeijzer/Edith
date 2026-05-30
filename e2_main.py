@@ -1,5 +1,5 @@
 from markdown_editor2 import Markdown_Editor
-from PyQt6.QtWidgets import QApplication
+from PyQt6.QtWidgets import QApplication, QMainWindow
 import sys
 from PyQt6.QtWidgets import QWidget, QVBoxLayout
 
