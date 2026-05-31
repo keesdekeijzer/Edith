@@ -10,7 +10,7 @@ from highlighter_markdown import MarkdownHighlighter
 from highlighter_python import PythonHighlighter
 from highlighter_html import HtmlHighlighter
 from markdown_renderer import render_markdown
-from e2 import CodeEditor
+from code_editor import CodeEditor
 import re, yaml
 from outline_panel import OutlinePanel 
 from pathlib import Path
@@ -371,11 +371,15 @@ class Markdown_Editor(QWidget):
         ratio = self._editor_scroll_ratio()
         
         js = f"""
-        (function() {{
-            let h = document.body.scrollHeight - window.innerHeight;
-            window.scrollTo(0, h * {ratio});
-        }})();
+        
+
+        (function() {{  const dbody = document.body;  
+                     if (!dbody) return;  
+                     const h = dbody.scrollHeight - window.innerHeight;  
+                     window.scrollTo(0, h * {ratio});}})();
         """
+
+
 
         self.preview.page().runJavaScript(js)
 
@@ -407,12 +411,18 @@ class Markdown_Editor(QWidget):
             het verschil tussen inhoudshoogte en viewport‑hoogte → de maximale scrollTop-waarde (0 tot h). 
             Als h ≤ 0 is, is er niks om te scrollen.
             """
+            
             js = f"""
-            (function() {{
-                let h = document.body.scrollHeight - window.innerHeight;
-                window.scrollTo(0, h * {ratio});
-            }})();
+            (function() {{  
+                    const dbody = document.body;  
+                     if (!dbody) return;  
+                     const h = dbody.scrollHeight - window.innerHeight;  
+                     window.scrollTo(0, h * {ratio});}})();
             """
+
+
+
+
             self.preview.page().runJavaScript(js)
 
         self.preview.page().loadFinished.connect(lambda _: after_load(None))
@@ -693,6 +703,7 @@ class Markdown_Editor(QWidget):
                 color: #FFFFFF;
             }
             ''')
+        #window.set_colors("#212121", "#FFFFFF")
 
     def blauwe_modus(self):
         configuratie["darkmode"] = 'blue'
