@@ -68,11 +68,14 @@ class Markdown_Editor(QMainWindow):
         # Central widget        
         self.editor = CodeEditor()  
         container = QWidget()
+
         layout = QVBoxLayout(container)
+
         h_layout = QHBoxLayout()
 
-        #h_layout.addWidget(self.editor)   
+
         layout.addLayout(h_layout)   
+
         self.setCentralWidget(container)
 
         # menu begin
@@ -192,12 +195,23 @@ class Markdown_Editor(QMainWindow):
         
         # Maak menubalk en menu's        
         
-        #menubalk = QMenuBar(self)                 # maak menubalk widget
-        #menubalk.setStyleSheet("padding: 8px;")
-        #menubalk.setMinimumHeight(30)
-       # menubalk.setMaximumHeight(60)
 
-        # File menu        file_menu = self.menuBar().addMenu("&File")
+        # set style for menubar and menu's
+        self.menuBar().setStyleSheet("""
+            QMenuBar {
+                background: #2b2b2b;
+                color: #e6e6e6;
+                border-bottom: 1px solid #444;
+                                     padding: 5px;
+            }
+            QMenuBar::item {
+                padding: 5px 10px;
+                border: 1px solid transparent;
+            }
+            QMenuBar::item:selected {
+                background: #444;
+            }
+        """)
         
         bestand_menu = self.menuBar().addMenu("Bestand")        
         bestand_menu.addAction(actie["nieuw_actie"])        
@@ -222,9 +236,6 @@ class Markdown_Editor(QMainWindow):
         bewerken_menu.addAction(actie["knippen_actie"])
         bewerken_menu.addAction(actie["plakken_actie"])
         bewerken_menu.addSeparator()
-        # bewerken_menu.addAction(actie["zoeken_actie"])
-        # bewerken_menu.addAction(actie["zoeken_en_vervangen_actie"])
-        # bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["alles_selecteren_actie"])
         bewerken_menu.addAction(actie["ongedaan_maken_actie"])
         bewerken_menu.addAction(actie["opnieuw_doen_actie"])
@@ -265,8 +276,9 @@ class Markdown_Editor(QMainWindow):
         hulp_menu.addAction(actie["sneltoetsen_alt_actie"])
         hulp_menu.addAction(actie["markdown_actie"])
 
-        v_layout = QVBoxLayout(self)
-        #v_layout.setMenuBar(self.menuBar())  
+
+        v_layout = QVBoxLayout()
+ 
 
         self.file_label = QLabel("?")  # bestandsnaam
         self.file_label.setStyleSheet("padding: 8px;")
@@ -277,23 +289,14 @@ class Markdown_Editor(QMainWindow):
         v_layout.addWidget(self.file_label, 0)
 
 
+
         # menu einde
 
-        #h_layout = QHBoxLayout()
-        #h_layout.setContentsMargins(0, 0, 0, 0)
+     
 
-        v_layout.addLayout(h_layout)
-        #self.frontmatter = FrontmatterPanel(self)
-        #layout.addWidget(self.frontmatter, 0)
-
-        #self.statusbar = QtWidgets.QStatusBar()
-        #self.statusbar.setStyleSheet("padding: 8px;")
-        #self.statusbar.setMinimumHeight(30)
-        #self.statusbar.setMaximumHeight(60)
         self.statusBar().showMessage("Ready")
 
-        # zoken en vervangen panel
-        # Zoek- en vervang widgets
+
         find_label = QLabel("Zoeken:")
         self.find_input = QLineEdit()
         self.case_cb = QCheckBox("Hoofdlettergevoelig")
@@ -320,7 +323,6 @@ class Markdown_Editor(QMainWindow):
         bottom_layout.addWidget(replace_all_btn)
 
         main_layout = QVBoxLayout()
-        #main_layout.addWidget(self.editor)
         main_layout.addLayout(top_layout)
         main_layout.addLayout(bottom_layout)
 
@@ -360,6 +362,11 @@ class Markdown_Editor(QMainWindow):
         # Preview rechts
         self.preview = QWebEngineView()
         h_layout.addWidget(self.preview, 1)
+
+        # layouts
+        layout.setContentsMargins(10, 10, 10, 10)
+        layout.setSpacing(10)
+        layout.addLayout(v_layout)
 
         # Live updates
         self.editor.textChanged.connect(self.update_preview)
