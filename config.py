@@ -13,7 +13,8 @@ configuratie = {
     'database': DATABASE,
     'darkmode': DARKMODE,
     'opslaglocatie': OPSLAGLOCATIE,
-    'favoriete_font': ("Arial", 12)
+    'favoriete_font': ("Arial", 12),
+    'language': 'de'  # opties: 'nl', 'en', 'de'
 }
 
 nu = datetime.datetime.now()
