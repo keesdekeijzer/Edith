@@ -46,7 +46,7 @@ from config import FRONTMATTER_TEXT, configuratie, font_sizes
 from memo import Memo
 from memolijst import MemoLijst
 
-from teksten import menu_teksten_nl, menu_teksten_en, menu_teksten_de
+from teksten import menu_teksten_nl, menu_teksten_en, menu_teksten_de, meldingen_de, meldingen_en, meldingen_nl
 
 
 class Markdown_Editor(QMainWindow):
@@ -81,14 +81,17 @@ class Markdown_Editor(QMainWindow):
         self.setCentralWidget(container)
 
         # menu begin
-        
+        self.meldingen = {}
 
         if taal == "en":
             menu_teksten = menu_teksten_en
+            self.meldingen = meldingen_en
         elif taal == "de":
             menu_teksten = menu_teksten_de
+            self.meldingen = meldingen_de
         else:
             menu_teksten = menu_teksten_nl
+            self.meldingen = meldingen_nl
 
         actie = {}
 
@@ -301,7 +304,7 @@ class Markdown_Editor(QMainWindow):
 
      
 
-        self.statusBar().showMessage("Ready")
+        self.statusBar().showMessage(self.meldingen["Ready"], 3000)
 
 
         find_label = QLabel(menu_teksten["Zoeken:"])
@@ -351,7 +354,7 @@ class Markdown_Editor(QMainWindow):
         #
 
         #v_layout.addWidget(self.statusBar(), 0)
-        self.statusBar().showMessage("Ready", 3000)
+        self.statusBar().showMessage(self.meldingen["Ready"], 3000)
 
         # Editor links
         self.editor = CodeEditor()
@@ -386,7 +389,7 @@ class Markdown_Editor(QMainWindow):
 
     def on_text_changed(self):
         self.unsaved_changes = True
-        self.statusBar().showMessage("Onopgeslagen wijzigingen")
+        self.statusBar().showMessage(self.meldingen["Onopgeslagen wijzigingen"])
 
     def _editor_scroll_ratio(self):
         sb = self.editor.verticalScrollBar()
@@ -566,20 +569,20 @@ class Markdown_Editor(QMainWindow):
 
     def nieuw(self):        
         if self.unsaved_changes:
-            reply = QMessageBox.question(self, 'Waarschuwing', 
-                                         'Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?')
+            reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
+                                         self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
         self.editor.clear()
-        self.setWindowTitle("Geen naam")
+        self.setWindowTitle(self.meldingen["Geen naam"])
         self.current_path = None 
-        self.statusBar().showMessage("Nieuw Bestand")
+        self.statusBar().showMessage(self.meldingen["Nieuw Bestand"])
         self.file_label.setText("?")
 
     def openen(self):        
         if self.unsaved_changes:
-            reply = QMessageBox.question(self, 'Waarschuwing', 
-                                         'Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?')
+            reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
+                                         self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
         try:
@@ -592,7 +595,7 @@ class Markdown_Editor(QMainWindow):
                 self.editor.setPlainText(filetext)
             self.current_path = fname[0]
             self.load_highlighter()
-            self.statusBar().showMessage("Bestand geopend")
+            self.statusBar().showMessage(self.meldingen["Bestand geopend"])
         except Exception as e:
             self.dialog_critical(str(e))
 
@@ -602,7 +605,7 @@ class Markdown_Editor(QMainWindow):
             with open(fname[0], 'r') as f:
                 filetext = f.read()
                 self.editor.insertPlainText(filetext)
-            self.statusBar().showMessage("Bestand ingevoegd")
+            self.statusBar().showMessage(self.meldingen["Bestand ingevoegd"])
         except Exception as e:
             self.dialog_critical(str(e))
 
@@ -612,7 +615,7 @@ class Markdown_Editor(QMainWindow):
             try:
                 with open(self.current_path, 'w') as f:
                     f.write(filetext)
-                self.statusBar().showMessage("Bestand opgeslagen")
+                self.statusBar().showMessage(self.meldingen["Bestand opgeslagen"])
                 self.file_label.setText(self.current_path)
                 self.unsaved_changes = False
             except Exception as e:
@@ -629,18 +632,18 @@ class Markdown_Editor(QMainWindow):
             self.current_path = pathname[0]
             self.setWindowTitle(pathname[0])
             self.file_label.setText(pathname[0])
-            self.statusBar().showMessage("Bestand opgeslagen")
+            self.statusBar().showMessage(self.meldingen["Bestand opgeslagen"])
             self.unsaved_changes = False
         except Exception as e:
-            errortekst = "Bestand niet opgeslagen!\n" + str(e)
+            errortekst = self.meldingen["Bestand niet opgeslagen"] + "\n" + str(e)
             self.dialog_critical(errortekst)
 
     def afsluiten(self):
-        QMessageBox.information(self, "Afsluiten", "Programma afsluiten.")
+        QMessageBox.information(self, self.meldingen["Afsluiten"], self.meldingen["Programma afsluiten."])
         # waarschuwen bij onopgeslagen wijzigingen
         if self.unsaved_changes:
-            reply = QMessageBox.question(self, 'Waarschuwing', 
-                                         'Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?')
+            reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
+                                         self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
         CodeEditor.close(self)
@@ -670,7 +673,7 @@ class Markdown_Editor(QMainWindow):
                 if not gevonden:
                     term = text.replace('<','&lt;')
                     term = term.replace('>','&gt;')
-                    QMessageBox.information(self, "Vinden", f"'{term}' niet gevonden")
+                    QMessageBox.information(self, self.meldingen["Vinden"], f"'{term}' niet gevonden")
 
     def alles_selecteren(self):
         self.editor.selectAll()
@@ -695,7 +698,7 @@ class Markdown_Editor(QMainWindow):
             kleine_tekst = geselecteerde_tekst.lower()
             selectie.insertText(kleine_tekst)
         else:
-            QMessageBox.about(self, "Geen Selectie", "Selecteer eerst tekst om om te zetten naar kleine letters.")
+            QMessageBox.about(self, self.meldingen["Geen Selectie"], self.meldingen["Selecteer eerst tekst om om te zetten naar kleine letters."])
 
     def schrift(self):
         selectie = self.editor.textCursor()
@@ -712,7 +715,7 @@ class Markdown_Editor(QMainWindow):
                 schrift_tekst += schrift_char
             selectie.insertText(schrift_tekst)
         else:
-            QMessageBox.about(self, "Geen Selectie", "Selecteer eerst tekst om om te zetten naar schrift.")
+            QMessageBox.about(self, self.meldingen["Geen Selectie"], self.meldingen["Selecteer eerst tekst om om te zetten naar schrift."])
 
     def lichte_modus(self):
         configuratie["darkmode"] = 'light'
@@ -874,29 +877,17 @@ class Markdown_Editor(QMainWindow):
         self.editor.setTextCursor(cursor)
 
     def over(self):        
-        QMessageBox.information(self, "Over Edith", "Markdown editor met preview.")
+        QMessageBox.information(self, self.meldingen["Over Edith"], self.meldingen["Markdown editor met preview."])
 
     def sneltoetsen(self):
-        QMessageBox.about(self, "Sneltoetsen", "Ctrl+N: Nieuw\nCtrl+O: Openen\nCtrl+S: Opslaan\n" \
-        "Ctrl+Shift+S: Opslaan als\nCtrl+Q: Sluiten\nCtrl+C: Kopiëren\nCtrl+X: Knippen\nCtrl+V: Plakken\n" \
-        "Ctrl+F: Zoeken\nCtrl+Z: Ongedaan maken\nCtrl+R: Opnieuw doen\nCtrl+A: Alles selecteren")
+        QMessageBox.about(self, self.meldingen["Sneltoetsen"], self.meldingen["Sneltoetsen_help"])
 
     def sneltoetsen_alt(self):
-        QMessageBox.about(self, "Sneltoetsen Alt", "Invoegen:\nAlt+D: Datum\nAlt+T: Tijd\nAlt+L: md link\n" \
-                          "Alt+A: md afbeelding\nAlt+I: if name == main\nAlt+F: Frontmatter\n\n" \
-                          "Bewerken:\nAlt+N: Normaliseren\nAlt+U: Geen hoofdletters\nAlt+S: Schrift\n\n")
+        QMessageBox.about(self, self.meldingen["Sneltoetsen Alt"], self.meldingen["Sneltoetsen_Alt_help"])
 
 
     def markdown_overzicht(self):
-        QMessageBox.about(self, "Markdown", 
-                          "Koppen:\n" \
-                          "# H1\n## H2\n### H3\n\n" \
-                          "Vet (bold):\t**vet**\n\n" \
-                          "Schuin (italic):\t*schuin*\n\n" \
-                          "Blockquote:\n> blockquote\n\n" \
-                          "Genummerde lijst:\n1. eerste item\n2. tweede item\n3. derde item\n\n" \
-                          "Ongenummerde lijst:\n- item A\n- item B\n- item C\n\n" \
-                          "Highlight:\t==highlighted==\n")
+        QMessageBox.about(self, self.meldingen["Markdown"], self.meldingen["Markdown_help"])
 
     def datum(self):
         nu = datetime.datetime.now()
