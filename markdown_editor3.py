@@ -569,6 +569,7 @@ class Markdown_Editor(QMainWindow):
 
     def nieuw(self):        
         if self.unsaved_changes:
+            print("-nieuw- Onopgeslagen wijzigingen, waarschuwen")
             reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
                                          self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
             if reply == QMessageBox.StandardButton.Yes:
@@ -581,6 +582,7 @@ class Markdown_Editor(QMainWindow):
 
     def openen(self):        
         if self.unsaved_changes:
+            print("-openen- Onopgeslagen wijzigingen, waarschuwen")
             reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
                                          self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
             if reply == QMessageBox.StandardButton.Yes:
@@ -642,6 +644,7 @@ class Markdown_Editor(QMainWindow):
         QMessageBox.information(self, self.meldingen["Afsluiten"], self.meldingen["Programma afsluiten."])
         # waarschuwen bij onopgeslagen wijzigingen
         if self.unsaved_changes:
+            print("-afsluiten- Onopgeslagen wijzigingen, waarschuwen")
             reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
                                          self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
             if reply == QMessageBox.StandardButton.Yes:
@@ -900,14 +903,14 @@ class Markdown_Editor(QMainWindow):
         self.editor.insertPlainText(tijd_nu)
 
     def md_link(self):
-        pathname = QFileDialog.getOpenFileName(self, 'Bestand openen', configuratie["opslaglocatie"], 'Alle bestanden (*)')
+        pathname = QFileDialog.getOpenFileName(self, self.meldingen["Bestand openen"], configuratie["opslaglocatie"], self.meldingen["Alle bestanden"])
         if pathname[0]:
             bestandsnaam = pathname[0].split('/')[-1]
             md_code = f"[{bestandsnaam}]({pathname[0]})"
             self.editor.insertPlainText(md_code)
 
     def md_afbeelding(self):
-        pathname = QFileDialog.getOpenFileName(self, 'Afbeelding openen', configuratie["opslaglocatie"], 'Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)')
+        pathname = QFileDialog.getOpenFileName(self, self.meldingen["Afbeelding openen"], configuratie["opslaglocatie"], self.meldingen["Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)"])
         if pathname[0]:
             bestandsnaam = pathname[0].split('/')[-1]
             md_code = f"![{bestandsnaam}]({pathname[0]})"
@@ -958,13 +961,13 @@ class Markdown_Editor(QMainWindow):
         self.editor.setPlainText(md)
 
     def import_pdf_as_text(self):
-        path, _ = QFileDialog.getOpenFileName(self, "Kies een pdf om te importeren", "", "PDF-bestanden (*.pdf)")
+        path, _ = QFileDialog.getOpenFileName(self, self.meldingen["Kies een pdf om te importeren"], "", self.meldingen["PDF-bestanden (*.pdf)"])
         if not path:
             return
         try:
             text = self.pdf_to_text(path)  # self.pdf_to_text_with_ocr(path)
         except Exception as e:
-            QMessageBox.critical(self, "Fout bij importeren", str(e))
+            QMessageBox.critical(self, self.meldingen["Fout bij importeren"], str(e))
             return
         # Plaats tekst in editor
         self.editor.setPlainText(text)
@@ -973,13 +976,13 @@ class Markdown_Editor(QMainWindow):
         self.file_label.setText("?")
 
     def import_pdf_as_md(self):
-        path, _ = QFileDialog.getOpenFileName(self, "Kies een pdf om te importeren", "", "PDF-bestanden (*.pdf)")
+        path, _ = QFileDialog.getOpenFileName(self, self.meldingen["Kies een pdf om te importeren"], "", self.meldingen["PDF-bestanden (*.pdf)"])
         if not path:
             return
         try:
             text = self.pdf_to_markdown(path)  # self.pdf_to_markdown_with_ocr
         except Exception as e:
-            QMessageBox.critical(self, "Fout bij importeren", str(e))
+            QMessageBox.critical(self, self.meldingen["Fout bij importeren"], str(e))
             return
         # Plaats tekst in editor
         self.editor.setPlainText(text)
@@ -1175,9 +1178,9 @@ class Markdown_Editor(QMainWindow):
     def export_pdf(self):
         path, _ = QFileDialog.getSaveFileName(
             self,
-            "Exporteer naar PDF",
+            self.meldingen["Exporteer naar PDF"],
             "",
-            "PDF-bestanden (*.pdf)"
+            self.meldingen["PDF-bestanden (*.pdf)"]
         )
 
         if not path:
@@ -1187,10 +1190,10 @@ class Markdown_Editor(QMainWindow):
             md_text = self.editor.toPlainText()
             self.export_markdown_to_pdf(md_text, path)
         except Exception as e:
-            QMessageBox.critical(self, "Fout bij exporteren", str(e))
+            QMessageBox.critical(self, self.meldingen["Fout bij exporteren"], str(e))
             return
         
-        QMessageBox.information(self, "Succes", "PDF succesvol opgeslagen!")
+        QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["PDF succesvol opgeslagen!"])
 
     def html_to_docx(self, html, output_path):
         doc = Document()
@@ -1281,9 +1284,9 @@ class Markdown_Editor(QMainWindow):
     def export_word(self):
         path, _ = QFileDialog.getSaveFileName(
             self,
-            "Exporteer naar Word",
+            self.meldingen["Exporteer naar Word"],
             "",
-            "Word-bestanden (*.docx)"
+            self.meldingen["Word-bestanden (*.docx)"]
         )
 
         if not path:
@@ -1292,7 +1295,7 @@ class Markdown_Editor(QMainWindow):
         md_text = self.editor.toPlainText()
         self.export_markdown_to_word(md_text, path)
 
-        QMessageBox.information(self, "Succes", "Word-document opgeslagen!")
+        QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Word-document opgeslagen!"])
 
     def export_markdown_to_epub_zonder_hoofdstukken(self, md_text, output_path):
         # 1. Metadata
@@ -1358,9 +1361,9 @@ class Markdown_Editor(QMainWindow):
     def export_epub(self):
         path, _ = QFileDialog.getSaveFileName(
             self,
-            "Exporteer naar EPUB",
+            self.meldingen["Exporteer naar EPUB"],
             "",
-            "EPUB-bestanden (*.epub)"
+            self.meldingen["EPUB-bestanden (*.epub)"]
         )
 
         if not path:
@@ -1369,7 +1372,7 @@ class Markdown_Editor(QMainWindow):
         md_text = self.editor.toPlainText()
         self.export_markdown_to_epub(md_text, path)
 
-        QMessageBox.information(self, "Succes", "EPUB-boek opgeslagen!")
+        QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["EPUB-boek opgeslagen!"])
 
     def split_into_chapters(self, md_text):
         regels = md_text.split("\n")
@@ -1430,8 +1433,8 @@ class Markdown_Editor(QMainWindow):
     
     def export_markdown_to_epub(self, md_text, output_path):
         meta = self.extract_metadata(md_text)
-        title = meta.get("title", "Mijn Markdown Boek")
-        author = meta.get("author", "Onbekende Auteur")
+        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
+        author = meta.get("author", self.meldingen["Onbekende Auteur"])
 
         # 1. Markdown -> hoofdstukken
         chapters = self.split_into_chapters(md_text)
@@ -1489,9 +1492,10 @@ class Markdown_Editor(QMainWindow):
         epub.write_epub(output_path, book, {"pretty": True})            
 
     def closeEvent(self, event):
+        print("Close event triggered")
         if self.unsaved_changes:
-            reply = QMessageBox.question(self, 'Waarschuwing', 
-                                         'Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?',
+            reply = QMessageBox.question(self, self.meldingen['Waarschuwing'], 
+                                         self.meldingen['Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?'],
                                          QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No | QMessageBox.StandardButton.Cancel)
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
@@ -1514,8 +1518,8 @@ class Markdown_Editor(QMainWindow):
         draw = ImageDraw.Draw(img)
 
 
-        title = meta.get("title", "Mijn Markdown Boek")
-        author = meta.get("author", "Onbekende Auteur")
+        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
+        author = meta.get("author", self.meldingen["Onbekende Auteur"])
 
         # Fonts
         #title_font = ImageFont.truetype("arial.ttf", 40)
@@ -1523,8 +1527,8 @@ class Markdown_Editor(QMainWindow):
         #small_font = ImageFont.truetype("arial.ttf", 20)
 
         # Metadata
-        title = meta.get("title", "Mijn Markdown Boek")
-        author = meta.get("author", "Onbekende Auteur")
+        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
+        author = meta.get("author", self.meldingen["Onbekende Auteur"])
         project = meta.get("project", "")
         version = meta.get("version", "")
 
@@ -1586,8 +1590,8 @@ class Markdown_Editor(QMainWindow):
         draw = ImageDraw.Draw(bg)
 
         # Metadata
-        title = meta.get("title", "Mijn Markdown Boek")
-        author = meta.get("author", "Onbekende Auteur")
+        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
+        author = meta.get("author", self.meldingen["Onbekende Auteur"])
         project = meta.get("project", "")
         version = meta.get("version", "")
 
@@ -1642,8 +1646,8 @@ class Markdown_Editor(QMainWindow):
         draw = ImageDraw.Draw(bg)
 
         # Metadata
-        title = meta.get("title", "Mijn Markdown Boek")
-        author = meta.get("author", "Onbekende Auteur")
+        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
+        author = meta.get("author", self.meldingen["Onbekende Auteur"])
         project = meta.get("project", "")
         version = meta.get("version", "")
 
@@ -1698,8 +1702,8 @@ class Markdown_Editor(QMainWindow):
         draw = ImageDraw.Draw(bg)
 
         # Metadata
-        title = meta.get("title", "Mijn Markdown Boek")
-        author = meta.get("author", "Onbekende Auteur")
+        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
+        author = meta.get("author", self.meldingen["Onbekende Auteur"])
         project = meta.get("project", "")
         version = meta.get("version", "")
 
@@ -1755,9 +1759,9 @@ class Markdown_Editor(QMainWindow):
         draw = ImageDraw.Draw(bg)
 
         # Metadata
-        title = meta.get("title", "Mijn Markdown Boek")
+        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
         subtitle = meta.get("subtitle", "")
-        author = meta.get("author", "Onbekende Auteur")
+        author = meta.get("author", self.meldingen["Onbekende Auteur"])
         project = meta.get("project", "")
         version = meta.get("version", "")
 
@@ -1817,9 +1821,9 @@ class Markdown_Editor(QMainWindow):
         draw = ImageDraw.Draw(bg)
 
         # Metadata
-        title = meta.get("title", "Mijn Markdown Boek")
+        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
         subtitle = meta.get("subtitle", "")
-        author = meta.get("author", "Onbekende Auteur")
+        author = meta.get("author", self.meldingen["Onbekende Auteur"])
         project = meta.get("project", "")
         version = meta.get("version", "")
 
@@ -1879,9 +1883,9 @@ class Markdown_Editor(QMainWindow):
         draw = ImageDraw.Draw(bg)
 
         # Metadata
-        title = meta.get("title", "Mijn Markdown Boek")
+        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
         subtitle = meta.get("subtitle", "")
-        author = meta.get("author", "Onbekende Auteur")
+        author = meta.get("author", self.meldingen["Onbekende Auteur"])
         project = meta.get("project", "")
         version = meta.get("version", "")
 
@@ -1941,9 +1945,9 @@ class Markdown_Editor(QMainWindow):
         draw = ImageDraw.Draw(bg)
 
         # Metadata
-        title = meta.get("title", "Mijn Markdown Boek")
+        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
         subtitle = meta.get("subtitle", "")
-        author = meta.get("author", "Onbekende Auteur")
+        author = meta.get("author", self.meldingen["Onbekende Auteur"])
         project = meta.get("project", "")
         version = meta.get("version", "")
 
@@ -2003,8 +2007,8 @@ class Markdown_Editor(QMainWindow):
         return t() if callable(t) else None
     
     def epub_metadata_to_frontmatter(self, book):
-        title = book.get_metadata("DC", "title")[0][0] if book.get_metadata("DC", "title") else "Mijn Markdown Boek"
-        author = book.get_metadata("DC", "creator")[0][0] if book.get_metadata("DC", "creator") else "Onbekende Auteur"
+        title = book.get_metadata("DC", "title")[0][0] if book.get_metadata("DC", "title") else self.meldingen["Mijn Markdown Boek"]
+        author = book.get_metadata("DC", "creator")[0][0] if book.get_metadata("DC", "creator") else self.meldingen["Onbekende Auteur"]
         language = book.get_metadata("DC", "language")[0][0] if book.get_metadata("DC", "language") else "nl"
         identifier = book.get_metadata("DC", "identifier")[0][0] if book.get_metadata("DC", "identifier") else "id123456"
 
@@ -2064,9 +2068,9 @@ identifier: {identifier}
     def import_epub(self):
         path, _ = QFileDialog.getOpenFileName(
             self,
-            "Importeer EPUB",
+            self.meldingen["Importeer EPUB"],
             "",
-            "EPUB-bestanden (*.epub)"
+            self.meldingen["EPUB-bestanden (*.epub)"]
         )
 
         if not path:
@@ -2074,7 +2078,7 @@ identifier: {identifier}
         
         md_text = self.epub_to_markdown(path)
         self.editor.setPlainText(md_text)
-        QMessageBox.information(self, "Succes", "EPUB-boek geïmporteerd!")
+        QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["EPUB-boek geïmporteerd!"])
 
     def extract_footnotes_from_html(self, html):
         soup = BeautifulSoup(html, "html.parser")
@@ -2266,9 +2270,9 @@ identifier: {identifier}
     def export_txt(self):
         path, _ = QFileDialog.getSaveFileName(
             self,
-            "Exporteer als Tekstbestand",
+            self.meldingen["Exporteer als Tekstbestand"],
             "",
-            "Tekstbestanden (*.txt)"
+            self.meldingen["Tekstbestanden (*.txt)"]
         )
 
         if not path:
@@ -2281,12 +2285,12 @@ identifier: {identifier}
             with open(path, "w", encoding="utf-8") as f:
                 f.write(plain_text)
         except Exception as e:
-            QMessageBox.critical(self, "Fout", f"Fout bij exporteren: {e}")
+            QMessageBox.critical(self, self.meldingen["Fout"], f"{self.meldingen['Fout bij exporteren']}: {e}")
         else:
-            QMessageBox.information(self, "Succes", "Bestand geëxporteerd als tekstbestand!")
+            QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Bestand geëxporteerd als tekstbestand!"])
 
     def spellcheck(self):
-        QMessageBox.information(self, "Spellcheck", "Spelling controleren...\nDit kan lang duren, je kunt meldingen krijgen dat het programma niet meer reageert. \nHeb dan geduld.\nAls het klaar is krijg je daar een melding van.")
+        QMessageBox.information(self, self.meldingen["Spellcheck"], f"{self.meldingen['Spelling controleren']}\n{self.meldingen['Dit kan lang duren']}\n{self.meldingen['Heb dan geduld.']}\n{self.meldingen['Als het klaar is krijg je daar een melding van.']}")
         if not hasattr(self, "spellchecker"):
             self.spellchecker = SpellChecker()
         text = self.editor.toPlainText()
@@ -2313,7 +2317,7 @@ identifier: {identifier}
         verslaglocatie = configuratie["opslaglocatie"] + "/spellcheck_report.txt"
         with open(verslaglocatie, "w") as f:
             f.write(verslag)
-        QMessageBox.information(self, "Spellcheck", f"Spellingcontrole voltooid! {len(matches)} fouten gevonden.\nVerslag opgeslagen in {verslaglocatie}")
+        QMessageBox.information(self, self.meldingen["Spellcheck"], f"{self.meldingen['Spellingcontrole voltooid!']} {len(matches)} {self.meldingen['fouten gevonden.']}\n{self.meldingen['Verslag opgeslagen in']} {verslaglocatie}")
 
     def go_to_line_column(self, line, column):
         cursor = self.editor.textCursor()
