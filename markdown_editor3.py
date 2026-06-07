@@ -643,13 +643,15 @@ class Markdown_Editor(QMainWindow):
     def afsluiten(self):
         QMessageBox.information(self, self.meldingen["Afsluiten"], self.meldingen["Programma afsluiten."])
         # waarschuwen bij onopgeslagen wijzigingen
+        """
         if self.unsaved_changes:
             print("-afsluiten- Onopgeslagen wijzigingen, waarschuwen")
             reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
                                          self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
-        CodeEditor.close(self)
+        """
+        #CodeEditor.close(self)
         # Alle vensters sluiten
         for widget in QApplication.topLevelWidgets():
             widget.close()

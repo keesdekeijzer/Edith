@@ -8,64 +8,102 @@ meldingen_nl = {}
 meldingen_en = {}
 meldingen_de = {}
 
+# Bestand
 menu_teksten_nl["Bestand"] = "Bestand"
 menu_teksten_en["Bestand"] = "File"
 menu_teksten_de["Bestand"] = "Datei"
+
+# Bewerken
 menu_teksten_nl["Bewerken"] = "Bewerken"
 menu_teksten_en["Bewerken"] = "Edit"
 menu_teksten_de["Bewerken"] = "Bearbeiten"
+
+# Beeld
 menu_teksten_nl["Beeld"] = "Beeld"
 menu_teksten_en["Beeld"] = "View"
 menu_teksten_de["Beeld"] = "Ansicht"
+
+# Navigatie
 menu_teksten_nl["Navigatie"] = "Navigatie"
 menu_teksten_en["Navigatie"] = "Navigate"
 menu_teksten_de["Navigatie"] = "Navigation"
+
+# Invoegen
 menu_teksten_nl["Invoegen"] = "Invoegen"
 menu_teksten_en["Invoegen"] = "Insert"
 menu_teksten_de["Invoegen"] = "Einfügen"
+
+# Apps
 menu_teksten_nl["Apps"] = "Apps"
 menu_teksten_en["Apps"] = "Apps"
 menu_teksten_de["Apps"] = "Apps"
+
+# Help
 menu_teksten_nl["Help"] = "Help"
 menu_teksten_en["Help"] = "Help"
 menu_teksten_de["Help"] = "Hilfe"
 
+# Nieuw
 menu_teksten_nl["Nieuw"] = "Nieuw"
 menu_teksten_en["Nieuw"] = "New"
 menu_teksten_de["Nieuw"] = "Neu"
+
+# Openen
 menu_teksten_nl["Openen"] = "Openen"
 menu_teksten_en["Openen"] = "Open"
 menu_teksten_de["Openen"] = "Öffnen"
+
+# Invoegen
 menu_teksten_nl["Invoegen"] = "Invoegen"
 menu_teksten_en["Invoegen"] = "Insert"
 menu_teksten_de["Invoegen"] = "Einfügen"
+
+# Opslaan
 menu_teksten_nl["Opslaan"] = "Opslaan"
 menu_teksten_en["Opslaan"] = "Save"
 menu_teksten_de["Opslaan"] = "Speichern"
+
+# Opslaan als
 menu_teksten_nl["Opslaan als"] = "Opslaan als..."
 menu_teksten_en["Opslaan als"] = "Save as..."
 menu_teksten_de["Opslaan als"] = "Speichern als..."
+
+# Importeer pdf als tekst
 menu_teksten_nl["Importeer pdf als tekst"] = "Importeer pdf als tekst"
 menu_teksten_en["Importeer pdf als tekst"] = "Import pdf as text"
 menu_teksten_de["Importeer pdf als tekst"] = "PDF als Text importieren"
+
+# Importeer pdf als markdown
 menu_teksten_nl["Importeer pdf als markdown"] = "Importeer pdf als markdown"
 menu_teksten_en["Importeer pdf als markdown"] = "Import pdf as markdown"
 menu_teksten_de["Importeer pdf als markdown"] = "PDF als Markdown importieren"
+
+# Importeer ePub
 menu_teksten_nl["Importeer ePub"] = "Importeer ePub"
 menu_teksten_en["Importeer ePub"] = "Import ePub"
 menu_teksten_de["Importeer ePub"] = "ePub importieren"
+
+# Exporteer als PDF
 menu_teksten_nl["Exporteer als PDF"] = "Exporteer als PDF"
 menu_teksten_en["Exporteer als PDF"] = "Export as PDF"
 menu_teksten_de["Exporteer als PDF"] = "Als PDF exportieren"
+
+# Exporteer naar Word
 menu_teksten_nl["Exporteer naar Word"] = "Exporteer naar Word"
 menu_teksten_en["Exporteer naar Word"] = "Export to Word"
 menu_teksten_de["Exporteer naar Word"] = "In Word exportieren"
+
+# Exporteer naar ePub
 menu_teksten_nl["Exporteer naar ePub"] = "Exporteer naar ePub"
 menu_teksten_en["Exporteer naar ePub"] = "Export to ePub"
 menu_teksten_de["Exporteer naar ePub"] = "In ePub exportieren"
+
+# Exporteer als tekst
 menu_teksten_nl["Exporteer als tekst"] = "Exporteer als tekst"
 menu_teksten_en["Exporteer als tekst"] = "Export as text"
 menu_teksten_de["Exporteer als tekst"] = "Als Text exportieren"
+
+# Afsluiten
 menu_teksten_nl["Afsluiten"] = "Afsluiten"
 menu_teksten_en["Afsluiten"] = "Exit"
 menu_teksten_de["Afsluiten"] = "Beenden"

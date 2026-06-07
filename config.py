@@ -1,5 +1,3 @@
-
-
 import datetime
 
 
@@ -14,7 +12,7 @@ configuratie = {
     'darkmode': DARKMODE,
     'opslaglocatie': OPSLAGLOCATIE,
     'favoriete_font': ("Arial", 12),
-    'language': 'de'  # opties: 'nl', 'en', 'de'
+    'language': 'en'  # opties: 'nl', 'en', 'de'
 }
 
 nu = datetime.datetime.now()
