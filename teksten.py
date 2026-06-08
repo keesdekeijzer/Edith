@@ -33,10 +33,10 @@ menu_teksten_nl["Invoegen"] = "Invoegen"
 menu_teksten_en["Invoegen"] = "Insert"
 menu_teksten_de["Invoegen"] = "Einfügen"
 
-# Apps
-menu_teksten_nl["Apps"] = "Apps"
-menu_teksten_en["Apps"] = "Apps"
-menu_teksten_de["Apps"] = "Apps"
+# Extra
+menu_teksten_nl["Extra"] = "Extra"
+menu_teksten_en["Extra"] = "Extra"
+menu_teksten_de["Extra"] = "Extra"
 
 # Help
 menu_teksten_nl["Help"] = "Help"
@@ -222,6 +222,10 @@ menu_teksten_de["Vervangen door:"] = "Ersetzen durch:"
 menu_teksten_nl["Alles vervangen"] = "Alles vervangen"
 menu_teksten_en["Alles vervangen"] = "Replace all"
 menu_teksten_de["Alles vervangen"] = "Alle ersetzen"
+
+menu_teksten_nl["Configuratie bewerken"] = "Configuratie bewerken"
+menu_teksten_en["Configuratie bewerken"] = "Edit configuration"
+menu_teksten_de["Configuratie bewerken"] = "Konfiguration bearbeiten"
 
 # Meldingen
 meldingen_nl["Bestand opgeslagen"] = "Bestand opgeslagen"

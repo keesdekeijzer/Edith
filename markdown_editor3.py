@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import QApplication, QCheckBox, QFileDialog, QInputDialog, 
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 import language_tool_python
+from configuratie_bewerken import ConfiguratieBewerken
 from highlighter_markdown import MarkdownHighlighter
 from highlighter_python import PythonHighlighter
 from highlighter_html import HtmlHighlighter
@@ -193,6 +194,8 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "memolijst_actie", menu_teksten["Memolijst"], "", self.memolijst)
 
+        maak_menu_punt(self, "configuratie_bewerken_actie", menu_teksten["Configuratie bewerken"], "", self.configuratie_bewerken)
+
         # Help - Over Edith, Sneltoetsen, Sneltoetsen (Alt), Markdown
         
         maak_menu_punt(self, "over_actie", menu_teksten["Over Edith"], "", self.over)
@@ -276,10 +279,11 @@ class Markdown_Editor(QMainWindow):
         invoegen_menu.addAction(actie["if_name_is_main_actie"])
         invoegen_menu.addAction(actie["frontmatter_actie"])
 
-        apps_menu = self.menuBar().addMenu(menu_teksten["Apps"])
-        apps_menu.addAction(actie["memo_actie"])
-        apps_menu.addAction(actie["memolijst_actie"])
-        
+        extra_menu = self.menuBar().addMenu(menu_teksten["Extra"])
+        extra_menu.addAction(actie["memo_actie"])
+        extra_menu.addAction(actie["memolijst_actie"])
+        extra_menu.addAction(actie["configuratie_bewerken_actie"])
+
         hulp_menu = self.menuBar().addMenu(menu_teksten["Help"])
         hulp_menu.addAction(actie["over_actie"])
         hulp_menu.addAction(actie["sneltoetsen_actie"])
@@ -2140,21 +2144,21 @@ identifier: {identifier}
         doc = self.editor.document()    
         cursor = self.editor.textCursor()    
         start_pos = cursor.selectionEnd() if cursor.hasSelection() else cursor.position()
-        if self.case_cb.isChecked():
-            # plain search from int position
-            it = doc.find(text, start_pos)        
+        #if self.case_cb.isChecked():
+        # plain search from int position
+        it = doc.find(text, start_pos)        
+        if it.isNull():            
+            it = doc.find(text, 0)    # wrap around to start of document
+        else:        
+            # regex with case-insensitive option        
+            regex = QRegularExpression(text)        
+            regex.setPatternOptions(QRegularExpression.PatternOption.CaseInsensitiveOption)
+            it = doc.find(regex, start_pos)        
             if it.isNull():            
-                it = doc.find(text, 0)    
-            else:        
-                # regex with case-insensitive option        
-                regex = QRegularExpression(text)        
-                regex.setPatternOptions(QRegularExpression.PatternOption.CaseInsensitiveOption)
-                it = doc.find(regex, start_pos)        
-                if it.isNull():            
-                    it = doc.find(regex, 0)
-            if not it.isNull():        
-                self.editor.setTextCursor(it)        
-                self.update_highlight()
+                it = doc.find(regex, 0)  # wrap around to start of document
+        if not it.isNull():        
+            self.editor.setTextCursor(it)        
+            self.update_highlight()
 
 
     def find_previous(self):
@@ -2340,6 +2344,10 @@ identifier: {identifier}
             return cursor.selectedText()
         return ""
 
+    def configuratie_bewerken(self):
+        self.config_venster = ConfiguratieBewerken()
+        self.config_venster.show()
+        
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
