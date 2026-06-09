@@ -1,9 +1,10 @@
-from PyQt6.QtWidgets import QDialog, QVBoxLayout
+from PyQt6.QtWidgets import QDialog, QLabel, QVBoxLayout
 import yaml
 
 class ConfiguratieBewerken(QDialog):
-    def __init__(self):
+    def __init__(self, taal='nl'):
         super().__init__()
+        self.taal = taal
         self.setWindowTitle("Configuratie bewerken")
         self.setModal(True)
         self.setup_ui()
@@ -11,6 +12,10 @@ class ConfiguratieBewerken(QDialog):
 
     def setup_ui(self):
         layout = QVBoxLayout()
+        label = QLabel("Hier kun je de configuratie bewerken.")
+        layout.addWidget(label)
+        label2 = QLabel("Deze functionaliteit is nog in ontwikkeling.")
+        layout.addWidget(label2)
         self.setLayout(layout)
 
     def load_config(self):

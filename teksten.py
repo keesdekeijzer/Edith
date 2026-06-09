@@ -108,73 +108,117 @@ menu_teksten_nl["Afsluiten"] = "Afsluiten"
 menu_teksten_en["Afsluiten"] = "Exit"
 menu_teksten_de["Afsluiten"] = "Beenden"
 
+# Kopieren
 menu_teksten_nl["Kopieren"] = "Kopieren"
 menu_teksten_en["Kopieren"] = "Copy"
 menu_teksten_de["Kopieren"] = "Kopieren"
+
+# Plakken
 menu_teksten_nl["Plakken"] = "Plakken"
 menu_teksten_en["Plakken"] = "Paste"
 menu_teksten_de["Plakken"] = "Einfügen"
+
+# Knippen
 menu_teksten_nl["Knippen"] = "Knippen"
 menu_teksten_en["Knippen"] = "Cut"
 menu_teksten_de["Knippen"] = "Ausschneiden"
+
+# Alles selecteren
 menu_teksten_nl["Alles selecteren"] = "Alles selecteren"
 menu_teksten_en["Alles selecteren"] = "Select all"
 menu_teksten_de["Alles selecteren"] = "Alles auswählen"
+
+# Ongedaam maken
 menu_teksten_nl["Ongedaan maken"] = "Ongedaan maken"
 menu_teksten_en["Ongedaan maken"] = "Undo"
 menu_teksten_de["Ongedaan maken"] = "Rückgängig"
+
+# Opnieuw doen
 menu_teksten_nl["Opnieuw doen"] = "Opnieuw doen"
 menu_teksten_en["Opnieuw doen"] = "Redo"
 menu_teksten_de["Opnieuw doen"] = "Wiederholen"
+
+# Normaliseren
 menu_teksten_nl["Normaliseren"] = "Normaliseren"
 menu_teksten_en["Normaliseren"] = "Normalize"
 menu_teksten_de["Normaliseren"] = "Normalisieren"
+
+# Geen hoofdletters
 menu_teksten_nl["Geen hoofdletters"] = "Geen hoofdletters"
 menu_teksten_en["Geen hoofdletters"] = "No caps"
 menu_teksten_de["Geen hoofdletters"] = "Keine Großbuchstaben"
+
+# Schrift
 menu_teksten_nl["Schrift"] = "Schrift"
 menu_teksten_en["Schrift"] = "Writing"
 menu_teksten_de["Schrift"] = "Schrift"
+
+# Spelling controleren
 menu_teksten_nl["Spelling controleren"] = "Spelling controleren"
 menu_teksten_en["Spelling controleren"] = "Check spelling"
 menu_teksten_de["Spelling controleren"] = "Rechtschreibprüfung"
 
+# Lichte modus
 menu_teksten_nl["Lichte modus"] = "Lichte modus"
 menu_teksten_en["Lichte modus"] = "Light mode"
 menu_teksten_de["Lichte modus"] = "Heller Modus"
+
+# Donkere modus
 menu_teksten_nl["Donkere modus"] = "Donkere modus"
 menu_teksten_en["Donkere modus"] = "Dark mode"
 menu_teksten_de["Donkere modus"] = "Dunkler Modus"
+
+# Blauwe modus
 menu_teksten_nl["Blauwe modus"] = "Blauwe modus"
 menu_teksten_en["Blauwe modus"] = "Blue mode"
 menu_teksten_de["Blauwe modus"] = "Blauer Modus"
+
+# Font
 menu_teksten_nl["Font"] = "Font"
 menu_teksten_en["Font"] = "Font"
 menu_teksten_de["Font"] = "Schriftart"
+
+# Favoriete font
 menu_teksten_nl["Favoriete font"] = "Favoriete font"
 menu_teksten_en["Favoriete font"] = "Favorite font"
 menu_teksten_de["Favoriete font"] = "Bevorzugte Schriftart"
+
+# Naar begin
 menu_teksten_nl["Naar begin"] = "Naar begin"
 menu_teksten_en["Naar begin"] = "To start"
 menu_teksten_de["Naar begin"] = "Zum Anfang"
+
+# Naar einde
 menu_teksten_nl["Naar einde"] = "Naar einde"
 menu_teksten_en["Naar einde"] = "To end"
 menu_teksten_de["Naar einde"] = "Zum Ende"
+
+# Datum
 menu_teksten_nl["Datum"] = "Datum"
 menu_teksten_en["Datum"] = "Date"
 menu_teksten_de["Datum"] = "Datum"
+
+# Tijd
 menu_teksten_nl["Tijd"] = "Tijd"
 menu_teksten_en["Tijd"] = "Time"
 menu_teksten_de["Tijd"] = "Zeit"
+
+# md link
 menu_teksten_nl["md link"] = "md link"
 menu_teksten_en["md link"] = "md link"
 menu_teksten_de["md link"] = "md Link"
+
+# md afbeelding
 menu_teksten_nl["md afbeelding"] = "md afbeelding"
 menu_teksten_en["md afbeelding"] = "md image"
 menu_teksten_de["md afbeelding"] = "md Bild"
+
+# if name == main
 menu_teksten_nl["if name == main"] = "if name == main"
 menu_teksten_en["if name == main"] = "if name == main"
 menu_teksten_de["if name == main"] = "if name == main"
+
+# Frontmatter
 menu_teksten_nl["Frontmatter"] = "Frontmatter"
 menu_teksten_en["Frontmatter"] = "Frontmatter"
 menu_teksten_de["Frontmatter"] = "Frontmatter"

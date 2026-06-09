@@ -66,7 +66,7 @@ class Markdown_Editor(QMainWindow):
             "it": "ita",
         }
         
-        taal = configuratie.get("language", "nl")
+        self.taal = configuratie.get("language", "nl")
 
         # Central widget        
         self.editor = CodeEditor()  
@@ -84,10 +84,10 @@ class Markdown_Editor(QMainWindow):
         # menu begin
         self.meldingen = {}
 
-        if taal == "en":
+        if self.taal == "en":
             menu_teksten = menu_teksten_en
             self.meldingen = meldingen_en
-        elif taal == "de":
+        elif self.taal == "de":
             menu_teksten = menu_teksten_de
             self.meldingen = meldingen_de
         else:
@@ -2345,7 +2345,7 @@ identifier: {identifier}
         return ""
 
     def configuratie_bewerken(self):
-        self.config_venster = ConfiguratieBewerken()
+        self.config_venster = ConfiguratieBewerken(self.taal)
         self.config_venster.show()
         
 
