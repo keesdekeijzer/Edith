@@ -271,6 +271,10 @@ menu_teksten_nl["Configuratie bewerken"] = "Configuratie bewerken"
 menu_teksten_en["Configuratie bewerken"] = "Edit configuration"
 menu_teksten_de["Configuratie bewerken"] = "Konfiguration bearbeiten"
 
+menu_teksten_nl["Woorden vervangen"] = "Woorden vervangen"
+menu_teksten_en["Woorden vervangen"] = "Replace words"
+menu_teksten_de["Woorden vervangen"] = "Wörter ersetzen"
+
 # Meldingen
 meldingen_nl["Bestand opgeslagen"] = "Bestand opgeslagen"
 meldingen_en["Bestand opgeslagen"] = "File saved"

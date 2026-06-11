@@ -156,6 +156,8 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "spellcheck_actie", menu_teksten["Spelling controleren"], "F7", self.spellcheck)
 
+        maak_menu_punt(self, "woorden_vervangen_actie", menu_teksten["Woorden vervangen"], "", self.woorden_vervangen)
+
         # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
 
         maak_menu_punt(self, "lichte_modus_actie", menu_teksten["Lichte modus"], "", self.lichte_modus)
@@ -258,6 +260,7 @@ class Markdown_Editor(QMainWindow):
         bewerken_menu.addAction(actie["schrift_actie"])
         bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["spellcheck_actie"])
+        bewerken_menu.addAction(actie["woorden_vervangen_actie"])
 
         beeld_menu = self.menuBar().addMenu(menu_teksten["Beeld"])
         beeld_menu.addAction(actie["lichte_modus_actie"])
@@ -2347,6 +2350,18 @@ identifier: {identifier}
     def configuratie_bewerken(self):
         self.config_venster = ConfiguratieBewerken(self.taal)
         self.config_venster.show()
+        
+    def woorden_vervangen(self):
+        genormaliseerde_tekst = ""
+        regellijst = self.editor.toPlainText().split('\n')
+        for r in regellijst:
+            woorden = r.split()
+            for i, woord in enumerate(woorden):
+                if woord in configuratie["vervangingen"]:
+                    woorden[i] = configuratie["vervangingen"][woord]
+            genormaliseerde_regel = ' '.join(woorden)
+            genormaliseerde_tekst += genormaliseerde_regel + "\n"
+        self.editor.setPlainText(genormaliseerde_tekst)
         
 
 if __name__ == "__main__":

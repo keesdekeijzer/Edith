@@ -12,7 +12,26 @@ configuratie = {
     'darkmode': DARKMODE,
     'opslaglocatie': OPSLAGLOCATIE,
     'favoriete_font': ("Arial", 12),
-    'language': 'en'  # opties: 'nl', 'en', 'de'
+    'language': 'en',  # opties: 'nl', 'en', 'de'
+    'vervangingen': {
+        "te": "tot",
+        "en": "en",
+        "de": "de",
+        "het": "het",
+        "een": "een",
+        "is": "is",
+        "zijn": "zijn",
+        "was": "was",
+        "waren": "waren",
+        "wordt": "wordt",
+        "worden": "worden",
+        "heb": "heb",
+        "heeft": "heeft",
+        "hebben": "hebben",
+        "kan": "kan",
+        "kun": "kun",
+        "regel": "REGEL",
+    }  # opties: 'nl', 'en', 'de'
 }
 
 nu = datetime.datetime.now()
