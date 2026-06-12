@@ -2352,15 +2352,18 @@ identifier: {identifier}
         self.config_venster.show()
         
     def woorden_vervangen(self):
+        # dit is hoofdlettergevoelig en leestekengevoelig
+        from config import VERVANGINGEN
         genormaliseerde_tekst = ""
         regellijst = self.editor.toPlainText().split('\n')
         for r in regellijst:
             woorden = r.split()
             for i, woord in enumerate(woorden):
-                if woord in configuratie["vervangingen"]:
-                    woorden[i] = configuratie["vervangingen"][woord]
+                if woord in VERVANGINGEN:
+                    woorden[i] = VERVANGINGEN[woord]
             genormaliseerde_regel = ' '.join(woorden)
-            genormaliseerde_tekst += genormaliseerde_regel + "\n"
+            genormaliseerde_tekst += genormaliseerde_regel + "\n" 
+            # bij de laatste regel zou er geen \n toegevoegd hoeven te worden
         self.editor.setPlainText(genormaliseerde_tekst)
         
 

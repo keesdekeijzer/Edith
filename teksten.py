@@ -223,125 +223,201 @@ menu_teksten_nl["Frontmatter"] = "Frontmatter"
 menu_teksten_en["Frontmatter"] = "Frontmatter"
 menu_teksten_de["Frontmatter"] = "Frontmatter"
 
+# Memo
 menu_teksten_nl["Memo"] = "Memo"
 menu_teksten_en["Memo"] = "Memo"
 menu_teksten_de["Memo"] = "Memo"
+
+# Memolijst
 menu_teksten_nl["Memolijst"] = "Memolijst"
 menu_teksten_en["Memolijst"] = "Memolist"
 menu_teksten_de["Memolijst"] = "Memoliste"
+
+# Over Edith
 menu_teksten_nl["Over Edith"] = "Over Edith"
 menu_teksten_en["Over Edith"] = "About Edith"
 menu_teksten_de["Over Edith"] = "Über Edith"
+
+# Sneltoetsen
 menu_teksten_nl["Sneltoetsen"] = "Sneltoetsen"
 menu_teksten_en["Sneltoetsen"] = "Shortcuts"
 menu_teksten_de["Sneltoetsen"] = "Tastenkürzel"
+
+# Sneltoetsen (Alt)
 menu_teksten_nl["Sneltoetsen (Alt)"] = "Sneltoetsen (Alt)"
 menu_teksten_en["Sneltoetsen (Alt)"] = "Shortcuts (Alt)"
 menu_teksten_de["Sneltoetsen (Alt)"] = "Tastenkürzel (Alt)"
+
+# Markdown
 menu_teksten_nl["Markdown"] = "Markdown"
 menu_teksten_en["Markdown"] = "Markdown"
 menu_teksten_de["Markdown"] = "Markdown"
 
+# Zoeken:
 menu_teksten_nl["Zoeken:"] = "Zoeken:"
 menu_teksten_en["Zoeken:"] = "Search:"
 menu_teksten_de["Zoeken:"] = "Suchen:"
+
+# Vervangen
 menu_teksten_nl["Vervangen"] = "Vervangen"
 menu_teksten_en["Vervangen"] = "Replace"
 menu_teksten_de["Vervangen"] = "Ersetzen"
+
+# Zoeken en vervangen
 menu_teksten_nl["Zoeken en vervangen"] = "Zoeken en vervangen"
 menu_teksten_en["Zoeken en vervangen"] = "Search and replace"
 menu_teksten_de["Zoeken en vervangen"] = "Suchen und Ersetzen"
+
+# Hoofdlettergevoelig
 menu_teksten_nl["Hoofdlettergevoelig"] = "Hoofdlettergevoelig"
 menu_teksten_en["Hoofdlettergevoelig"] = "Case sensitive"
 menu_teksten_de["Hoofdlettergevoelig"] = "Groß-/Klein empfindlich"
+
+# Volgende
 menu_teksten_nl["Volgende"] = "Volgende"
 menu_teksten_en["Volgende"] = "Next"
 menu_teksten_de["Volgende"] = "Nächste"
+
+# Vorige
 menu_teksten_nl["Vorige"] = "Vorige"
 menu_teksten_en["Vorige"] = "Previous"
 menu_teksten_de["Vorige"] = "Vorige"
+
+# Vervangen door:
 menu_teksten_nl["Vervangen door:"] = "Vervangen door:"
 menu_teksten_en["Vervangen door:"] = "Replace with:"
 menu_teksten_de["Vervangen door:"] = "Ersetzen durch:"
+
+# Alles vervangen
 menu_teksten_nl["Alles vervangen"] = "Alles vervangen"
 menu_teksten_en["Alles vervangen"] = "Replace all"
 menu_teksten_de["Alles vervangen"] = "Alle ersetzen"
 
+# Configuratie bewerken
 menu_teksten_nl["Configuratie bewerken"] = "Configuratie bewerken"
 menu_teksten_en["Configuratie bewerken"] = "Edit configuration"
 menu_teksten_de["Configuratie bewerken"] = "Konfiguration bearbeiten"
 
+# Woorden vervangen
 menu_teksten_nl["Woorden vervangen"] = "Woorden vervangen"
 menu_teksten_en["Woorden vervangen"] = "Replace words"
 menu_teksten_de["Woorden vervangen"] = "Wörter ersetzen"
 
+#
 # Meldingen
+#
+
+# Bestand opgeslagen
 meldingen_nl["Bestand opgeslagen"] = "Bestand opgeslagen"
 meldingen_en["Bestand opgeslagen"] = "File saved"
 meldingen_de["Bestand opgeslagen"] = "Datei gespeichert"
+
+# Bestand geopend
 meldingen_nl["Bestand geopend"] = "Bestand geopend"
 meldingen_en["Bestand geopend"] = "File opened"
 meldingen_de["Bestand geopend"] = "Datei geöffnet"
+
+# Bestand verwijderd
 meldingen_nl["Bestand verwijderd"] = "Bestand verwijderd"
 meldingen_en["Bestand verwijderd"] = "File deleted"
 meldingen_de["Bestand verwijderd"] = "Datei gelöscht"
+
+# Bestand hernoemd
 meldingen_nl["Bestand hernoemd"] = "Bestand hernoemd"
 meldingen_en["Bestand hernoemd"] = "File renamed"
 meldingen_de["Bestand hernoemd"] = "Datei umbenannt"
+
+# Bestand niet gevonden
 meldingen_nl["Bestand niet gevonden"] = "Bestand niet gevonden"
 meldingen_en["Bestand niet gevonden"] = "File not found"
 meldingen_de["Bestand niet gevonden"] = "Datei nicht gefunden"
+
+# Bestand is leeg
 meldingen_nl["Bestand is leeg"] = "Bestand is leeg"
 meldingen_en["Bestand is leeg"] = "File is empty"
 meldingen_de["Bestand is leeg"] = "Datei ist leer"
+
+# Ready
 meldingen_nl["Ready"] = "Ready"
 meldingen_en["Ready"] = "Ready"
 meldingen_de["Ready"] = "Bereit"
+
+# Onopgeslagen wijzigingen
 meldingen_nl["Onopgeslagen wijzigingen"] = "Onopgeslagen wijzigingen"
 meldingen_en["Onopgeslagen wijzigingen"] = "Unsaved changes"
 meldingen_de["Onopgeslagen wijzigingen"] = "Ungespeicherte Änderungen"
+
+# Waarschuwing
 meldingen_nl["Waarschuwing"] = "Waarschuwing"
 meldingen_en["Waarschuwing"] = "Warning"
 meldingen_de["Waarschuwing"] = "Warnung"
+
+# Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?
 meldingen_nl["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"] = "Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"
 meldingen_en["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"] = "Current file is not saved yet. Do you want to save the changes?"
 meldingen_de["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"] = "Die aktuelle Datei ist noch nicht gespeichert. Möchten Sie die Änderungen speichern?"
+
+# Geen naam
 meldingen_nl["Geen naam"] = "Geen naam"
 meldingen_en["Geen naam"] = "Untitled"
 meldingen_de["Geen naam"] = "Kein Name"
+
+# Bestand niet opgeslagen
 meldingen_nl["Bestand niet opgeslagen"] = "Bestand niet opgeslagen"
 meldingen_en["Bestand niet opgeslagen"] = "File not saved"
 meldingen_de["Bestand niet opgeslagen"] = "Datei nicht gespeichert"
+
+# Afsluiten
 meldingen_nl["Afsluiten"] = "Afsluiten"
 meldingen_en["Afsluiten"] = "Exit"
 meldingen_de["Afsluiten"] = "Beenden"
+
+# Programma afsluiten
 meldingen_nl["Programma afsluiten."] = "Programma afsluiten."
 meldingen_en["Programma afsluiten."] = "Exiting program."
 meldingen_de["Programma afsluiten."] = "Programm wird beendet."
+
+# Vinden
 meldingen_nl["Vinden"] = "Vinden"
 meldingen_en["Vinden"] = "Find"
 meldingen_de["Vinden"] = "Suchen"
+
+# '{}' niet gevonden
 meldingen_nl["'{}' niet gevonden"] = "'{}' niet gevonden"
 meldingen_en["'{}' niet gevonden"] = "'{}' not found"
 meldingen_de["'{}' niet gevonden"] = "'{}' nicht gefunden"
+
+# Geen selectie
 meldingen_nl["Geen Selectie"] = "Geen Selectie"
 meldingen_en["Geen Selectie"] = "No Selection"
 meldingen_de["Geen Selectie"] = "Keine Auswahl"
+
+# Selecteer eerst tekst om om te zetten naar kleine letters.
 meldingen_nl["Selecteer eerst tekst om om te zetten naar kleine letters."] = "Selecteer eerst tekst om om te zetten naar kleine letters."
 meldingen_en["Selecteer eerst tekst om om te zetten naar kleine letters."] = "Please select text first to convert to lowercase."
 meldingen_de["Selecteer eerst tekst om om te zetten naar kleine letters."] = "Bitte zuerst Text auswählen, um in Kleinbuchstaben umzuwandeln."
+
+# Selecteer eerst tekst om om te zetten naar schrift.
 meldingen_nl["Selecteer eerst tekst om om te zetten naar schrift."] = "Selecteer eerst tekst om om te zetten naar schrift."
 meldingen_en["Selecteer eerst tekst om om te zetten naar schrift."] = "Please select text first to convert to writing."
 meldingen_de["Selecteer eerst tekst om om te zetten naar schrift."] = "Bitte zuerst Text auswählen, um in Schrift umzuwandeln."
+
+# Over Edith
 meldingen_nl["Over Edith"] = "Over Edith"
 meldingen_en["Over Edith"] = "About Edith"
 meldingen_de["Over Edith"] = "Über Edith"
+
+# Markdown editor met preview.
 meldingen_nl["Markdown editor met preview."] = "Markdown editor met preview."
 meldingen_en["Markdown editor met preview."] = "Markdown editor with preview."
 meldingen_de["Markdown editor met preview."] = "Markdown-Editor mit Vorschau."
+
+# Sneltoetsen
 meldingen_nl["Sneltoetsen"] = "Sneltoetsen"
 meldingen_en["Sneltoetsen"] = "Shortcuts"
 meldingen_de["Sneltoetsen"] = "Tastenkürzel"
+
+
 meldingen_nl["Sneltoetsen Alt"] = "Sneltoetsen Alt"
 meldingen_en["Sneltoetsen Alt"] = "Shortcuts Alt"
 meldingen_de["Sneltoetsen Alt"] = "Tastenkürzel Alt"
