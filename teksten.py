@@ -417,53 +417,82 @@ meldingen_nl["Sneltoetsen"] = "Sneltoetsen"
 meldingen_en["Sneltoetsen"] = "Shortcuts"
 meldingen_de["Sneltoetsen"] = "Tastenkürzel"
 
-
+# Sneltoetsen Alt
 meldingen_nl["Sneltoetsen Alt"] = "Sneltoetsen Alt"
 meldingen_en["Sneltoetsen Alt"] = "Shortcuts Alt"
 meldingen_de["Sneltoetsen Alt"] = "Tastenkürzel Alt"
+
+# Sneltoetsen_help
 meldingen_nl["Sneltoetsen_help"] = "Ctrl+N: Nieuw\nCtrl+O: Openen\nCtrl+S: Opslaan\nCtrl+Shift+S: Opslaan als\nCtrl+Q: Sluiten\nCtrl+C: Kopiëren\nCtrl+X: Knippen\nCtrl+V: Plakken\nCtrl+F: Zoeken\nCtrl+Z: Ongedaan maken\nCtrl+R: Opnieuw doen\nCtrl+A: Alles selecteren"
 meldingen_en["Sneltoetsen_help"] = "Ctrl+N: New\nCtrl+O: Open\nCtrl+S: Save\nCtrl+Shift+S: Save as\nCtrl+Q: Exit\nCtrl+C: Copy\nCtrl+X: Cut\nCtrl+V: Paste\nCtrl+F: Find\nCtrl+Z: Undo\nCtrl+R: Redo\nCtrl+A: Select all"
 meldingen_de["Sneltoetsen_help"] = "Ctrl+N: Neu\nCtrl+O: Öffnen\nCtrl+S: Speichern\nCtrl+Shift+S: Speichern als\nCtrl+Q: Beenden\nCtrl+C: Kopieren\nCtrl+X: Ausschneiden\nCtrl+V: Einfügen\nCtrl+F: Suchen\nCtrl+Z: Rückgängig\nCtrl+R: Wiederholen\nCtrl+A: Alles auswählen"
+
+# Sneltoetsen_Alt_help
 meldingen_nl["Sneltoetsen_Alt_help"] = "Invoegen:\nAlt+D: Datum\nAlt+T: Tijd\nAlt+L: md link\nAlt+A: md afbeelding\nAlt+I: if name == main\nAlt+F: Frontmatter\n\nBewerken:\nAlt+N: Normaliseren\nAlt+U: Geen hoofdletters\nAlt+S: Schrift\n\n"
 meldingen_en["Sneltoetsen_Alt_help"] = "Insert:\nAlt+D: Date\nAlt+T: Time\nAlt+L: md link\nAlt+A: md image\nAlt+I: if name == main\nAlt+F: Frontmatter\n\nEdit:\nAlt+N: Normalize\nAlt+U: No caps\nAlt+S: Writing\n\n"
 meldingen_de["Sneltoetsen_Alt_help"] = "Einfügen:\nAlt+D: Datum\nAlt+T: Zeit\nAlt+L: md Link\nAlt+A: md Bild\nAlt+I: if name == main\nAlt+F: Frontmatter\n\nBearbeiten:\nAlt+N: Normalisieren\nAlt+U: Keine Großbuchstaben\nAlt+S: Schrift\n\n"
+
+# Markdown
 meldingen_nl["Markdown"] = "Markdown"
 meldingen_en["Markdown"] = "Markdown"
 meldingen_de["Markdown"] = "Markdown"
+
+# Markdown_help
 meldingen_nl["Markdown_help"] = "Koppen:\n# H1\n## H2\n### H3\n\nVet (bold):\t**vet**\nSchuin (italic):\t*schuin*\nDoorhalen (strikethrough):\t~~doorhalen~~\n\nLijsten:\n- Ongeordende lijst\n1. Geordende lijst\n\nLinks:\n[Google](https://www.google.com)\n\nAfbeeldingen:\n![Alt-tekst](https://www.example.com/afbeelding.jpg)\n\nCode:\n`inline code`\n```\ncodeblok\n```\n\nBlockquotes:\n> Dit is een blockquote.\n\nHorizontale lijn:\n---"
 meldingen_en["Markdown_help"] = "Headings:\n# H1\n## H2\n### H3\n\nBold:\t**bold**\nItalic:\t*italic*\nStrikethrough:\t~~strikethrough~~\n\nLists:\n- Unordered list\n1. Ordered list\n\nLinks:\n[Google](https://www.google.com)\n\nImages:\n![Alt text](https://www.example.com/image.jpg)\n\nCode:\n`inline code`\n```\ncode block\n```\n\nBlockquotes:\n> This is a blockquote.\n\nHorizontal line:\n---"
 meldingen_de["Markdown_help"] = "Überschriften:\n# H1\n## H2\n### H3\n\nFett:\t**fett**\nKursiv:\t*kursiv*\nDurchgestrichen:\t~~durchgestrichen~~\n\nListen:\n- Ungeordnete Liste\n1. Geordnete Liste\n\nLinks:\n[Google](https://www.google.com)\n\nBilder:\n![Alt-Text](https://www.example.com/bild.jpg)\n\nCode:\n`inline code`\n```\ncode block\n```\n\nBlockzitate:\n> Dies ist ein Blockzitat.\n\nHorizontale Linie:\n---"
 
+# Afbeelding openen
 meldingen_nl["Afbeelding openen"] = "Afbeelding openen"
 meldingen_en["Afbeelding openen"] = "Open image"
 meldingen_de["Afbeelding openen"] = "Bild öffnen"
+
+# Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)
 meldingen_nl["Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)"] = "Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)"
 meldingen_en["Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)"] = "Images (*.png *.jpg *.jpeg *.bmp *.gif);;All files (*)"
 meldingen_de["Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)"] = "Bilder (*.png *.jpg *.jpeg *.bmp *.gif);;Alle Dateien (*)"
+
+# md link
 meldingen_nl["md link"] = "md link"
 meldingen_en["md link"] = "md link"
 meldingen_de["md link"] = "md Link"
+
+# md afbeelding
 meldingen_nl["md afbeelding"] = "md afbeelding"
 meldingen_en["md afbeelding"] = "md image"
 meldingen_de["md afbeelding"] = "md Bild"
+
+# if name == main
 meldingen_nl["if name == main"] = "if name == main"
 meldingen_en["if name == main"] = "if name == main"
 meldingen_de["if name == main"] = "if name == main"
+
+# Frontmatter
 meldingen_nl["Frontmatter"] = "Frontmatter"
 meldingen_en["Frontmatter"] = "Frontmatter"
 meldingen_de["Frontmatter"] = "Frontmatter"
+
+# Datum
 meldingen_nl["Datum"] = "Datum"
 meldingen_en["Datum"] = "Date"
 meldingen_de["Datum"] = "Datum"
+
+# Tijd
 meldingen_nl["Tijd"] = "Tijd"
 meldingen_en["Tijd"] = "Time"
 meldingen_de["Tijd"] = "Zeit"
+
+# Bestand openen
 meldingen_nl["Bestand openen"] = "Bestand openen"
 meldingen_en["Bestand openen"] = "Open file"
 meldingen_de["Bestand openen"] = "Datei öffnen"
+
+# Alle bestanden
 meldingen_nl["Alle bestanden"] = "Alle bestanden (*)"
 meldingen_en["Alle bestanden"] = "All files (*)"
 meldingen_de["Alle bestanden"] = "Alle Dateien (*)"
+
+
 meldingen_nl["Kies een pdf om te importeren"] = "Kies een pdf om te importeren"
 meldingen_en["Kies een pdf om te importeren"] = "Choose a pdf to import"
 meldingen_de["Kies een pdf om te importeren"] = "Wählen Sie eine PDF zum Importieren aus"
