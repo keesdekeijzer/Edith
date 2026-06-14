@@ -492,70 +492,112 @@ meldingen_nl["Alle bestanden"] = "Alle bestanden (*)"
 meldingen_en["Alle bestanden"] = "All files (*)"
 meldingen_de["Alle bestanden"] = "Alle Dateien (*)"
 
-
+# Kies een pdf om te importeren
 meldingen_nl["Kies een pdf om te importeren"] = "Kies een pdf om te importeren"
 meldingen_en["Kies een pdf om te importeren"] = "Choose a pdf to import"
 meldingen_de["Kies een pdf om te importeren"] = "Wählen Sie eine PDF zum Importieren aus"
+
+# PDF-bestanden (*.pdf)
 meldingen_nl["PDF-bestanden (*.pdf)"] = "PDF-bestanden (*.pdf)"
 meldingen_en["PDF-bestanden (*.pdf)"] = "PDF files (*.pdf)"
 meldingen_de["PDF-bestanden (*.pdf)"] = "PDF-Dateien (*.pdf)"
+
+# Fout bij importeren
 meldingen_nl["Fout bij importeren"] = "Fout bij importeren"
 meldingen_en["Fout bij importeren"] = "Error importing"
 meldingen_de["Fout bij importeren"] = "Fehler beim Importieren"
+
+# Exporteer naar PDF
 meldingen_nl["Exporteer naar PDF"] = "Exporteer naar PDF"
 meldingen_en["Exporteer naar PDF"] = "Export to PDF"
 meldingen_de["Exporteer naar PDF"] = "In PDF exportieren"
+
+# PDF-bestanden (*.pdf)
 meldingen_nl["PDF-bestanden (*.pdf)"] = "PDF-bestanden (*.pdf)"
 meldingen_en["PDF-bestanden (*.pdf)"] = "PDF files (*.pdf)"
 meldingen_de["PDF-bestanden (*.pdf)"] = "PDF-Dateien (*.pdf)"
+
+# Fout bij exporteren
 meldingen_nl["Fout bij exporteren"] = "Fout bij exporteren"
 meldingen_en["Fout bij exporteren"] = "Error exporting"
 meldingen_de["Fout bij exporteren"] = "Fehler beim Exportieren"
+
+# Succes
 meldingen_nl["Succes"] = "Succes"
 meldingen_en["Succes"] = "Success"
 meldingen_de["Succes"] = "Erfolg"
+
+# PDF succesvol opgeslagen!
 meldingen_nl["PDF succesvol opgeslagen!"] = "PDF succesvol opgeslagen!"
 meldingen_en["PDF succesvol opgeslagen!"] = "PDF successfully saved!"
 meldingen_de["PDF succesvol opgeslagen!"] = "PDF erfolgreich gespeichert!"
+
+# Exporteer naar Word
 meldingen_nl["Exporteer naar Word"] = "Exporteer naar Word"
 meldingen_en["Exporteer naar Word"] = "Export to Word"
 meldingen_de["Exporteer naar Word"] = "In Word exportieren"
+
+# Word-bestanden (*.docx)
 meldingen_nl["Word-bestanden (*.docx)"] = "Word-bestanden (*.docx)"
 meldingen_en["Word-bestanden (*.docx)"] = "Word files (*.docx)"
 meldingen_de["Word-bestanden (*.docx)"] = "Word-Dateien (*.docx)"
+
+# Word-document opgeslagen!
 meldingen_nl["Word-document opgeslagen!"] = "Word-document opgeslagen!"
 meldingen_en["Word-document opgeslagen!"] = "Word document saved!"
 meldingen_de["Word-document opgeslagen!"] = "Word-Dokument gespeichert!"
+
+# Exporteer naar EPUB
 meldingen_nl["Exporteer naar EPUB"] = "Exporteer naar EPUB"
 meldingen_en["Exporteer naar EPUB"] = "Export to EPUB"
 meldingen_de["Exporteer naar EPUB"] = "In ePub exportieren"
+
+# EPUB-bestanden (*.epub)
 meldingen_nl["EPUB-bestanden (*.epub)"] = "EPUB-bestanden (*.epub)"
 meldingen_en["EPUB-bestanden (*.epub)"] = "EPUB files (*.epub)"
 meldingen_de["EPUB-bestanden (*.epub)"] = "EPUB-Dateien (*.epub)"
+
+# EPUB-boek opgeslagen!
 meldingen_nl["EPUB-boek opgeslagen!"] = "EPUB-boek opgeslagen!"
 meldingen_en["EPUB-boek opgeslagen!"] = "EPUB book saved!"
 meldingen_de["EPUB-boek opgeslagen!"] = "EPUB-Buch gespeichert!"
+
+# Mijn Markdown Boek
 meldingen_nl["Mijn Markdown Boek"] = "Mijn Markdown Boek"
 meldingen_en["Mijn Markdown Boek"] = "My Markdown Book"
 meldingen_de["Mijn Markdown Boek"] = "Mein Markdown Buch"
+
+# Onbekende Auteur
 meldingen_nl["Onbekende Auteur"] = "Onbekende Auteur"
 meldingen_en["Onbekende Auteur"] = "Unknown Author"
 meldingen_de["Onbekende Auteur"] = "Unbekannter Autor"
+
+# Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?
 meldingen_nl["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"] = "Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"
 meldingen_en["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"] = "Current file is not saved yet. Do you want to save the changes?"
 meldingen_de["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"] = "Die aktuelle Datei ist noch nicht gespeichert. Möchten Sie die Änderungen speichern?"
+
+# Importeer EPUB
 meldingen_nl["Importeer EPUB"] = "Importeer EPUB"
 meldingen_en["Importeer EPUB"] = "Import ePub"
 meldingen_de["Importeer EPUB"] = "ePub importieren"
+
+# Succes
 meldingen_nl["Succes"] = "Succes"
 meldingen_en["Succes"] = "Success"
 meldingen_de["Succes"] = "Erfolg"
+
+# EPUB-boek geïmporteerd!
 meldingen_nl["EPUB-boek geïmporteerd!"] = "EPUB-boek geïmporteerd!"
 meldingen_en["EPUB-boek geïmporteerd!"] = "EPUB book imported!"
 meldingen_de["EPUB-boek geïmporteerd!"] = "EPUB-Buch importiert!"
+
+# Fout bij importeren
 meldingen_nl["Fout bij importeren"] = "Fout bij importeren"
 meldingen_en["Fout bij importeren"] = "Error importing"
 meldingen_de["Fout bij importeren"] = "Fehler beim Importieren"
+
+
 meldingen_nl["Kies een ePub om te importeren"] = "Kies een ePub om te importeren"
 meldingen_en["Kies een ePub om te importeren"] = "Choose an ePub to import"
 meldingen_de["Kies een ePub om te importeren"] = "Wählen Sie eine ePub zum Importieren aus"

@@ -32,23 +32,3 @@ font_sizes = {
     "H2": 18,
     "H3": 16
 }
-
-VERVANGINGEN = {
-        "te": "tot",
-        "en": "en",
-        "de": "de",
-        "het": "het",
-        "een": "een",
-        "is": "is",
-        "zijn": "zijn",
-        "was": "was",
-        "waren": "waren",
-        "wordt": "wordt",
-        "worden": "worden",
-        "heb": "heb",
-        "heeft": "heeft",
-        "hebben": "hebben",
-        "kan": "kan",
-        "kun": "kun",
-        "regel": "REGEL",
-    }

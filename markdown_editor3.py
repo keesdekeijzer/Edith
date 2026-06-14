@@ -2353,8 +2353,8 @@ identifier: {identifier}
         
     def woorden_vervangen(self):
         # dit is hoofdlettergevoelig
-        leestekens = "!?;:,."
-        from config import VERVANGINGEN
+        leestekens = "!?;:,.'\""  #  als een woord meer dan 1 leesteken bevat, dan gaat deze niet mee
+        from woordvervangingen import VERVANGINGEN
         genormaliseerde_tekst = ""
         regellijst = self.editor.toPlainText().split('\n')
         for n, r in enumerate(regellijst):
