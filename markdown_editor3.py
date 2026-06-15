@@ -158,6 +158,8 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "woorden_vervangen_actie", menu_teksten["Woorden vervangen"], "", self.woorden_vervangen)
 
+        maak_menu_punt(self, "romeinse_cijfers_vervangen_actie", menu_teksten["Romeinse cijfers vervangen"], "", self.romeinse_cijfers_vervangen)
+
         # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
 
         maak_menu_punt(self, "lichte_modus_actie", menu_teksten["Lichte modus"], "", self.lichte_modus)
@@ -261,6 +263,7 @@ class Markdown_Editor(QMainWindow):
         bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["spellcheck_actie"])
         bewerken_menu.addAction(actie["woorden_vervangen_actie"])
+        bewerken_menu.addAction(actie["romeinse_cijfers_vervangen_actie"])
 
         beeld_menu = self.menuBar().addMenu(menu_teksten["Beeld"])
         beeld_menu.addAction(actie["lichte_modus_actie"])
@@ -2038,7 +2041,6 @@ identifier: {identifier}
 
         for item in book.get_items():
             ct = self.content_type(item)
-            #print(f"Item: {item.get_name()} - {item.get_type()} - {ct}")
             if ct == "image/jpeg" or ct == "image/png" or ct.startswith("image/"):
                 filename = os.path.basename(item.file_name)
                 output_path = os.path.join(output_dir, filename)
@@ -2052,15 +2054,20 @@ identifier: {identifier}
             md_text = md_text.replace(epub_path, local_path)
         return md_text
 
-    def epub_to_markdown(self, epub_path, output_dir="imported_epub"):
+    def epub_to_markdown(self, epub_path, output_dir=configuratie["opslaglocatie"]):
+        output_dir = os.path.join(output_dir, "epub_files")
+        output_images_dir = os.path.join(output_dir, "images")
         html_items, book = self.extract_epub_html(epub_path)
         fm = self.epub_metadata_to_frontmatter(book)
 
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
+        if not os.path.exists(output_images_dir):
+            os.makedirs(output_images_dir)
+
         # afbeeldingen
-        img_map = self.extract_images(book, os.path.join(output_dir, "images"))
+        img_map = self.extract_images(book, output_images_dir)
 
         # hoofdstukken converteren
         chapters_md = []
@@ -2373,6 +2380,30 @@ identifier: {identifier}
                 genormaliseerde_tekst += genormaliseerde_regel + "\n" 
         self.editor.setPlainText(genormaliseerde_tekst)
         
+    def romeinse_cijfers_vervangen(self):
+        print("romeinse cijfers vervangen")
+        # indien selectie, dan selectie omzetten
+        selectie = self.editor.textCursor()
+        if selectie.hasSelection():
+            geselecteerde_tekst = selectie.selectedText()
+            cijfers = self.romeinse_cijfers_omzetten(geselecteerde_tekst)
+            selectie.insertText(cijfers)
+        else:
+            QMessageBox.about(self, self.meldingen["Geen Selectie"], 
+                              self.meldingen["Selecteer eerst tekst om om te zetten naar cijfers."])
+
+        # indien geen selectie, dan pop-up met de vraag of alle Romeinse cijfers in de tekst vervangen moeten worden
+        ...
+        # indien alles vervangen moet worden, dan alles vdervangen
+        ...
+    
+    def romeinse_cijfers_omzetten(self, romein_str):
+        from romeinse_cijfers import romnum
+        if romein_str in romnum:
+            return str(romnum[romein_str])
+        else:
+            return romein_str
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

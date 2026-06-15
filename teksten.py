@@ -303,6 +303,11 @@ menu_teksten_nl["Woorden vervangen"] = "Woorden vervangen"
 menu_teksten_en["Woorden vervangen"] = "Replace words"
 menu_teksten_de["Woorden vervangen"] = "Wörter ersetzen"
 
+# Romeinse cijfers vervangen
+menu_teksten_nl["Romeinse cijfers vervangen"] = "Romeinse cijfers vervangen"
+menu_teksten_en["Romeinse cijfers vervangen"] = "Replace Roman numerals"
+menu_teksten_de["Romeinse cijfers vervangen"] = "Römische Zahlen ersetzen"
+
 #
 # Meldingen
 #
@@ -635,4 +640,6 @@ meldingen_nl["fouten gevonden."] = "fouten gevonden."
 meldingen_en["fouten gevonden."] = "errors found."
 meldingen_de["fouten gevonden."] = "Fehler gefunden."
 
-
+meldingen_nl["Selecteer eerst tekst om om te zetten naar cijfers."] = "Selecteer eerst tekst om om te zetten naar cijfers."
+meldingen_en["Selecteer eerst tekst om om te zetten naar cijfers."] = "First select text to convert to numbers."
+meldingen_de["Selecteer eerst tekst om om te zetten naar cijfers."] = "Wählen Sie zuerst den Text aus, um ihn in Zahlen umzuwandeln."
