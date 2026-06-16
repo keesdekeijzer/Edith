@@ -2397,12 +2397,37 @@ identifier: {identifier}
         # indien alles vervangen moet worden, dan alles vdervangen
         ...
     
+
     def romeinse_cijfers_omzetten(self, romein_str):
-        from romeinse_cijfers import romnum
-        if romein_str in romnum:
-            return str(romnum[romein_str])
+        rom_num = {
+            'I': 1,
+            'V': 5,
+            'X': 10,
+            'L': 50,
+            'C': 100,
+            'D': 500,
+            'M': 1000
+        }
+        if self.is_dit_een_romeins_cijfer(romein_str):
+            reeks = []
+            getal = 0
+            for letter in romein_str:
+                reeks.append(rom_num[letter])
+            for i, cijfer in enumerate(reeks):
+                if i < len(reeks)-1:
+                    if cijfer < reeks[i+1]:
+                        cijfer = cijfer * -1
+                getal += cijfer
+            return str(getal)
         else:
             return romein_str
+            
+
+    def is_dit_een_romeins_cijfer(self, romein_str):
+        for letter in romein_str:
+            if letter not in "IVXLCDM":
+                return False
+        return True    
 
 
 if __name__ == "__main__":
