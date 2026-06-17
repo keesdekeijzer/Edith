@@ -160,6 +160,8 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "romeinse_cijfers_vervangen_actie", menu_teksten["Romeinse cijfers vervangen"], "", self.romeinse_cijfers_vervangen)
 
+        maak_menu_punt(self, "alle_romeinse_cijfers_vervangen_actie", menu_teksten["Alle Romeinse cijfers vervangen"], "", self.alle_romeinse_cijfers_vervangen)
+
         # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
 
         maak_menu_punt(self, "lichte_modus_actie", menu_teksten["Lichte modus"], "", self.lichte_modus)
@@ -264,6 +266,7 @@ class Markdown_Editor(QMainWindow):
         bewerken_menu.addAction(actie["spellcheck_actie"])
         bewerken_menu.addAction(actie["woorden_vervangen_actie"])
         bewerken_menu.addAction(actie["romeinse_cijfers_vervangen_actie"])
+        bewerken_menu.addAction(actie["alle_romeinse_cijfers_vervangen_actie"])
 
         beeld_menu = self.menuBar().addMenu(menu_teksten["Beeld"])
         beeld_menu.addAction(actie["lichte_modus_actie"])
@@ -2372,6 +2375,25 @@ identifier: {identifier}
                 elif woord[-1] in leestekens:
                     if woord[:-1] in VERVANGINGEN:
                         woorden[i] = VERVANGINGEN[woord[:-1]] + woord[-1]
+            genormaliseerde_regel = ' '.join(woorden)
+            if n == len(regellijst) -1:
+                genormaliseerde_tekst += genormaliseerde_regel
+                # bij de laatste regel hoeft er geen \n te worden toegevoegd
+            else:
+                genormaliseerde_tekst += genormaliseerde_regel + "\n" 
+        self.editor.setPlainText(genormaliseerde_tekst)
+
+    def alle_romeinse_cijfers_vervangen(self):
+        QMessageBox.about(self, self.meldingen["Alle Romeinse cijfers vervangen"], 
+                              self.meldingen["Dit vervangt alle Romeinse cijfers die alleen op een regel staan, of die aan het einde van een regel staan."])
+        genormaliseerde_tekst = ""
+        regellijst = self.editor.toPlainText().split('\n')
+        for n, r in enumerate(regellijst):
+            woorden = r.split()
+            aantal_woorden = len(woorden)
+            if aantal_woorden > 0:
+                if self.is_dit_een_romeins_cijfer(woorden[aantal_woorden - 1]):
+                    woorden[aantal_woorden - 1] = self.romeinse_cijfers_omzetten(woorden[aantal_woorden - 1])
             genormaliseerde_regel = ' '.join(woorden)
             if n == len(regellijst) -1:
                 genormaliseerde_tekst += genormaliseerde_regel

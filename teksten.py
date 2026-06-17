@@ -308,6 +308,11 @@ menu_teksten_nl["Romeinse cijfers vervangen"] = "Romeinse cijfers vervangen"
 menu_teksten_en["Romeinse cijfers vervangen"] = "Replace Roman numerals"
 menu_teksten_de["Romeinse cijfers vervangen"] = "Römische Zahlen ersetzen"
 
+# AlleRomeinse cijfers vervangen
+menu_teksten_nl["Alle Romeinse cijfers vervangen"] = "Alle Romeinse cijfers vervangen"
+menu_teksten_en["Alle Romeinse cijfers vervangen"] = "Replace all Roman numerals"
+menu_teksten_de["Alle Romeinse cijfers vervangen"] = "Alle Römische Zahlen ersetzen"
+
 #
 # Meldingen
 #
@@ -602,44 +607,77 @@ meldingen_nl["Fout bij importeren"] = "Fout bij importeren"
 meldingen_en["Fout bij importeren"] = "Error importing"
 meldingen_de["Fout bij importeren"] = "Fehler beim Importieren"
 
-
+# Kies een ePub om te importeren
 meldingen_nl["Kies een ePub om te importeren"] = "Kies een ePub om te importeren"
 meldingen_en["Kies een ePub om te importeren"] = "Choose an ePub to import"
 meldingen_de["Kies een ePub om te importeren"] = "Wählen Sie eine ePub zum Importieren aus"
+
+# Exporteer als Tekstbestand
 meldingen_nl["Exporteer als Tekstbestand"] = "Exporteer als Tekstbestand"
 meldingen_en["Exporteer als Tekstbestand"] = "Export as Text File"
 meldingen_de["Exporteer als Tekstbestand"] = "Als Textdatei exportieren"
+
+# Tekstbestanden (*.txt)
 meldingen_nl["Tekstbestanden (*.txt)"] = "Tekstbestanden (*.txt)"
 meldingen_en["Tekstbestanden (*.txt)"] = "Text files (*.txt)"
 meldingen_de["Tekstbestanden (*.txt)"] = "Textdateien (*.txt)"
+
+# Bestand geexporteerd als tekstbestand!
 meldingen_nl["Bestand geexporteerd als tekstbestand!"] = "Bestand geexporteerd als tekstbestand!"
 meldingen_en["Bestand geexporteerd als tekstbestand!"] = "File exported as text file!"
 meldingen_de["Bestand geexporteerd als tekstbestand!"] = "Datei als Textdatei exportiert!"
+
+# Spelling controleren
 meldingen_nl["Spelling controleren"] = "Spelling controleren..."
 meldingen_en["Spelling controleren"] = "Check spelling..."
 meldingen_de["Spelling controleren"] = "Rechtschreibprüfung..."
+
+# Dit kan lang duren
 meldingen_nl["Dit kan lang duren"] = "Dit kan lang duren, je kunt meldingen krijgen dat het programma niet meer reageert."
 meldingen_en["Dit kan lang duren"] = "This can take a while, you may get notifications that the program is not responding."
 meldingen_de["Dit kan lang duren"] = "Dies kann eine Weile dauern, Sie können Benachrichtigungen erhalten, dass das Programm nicht mehr reagiert."
+
+# Heb dan geduld.
 meldingen_nl["Heb dan geduld."] = "Heb dan geduld."
 meldingen_en["Heb dan geduld."] = "Please be patient."
 meldingen_de["Heb dan geduld."] = "Bitte haben Sie Geduld."
+
+# Als het klaar is krijg je daar een melding van.
 meldingen_nl["Als het klaar is krijg je daar een melding van."] = "Als het klaar is krijg je daar een melding van."
 meldingen_en["Als het klaar is krijg je daar een melding van."] = "You will get a notification when it's done."
 meldingen_de["Als het klaar is krijg je daar een melding van."] = "Sie erhalten eine Benachrichtigung, wenn es fertig ist."
+
+# Spellingcontrole voltooid!
 meldingen_nl["Spellingcontrole voltooid!"] = "Spellingcontrole voltooid!"
 meldingen_en["Spellingcontrole voltooid!"] = "Spell check completed!"
 meldingen_de["Spellingcontrole voltooid!"] = "Rechtschreibprüfung abgeschlossen!"
+
+# Spellcheck
 meldingen_nl["Spellcheck"] = "Spellcheck"
 meldingen_en["Spellcheck"] = "Spellcheck"
 meldingen_de["Spellcheck"] = "Rechtschreibprüfung"
+
+# Verslag opgeslagen in
 meldingen_nl["Verslag opgeslagen in"] = "Verslag opgeslagen in"
 meldingen_en["Verslag opgeslagen in"] = "Report saved in"
 meldingen_de["Verslag opgeslagen in"] = "Bericht gespeichert in"
+
+# fouten gevonden.
 meldingen_nl["fouten gevonden."] = "fouten gevonden."
 meldingen_en["fouten gevonden."] = "errors found."
 meldingen_de["fouten gevonden."] = "Fehler gefunden."
 
+# Selecteer eerst tekst om om te zetten naar cijfers.
 meldingen_nl["Selecteer eerst tekst om om te zetten naar cijfers."] = "Selecteer eerst tekst om om te zetten naar cijfers."
 meldingen_en["Selecteer eerst tekst om om te zetten naar cijfers."] = "First select text to convert to numbers."
 meldingen_de["Selecteer eerst tekst om om te zetten naar cijfers."] = "Wählen Sie zuerst den Text aus, um ihn in Zahlen umzuwandeln."
+
+# Dit vervangt alle Romeinse cijfers die alleen op een regel staan, of die aan het einde van een regel staan.
+meldingen_nl["Dit vervangt alle Romeinse cijfers die alleen op een regel staan, of die aan het einde van een regel staan."] = "Dit vervangt alle Romeinse cijfers die alleen op een regel staan, of die aan het einde van een regel staan."
+meldingen_en["Dit vervangt alle Romeinse cijfers die alleen op een regel staan, of die aan het einde van een regel staan."] = "This replaces any Roman numerals that appear alone on a line, or that occur at the end of a line."
+meldingen_de["Dit vervangt alle Romeinse cijfers die alleen op een regel staan, of die aan het einde van een regel staan."] = "Dies ersetzt alle römischen Ziffern, die allein in einer Zeile stehen, oder die am Ende einer Zeile auftauchen."
+
+# AlleRomeinse cijfers vervangen
+meldingen_nl["Alle Romeinse cijfers vervangen"] = "Alle Romeinse cijfers vervangen"
+meldingen_en["Alle Romeinse cijfers vervangen"] = "Replace all Roman numerals"
+meldingen_de["Alle Romeinse cijfers vervangen"] = "Alle Römische Zahlen ersetzen"
