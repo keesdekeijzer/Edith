@@ -152,6 +152,8 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "geen_hoofdletters_actie", menu_teksten["Geen hoofdletters"], "Alt+U", self.geen_hoofdletters)
 
+        maak_menu_punt(self, "hoofdletters_actie", menu_teksten["Hoofdletters"], "", self.hoofdletters)
+
         maak_menu_punt(self, "schrift_actie", menu_teksten["Schrift"], "Alt+S", self.schrift)
 
         maak_menu_punt(self, "spellcheck_actie", menu_teksten["Spelling controleren"], "F7", self.spellcheck)
@@ -261,6 +263,7 @@ class Markdown_Editor(QMainWindow):
         bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["normaliseren_actie"])
         bewerken_menu.addAction(actie["geen_hoofdletters_actie"])
+        bewerken_menu.addAction(actie["hoofdletters_actie"])
         bewerken_menu.addAction(actie["schrift_actie"])
         bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["spellcheck_actie"])
@@ -717,6 +720,16 @@ class Markdown_Editor(QMainWindow):
             selectie.insertText(kleine_tekst)
         else:
             QMessageBox.about(self, self.meldingen["Geen Selectie"], self.meldingen["Selecteer eerst tekst om om te zetten naar kleine letters."])
+
+    def hoofdletters(self):
+        selectie = self.editor.textCursor()
+        if selectie.hasSelection():
+            geselecteerde_tekst = selectie.selectedText()
+            grote_tekst = geselecteerde_tekst.upper()
+            selectie.insertText(grote_tekst)
+        else:
+            QMessageBox.about(self, self.meldingen["Geen Selectie"], self.meldingen["Selecteer eerst tekst om om te zetten naar hoofdletters."])
+
 
     def schrift(self):
         selectie = self.editor.textCursor()

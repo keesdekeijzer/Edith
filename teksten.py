@@ -148,6 +148,11 @@ menu_teksten_nl["Geen hoofdletters"] = "Geen hoofdletters"
 menu_teksten_en["Geen hoofdletters"] = "No caps"
 menu_teksten_de["Geen hoofdletters"] = "Keine Großbuchstaben"
 
+# Hoofdletters
+menu_teksten_nl["Hoofdletters"] = "Hoofdletters"
+menu_teksten_en["Hoofdletters"] = "Caps"
+menu_teksten_de["Hoofdletters"] = "Großbuchstaben"
+
 # Schrift
 menu_teksten_nl["Schrift"] = "Schrift"
 menu_teksten_en["Schrift"] = "Writing"
@@ -406,6 +411,11 @@ meldingen_de["Geen Selectie"] = "Keine Auswahl"
 meldingen_nl["Selecteer eerst tekst om om te zetten naar kleine letters."] = "Selecteer eerst tekst om om te zetten naar kleine letters."
 meldingen_en["Selecteer eerst tekst om om te zetten naar kleine letters."] = "Please select text first to convert to lowercase."
 meldingen_de["Selecteer eerst tekst om om te zetten naar kleine letters."] = "Bitte zuerst Text auswählen, um in Kleinbuchstaben umzuwandeln."
+
+# Selecteer eerst tekst om om te zetten naar hoofdletters.
+meldingen_nl["Selecteer eerst tekst om om te zetten naar khoofdletters."] = "Selecteer eerst tekst om om te zetten naar hoofdletters."
+meldingen_en["Selecteer eerst tekst om om te zetten naar hoofdletters."] = "Please select text first to convert to uppercase."
+meldingen_de["Selecteer eerst tekst om om te zetten naar hoofdletters."] = "Bitte zuerst Text auswählen, um in Großbuchstaben umzuwandeln."
 
 # Selecteer eerst tekst om om te zetten naar schrift.
 meldingen_nl["Selecteer eerst tekst om om te zetten naar schrift."] = "Selecteer eerst tekst om om te zetten naar schrift."
