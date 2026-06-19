@@ -20,4 +20,6 @@ Spellingcontrole is op afroep beschikbaar, maar is wel langzaam.
 
 Een favoriet font is in te stellen in het config.py bestand.
 
+Via woorden vervagen kan op basis van een woordenlijst de tekst worden gemoderniseerd.
+
 

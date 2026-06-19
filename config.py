@@ -27,6 +27,14 @@ summary:
 ---
 """
 
+FRONTMATTER_TEXT_EPUB = """---
+title: 
+author: 
+language: nl
+identifier: 
+---
+"""
+
 font_sizes = {
     "H1": 20,
     "H2": 18,

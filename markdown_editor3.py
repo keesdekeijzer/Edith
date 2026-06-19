@@ -43,7 +43,7 @@ from _fontsize import fontsize_counts
 from spellcheck import SpellChecker
 
 # instellingen importeren
-from config import FRONTMATTER_TEXT, configuratie, font_sizes
+from config import FRONTMATTER_TEXT, FRONTMATTER_TEXT_EPUB, configuratie, font_sizes
 from memo import Memo
 from memolijst import MemoLijst
 
@@ -196,6 +196,8 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "frontmatter_actie", menu_teksten["Frontmatter"], "Alt+F", self.frontmatter)
 
+        maak_menu_punt(self, "frontmatter_epub_actie", menu_teksten["Frontmatter epub"], "", self.frontmatter_epub)
+
         # Apps - Memo, Memolijst
 
         maak_menu_punt(self, "memo_actie", menu_teksten["Memo"], "", self.memo)
@@ -290,6 +292,7 @@ class Markdown_Editor(QMainWindow):
         invoegen_menu.addAction(actie["md_afbeelding_actie"])
         invoegen_menu.addAction(actie["if_name_is_main_actie"])
         invoegen_menu.addAction(actie["frontmatter_actie"])
+        invoegen_menu.addAction(actie["frontmatter_epub_actie"])
 
         extra_menu = self.menuBar().addMenu(menu_teksten["Extra"])
         extra_menu.addAction(actie["memo_actie"])
@@ -951,6 +954,9 @@ class Markdown_Editor(QMainWindow):
         fm = FRONTMATTER_TEXT
         self.editor.insertPlainText(fm)
 
+    def frontmatter_epub(self):
+        fm = FRONTMATTER_TEXT_EPUB
+        self.editor.insertPlainText(fm)
 
     def memo(self):
         self.memo_venster = Memo()
@@ -1358,6 +1364,7 @@ class Markdown_Editor(QMainWindow):
         # 6. Body
         body_item = epub.EpubHtml(title=title, file_name="body.xhtml", lang="nl")
         body_item.content = html
+        print("HTML:", html)
         book.add_item(body_item)
 
         # TOC + spine
@@ -1464,9 +1471,12 @@ class Markdown_Editor(QMainWindow):
         title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
         author = meta.get("author", self.meldingen["Onbekende Auteur"])
 
+        # Zonder H1 koppen komt hier niets uit
+
         # 1. Markdown -> hoofdstukken
         chapters = self.split_into_chapters(md_text)
         html_chapters = self.chapters_to_html(chapters)
+        print("HTML CHAPTERS:", html_chapters)
 
         # 2. EPUB object aanmaken
         book = epub.EpubBook()
@@ -1481,7 +1491,7 @@ class Markdown_Editor(QMainWindow):
         book.toc = self.build_epub_toc(epub_items)
 
         # 5. Spine
-        book.spine = ["nav"] + epub_items
+        #book.spine = ["nav"] + epub_items
 
         # 6. Navigatie
         book.add_item(epub.EpubNcx())
@@ -1508,13 +1518,35 @@ class Markdown_Editor(QMainWindow):
         """)
         book.add_item(css)
 
-        #cover_path = self.generate_epub_cover(meta, logo_path="assets/logo.png")
+        #cover_path = self.generate_epub_cover(meta, logo_path="assets/cover.jpg")
         #cover_path = "assets/cover.jpg"
 
         #cover_path = self.generate_epub_cover_with_background(meta, bg_path="assets/background.jpg", logo_path="assets/logo.png")
 
         #with open(cover_path, "rb") as f:
             #book.set_cover("cover.jpg", f.read())
+
+        # cover
+        #with open('cover.jpg', 'rb') as f:    
+            #cover_bytes = f.read()
+            #book.set_cover('cover.jpg', cover_bytes)
+        #cover_item = epub.EpubItem(uid='cover', file_name='images/cover.jpg',                           
+                                   #media_type='image/jpeg', content=cover_bytes)
+
+        #cover_page = epub.EpubHtml(title='Cover', file_name='cover.xhtml', lang='nl')
+        #cover_page.content = \
+        '''<?xml version="1.0" encoding="utf-8"?>
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        <head><title>Cover</title></head><body>
+        <img src="images/cover.jpg" alt="Cover" style="max-width:100%"/>
+        </body>
+        </html>'''
+        #book.add_item(cover_page)
+
+        #book.toc = (epub.Link('cover.xhtml', 'Cover', 'cover'),)
+
+        # 5. Spine
+        book.spine = ["nav"] + epub_items
 
         # 8. EPUB opslaan
         epub.write_epub(output_path, book, {"pretty": True})            

@@ -228,6 +228,11 @@ menu_teksten_nl["Frontmatter"] = "Frontmatter"
 menu_teksten_en["Frontmatter"] = "Frontmatter"
 menu_teksten_de["Frontmatter"] = "Frontmatter"
 
+# Frontmatter epub
+menu_teksten_nl["Frontmatter epub"] = "Frontmatter epub"
+menu_teksten_en["Frontmatter epub"] = "Frontmatter epub"
+menu_teksten_de["Frontmatter epub"] = "Frontmatter epub"
+
 # Memo
 menu_teksten_nl["Memo"] = "Memo"
 menu_teksten_en["Memo"] = "Memo"
@@ -351,6 +356,11 @@ meldingen_de["Bestand niet gevonden"] = "Datei nicht gefunden"
 meldingen_nl["Bestand is leeg"] = "Bestand is leeg"
 meldingen_en["Bestand is leeg"] = "File is empty"
 meldingen_de["Bestand is leeg"] = "Datei ist leer"
+
+# Nieuw Bestand
+meldingen_nl["Nieuw Bestand"] = "Nieuw Bestand"
+meldingen_en["Nieuw Bestand"] = "New File"
+meldingen_de["Nieuw Bestand"] = "Neue Datei"
 
 # Ready
 meldingen_nl["Ready"] = "Ready"
@@ -491,6 +501,11 @@ meldingen_de["if name == main"] = "if name == main"
 meldingen_nl["Frontmatter"] = "Frontmatter"
 meldingen_en["Frontmatter"] = "Frontmatter"
 meldingen_de["Frontmatter"] = "Frontmatter"
+
+# Frontmatter epub
+meldingen_nl["Frontmatter epub"] = "Frontmatter epub"
+meldingen_en["Frontmatter epub"] = "Frontmatter epub"
+meldingen_de["Frontmatter epub"] = "Frontmatter epub"
 
 # Datum
 meldingen_nl["Datum"] = "Datum"
