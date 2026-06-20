@@ -1441,7 +1441,8 @@ class Markdown_Editor(QMainWindow):
         html_chapters = []
         for title, md in chapters:
             #html = self.markdown_to_html(md)
-            html = render_markdown(md)
+            compleet = "# " + title + "\n" + md
+            html = render_markdown(compleet)
             html_chapters.append((title, html))
         return html_chapters
 
@@ -1544,6 +1545,8 @@ class Markdown_Editor(QMainWindow):
         #book.add_item(cover_page)
 
         #book.toc = (epub.Link('cover.xhtml', 'Cover', 'cover'),)
+
+        #print("cover_page.content", cover_page.content)
 
         # 5. Spine
         book.spine = ["nav"] + epub_items
@@ -2141,7 +2144,15 @@ identifier: {identifier}
             return
         
         md_text = self.epub_to_markdown(path)
-        self.editor.setPlainText(md_text)
+        nw_text = ""
+        # xml version='1.0' encoding='utf-8'?
+        regels = md_text.split("\n")
+        for regel in regels:
+            if regel == "xml version='1.0' encoding='utf-8'?":
+                regel = ""
+            else:
+                nw_text += regel + "\n"    
+        self.editor.setPlainText(nw_text)
         QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["EPUB-boek geïmporteerd!"])
 
     def extract_footnotes_from_html(self, html):
