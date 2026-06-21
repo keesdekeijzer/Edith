@@ -1477,7 +1477,6 @@ class Markdown_Editor(QMainWindow):
         # 1. Markdown -> hoofdstukken
         chapters = self.split_into_chapters(md_text)
         html_chapters = self.chapters_to_html(chapters)
-        print("HTML CHAPTERS:", html_chapters)
 
         # 2. EPUB object aanmaken
         book = epub.EpubBook()
@@ -1485,39 +1484,34 @@ class Markdown_Editor(QMainWindow):
         book.add_author(author)
         book.set_language("nl")
 
-        # 3. Hoofdstukken toevoegen
-        epub_items = self.create_epub_chapters(book, html_chapters)
+        cover_path = "images/cover.jpg"
 
-        # 4. TOC
-        book.toc = self.build_epub_toc(epub_items)
+        # cover ====================
 
-        # 5. Spine
-        #book.spine = ["nav"] + epub_items
+        with open(cover_path, "rb") as f:    
+            cover_bytes = f.read()
 
-        # 6. Navigatie
-        book.add_item(epub.EpubNcx())
+        #print("cover_bytes:", cover_bytes)
 
-        book.add_item(epub.EpubNav())
+        # set_cover (optioneel maar helpt readers)
+        book.set_cover("cover.jpg", cover_bytes)
+        # expliciet image item op dezelfde path als in cover.xhtml <img src="images/cover.jpg">
+        cover_item = epub.EpubItem(uid="cover_image",    
+                                   file_name="images/cover.jpg",    
+                                   media_type="image/jpeg",    
+                                   content=cover_bytes)
+        book.add_item(cover_item)
+        # valide cover.xhtml (geen XML-declaratie)
+        cover_page = epub.EpubHtml(title="Cover", 
+                                   file_name="cover.xhtml", 
+                                   lang="nl")
+        cover_page.content = (    '<html xmlns="http://www.w3.org/1999/xhtml"><head><title>Cover</title></head>'    
+                              '<body><div><img src="images/cover.jpg" alt="Cover" style="max-width:100%"/></div></body></html>')
+        book.add_item(cover_page)
 
-        # remove
-        book.items = [i for i in book.get_items() if i.file_name not in ('nav.xhtml','toc.ncx')]
-        # add proper ones
-        book.add_item(epub.EpubNcx())
-        book.add_item(epub.EpubNav())
 
+        # einde cover ==============
 
-        # 7. CSS (optioneel)
-        css = epub.EpubItem(uid="style", file_name="style.css", media_type="text/css", content="""
-        body { font-family: Arial, sans-serif; line-height: 1.5; padding: 1em; }
-        h1 { font-size: 2em; margin-top: 1em; }
-        h2 { font-size: 1.5em; margin-top: 1em; }
-        h3 { font-size: 1.2em; margin-top: 1em; }
-        p { margin-bottom: 1em; }
-        pre { font-family: "Courier New", monospace; background: #f4f4f4; padding: 1em; overflow-x: auto; }
-        code { font-family: "Courier New", monospace; background: #f4f4f4; padding: 0.2em 0.4em; }
-        img { max-width: 100%; height: auto; }
-        """)
-        book.add_item(css)
 
         #cover_path = self.generate_epub_cover(meta, logo_path="assets/cover.jpg")
         #cover_path = "assets/cover.jpg"
@@ -1535,6 +1529,7 @@ class Markdown_Editor(QMainWindow):
                                    #media_type='image/jpeg', content=cover_bytes)
 
         #cover_page = epub.EpubHtml(title='Cover', file_name='cover.xhtml', lang='nl')
+        
         #cover_page.content = \
         '''<?xml version="1.0" encoding="utf-8"?>
         <html xmlns="http://www.w3.org/1999/xhtml">
@@ -1543,15 +1538,104 @@ class Markdown_Editor(QMainWindow):
         </body>
         </html>'''
         #book.add_item(cover_page)
+        #print("cover_page:", cover_page)
 
         #book.toc = (epub.Link('cover.xhtml', 'Cover', 'cover'),)
 
-        #print("cover_page.content", cover_page.content)
+        #print("(2) cover_page.content", cover_page.content)
+
+        # 3. Hoofdstukken toevoegen
+        epub_items = self.create_epub_chapters(book, html_chapters)
+
+        # 4. TOC
+        book.toc = self.build_epub_toc(epub_items)
 
         # 5. Spine
+        #book.spine = ["nav"] + epub_items
+
+        # 6. Navigatie
+        #book.add_item(epub.EpubNcx())
+
+        #book.add_item(epub.EpubNav())
+
+        # remove
+        book.items = [i for i in book.get_items() if i.file_name not in ('nav.xhtml','toc.ncx')]
+            # add proper ones
+        book.add_item(epub.EpubNcx())
+        book.add_item(epub.EpubNav())
+
+        # 7. CSS (optioneel)
+        css = epub.EpubItem(uid="style", file_name="style.css", media_type="text/css", content="""
+        body { font-family: Arial, sans-serif; line-height: 1.5; padding: 1em; }
+        h1 { font-size: 2em; margin-top: 1em; }
+        h2 { font-size: 1.5em; margin-top: 1em; }
+        h3 { font-size: 1.2em; margin-top: 1em; }
+        p { margin-bottom: 1em; }
+        pre { font-family: "Courier New", monospace; background: #f4f4f4; padding: 1em; overflow-x: auto; }
+        code { font-family: "Courier New", monospace; background: #f4f4f4; padding: 0.2em 0.4em; }
+        img { max-width: 100%; height: auto; }
+        """)
+        book.add_item(css)
+        
+
+        # 5. Spine
+        #book.spine = ["nav"] + epub_items
+        #print("book.spine:", book.spine)
+
+        #book.toc = (epub.Link('cover.xhtml','Cover','cover'),)  # ok
+        #book.spine = ['nav', cover_page] + epub_items
         book.spine = ["nav"] + epub_items
 
         # 8. EPUB opslaan
+        # Print cover_page.content.strip() vóór write_epub om te verifiëren dat het niet leeg is.
+        #print("laatste test:",cover_page.content.strip())
+
+        # Verwijder bestaande lege/duplicate cover.xhtml items
+        filtered = []
+        seen_files = set()
+        for i in book.get_items():    
+            # skip empty documents    
+            if getattr(i, "get_body_content", None):        
+                try:            
+                    body = i.get_body_content()        
+                except Exception:            
+                    body = None        
+                    if isinstance(body, (str, bytes)) and not str(body).strip():            
+                        continue    
+            if i.file_name in seen_files:        
+                continue    
+            seen_files.add(i.file_name)    
+            filtered.append(i)
+        book.items = filtered
+
+        # Debug check: confirm cover.xhtml exists and not empty
+        """
+        cp = next((i for i in book.get_items() if i.file_name == "cover.xhtml"), None)
+        if cp is None or (hasattr(cp, "get_body_content") and not cp.get_body_content().strip()):    
+            raise RuntimeError("cover.xhtml ontbreekt of is leeg")
+
+        for i in book.get_items():    
+            body = getattr(i, "get_body_content", lambda: None)()    
+            print(i.file_name, "empty" if not body or not str(body).strip() else "ok")
+        """
+        # check
+
+        # debug: toon alle items en of body leeg is
+        for i in book.get_items():
+            body = getattr(i, "get_body_content", lambda: None)()    
+            print(i.file_name, "EMPTY" if not body or not str(body).strip() else "OK")
+        # filter lege documenten
+        book.items = [i for i in book.get_items()
+                                           if not (getattr(i, "get_body_content", None) and not str(i.get_body_content()).strip())]
+        # controleer opnieuw
+        cp = next((i for i in book.get_items() if i.file_name == "cover.xhtml"), None)
+        if cp is None:    
+            raise RuntimeError("cover.xhtml ontbreekt")
+        if hasattr(cp, "get_body_content") and not str(cp.get_body_content()).strip():   
+            raise RuntimeError("cover.xhtml is leeg")
+
+        # einde check
+
         epub.write_epub(output_path, book, {"pretty": True})            
 
     def closeEvent(self, event):
