@@ -29,9 +29,11 @@ summary:
 
 FRONTMATTER_TEXT_EPUB = """---
 title: 
+subtitle:
 author: 
 language: nl
 identifier: 
+cover_file: assets/cover.jpg
 ---
 """
 

@@ -1471,6 +1471,7 @@ class Markdown_Editor(QMainWindow):
         meta = self.extract_metadata(md_text)
         title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
         author = meta.get("author", self.meldingen["Onbekende Auteur"])
+        cover_file = meta.get("cover_file", "")
 
         # Zonder H1 koppen komt hier niets uit
 
@@ -1484,14 +1485,24 @@ class Markdown_Editor(QMainWindow):
         book.add_author(author)
         book.set_language("nl")
 
-        cover_path = "images/cover.jpg"
+        if not cover_file:
+            cover_file = "assets/cover.jpg"
+
+        #cover_path = self.generate_epub_cover(meta, logo_path=cover_file)
+        # self, meta, bg_path, logo_path=None, output_path="cover.jpg"
+        bg_path = cover_file
+        print("bg_path",bg_path)
+        cover_path = self.generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author(
+            meta, cover_file, output_path="cover.jpg")
+        # Afmetingen volgens EPUB-conventies
+        
+        
 
         # cover ====================
 
         with open(cover_path, "rb") as f:    
             cover_bytes = f.read()
 
-        #print("cover_bytes:", cover_bytes)
 
         # set_cover (optioneel maar helpt readers)
         book.set_cover("cover.jpg", cover_bytes)
@@ -1945,16 +1956,52 @@ class Markdown_Editor(QMainWindow):
         bg.save(output_path, "JPEG", quality=95)
         return output_path
     
-    def generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
+    def fit_text(self, text, font_path, box_w, box_h, box_xy=(0,0), start_size=10, max_size=300):   
+        x0, y0 = box_xy 
+        # Binary search op fontszie    
+        lo, hi = start_size, max_size    
+        best = start_size
+        print("font_path:", font_path)
+        while lo <= hi:        
+            mid = (lo + hi) // 2        
+            font = ImageFont.truetype(font_path, mid)
+            print("font loop", font)
+            # textmeting        
+            bbox = font.getbbox(text)  
+            # (left, top, right, bottom)        
+            text_w = bbox[2] - bbox[0]        
+            text_h = bbox[3] - bbox[1]
+            if text_w <= box_w and text_h <= box_h:            
+                best = mid            
+                lo = mid + 1   
+                # probeer groter        
+            else:            
+                hi = mid - 1   
+                # probeer kleiner
+        
+        font = ImageFont.truetype(font_path, best)    
+        bbox = font.getbbox(text)    
+        text_w = bbox[2] - bbox[0]    
+        text_h = bbox[3] - bbox[1]
+        # Centreren    
+        x = x0 + (box_w - text_w) // 2 - bbox[0]    
+        y = y0 + (box_h - text_h) // 2 - bbox[1]
+        return font, (x, y)
+
+        #return ImageFont.truetype(font_path, best)
+
+    def generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author(self, meta, bg_path_, logo_path=None, output_path="cover.jpg"):
         # Afmetingen volgens EPUB-conventies
         width, height = 1600, 2560
 
         # Achtergrond
-        if os.path.exists(bg_path):
-            bg = Image.open(bg_path).convert("RGB")
+        if os.path.exists(bg_path_):
+            bg = Image.open(bg_path_).convert("RGB")
             bg = bg.resize((width, height), Image.LANCZOS)
         else:
             bg = Image.new("RGB", (width, height), color=(245, 245, 245))
+
+        print("bg", bg)
 
         # Gradient overlay
         gradient = Image.new("L", (1, height), color=0xFF)
@@ -1966,6 +2013,8 @@ class Markdown_Editor(QMainWindow):
         bg = Image.alpha_composite(bg.convert("RGBA"), black_img)
 
         draw = ImageDraw.Draw(bg)
+
+        print("draw", draw)
 
         # Metadata
         title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
@@ -1980,20 +2029,41 @@ class Markdown_Editor(QMainWindow):
         block = Image.new("RGBA", (width, block_height), block_color)
         bg.paste(block, (0, 200), block)
         # Titel
-        w = draw.textlength(title)
-        draw.text(((width - w) / 2, 250), title, fill="white")
+        
+        #text = title
+        font_path = "/home/kees/Data/FreeSerif.ttf"
+        #box_w = 1600
+        #box_h = 500
+        font, pos = self.fit_text(title, font_path, width, block_height)
+
+
+        #w = draw.textlength(title)
+
+
+        #draw.text(((width - w) / 2, 250), title, fill="white", font=font)
+        draw.text(pos, title, fill="white", font=font)
+
+
         # Subtitel
         if subtitle:
-            w = draw.textlength(subtitle)
-            draw.text(((width - w) / 2, 320), subtitle, fill="lightgray")
+            #w = draw.textlength(subtitle)
+            font, pos = self.fit_text(subtitle, font_path, width, block_height+500)
+            draw.text(pos, subtitle, fill="lightgray", font=font)
+            #draw.text(((width - w) / 2, 320), subtitle, fill="lightgray")
+
         # Auteur
-        w = draw.textlength(author)
-        draw.text(((width - w) / 2, 400), author, fill="lightgray")
+        #w = draw.textlength(author)
+        #draw.text(((width - w) / 2, 400), author, fill="lightgray")
+        font, pos = self.fit_text(author, font_path, width, block_height, box_xy=(0,2000))
+        draw.text(pos, author, fill="lightgray", font=font)
+
+
         # Project + versie
         footer = f"{project} {version}".strip()
         if footer:
             w = draw.textlength(footer)
             draw.text(((width - w) / 2, 550), footer, fill="lightgray")
+
         # Logo (optioneel)
         if logo_path and os.path.exists(logo_path):
             logo = Image.open(logo_path).convert("RGBA")
@@ -2004,7 +2074,9 @@ class Markdown_Editor(QMainWindow):
             lx = (width - logo.width) // 2
             ly = 200 + (block_height - logo.height) // 2
             bg.paste(logo, (lx, ly), logo)
-        bg.save(output_path, "JPEG", quality=95)
+        print("bg.save", bg)
+        #bg.save(output_path, "JPEG", quality=95)
+        bg.save(output_path, "PNG", quality=95)
         return output_path
 
     def generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author_and_project(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
