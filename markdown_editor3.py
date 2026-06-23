@@ -1404,6 +1404,9 @@ class Markdown_Editor(QMainWindow):
         if not path:
             return
         
+        if not path.endswith(".epub"):
+            path = path + ".epub"
+        
         md_text = self.editor.toPlainText()
         self.export_markdown_to_epub(md_text, path)
 
@@ -1965,7 +1968,7 @@ class Markdown_Editor(QMainWindow):
         while lo <= hi:        
             mid = (lo + hi) // 2        
             font = ImageFont.truetype(font_path, mid)
-            print("font loop", font)
+            #print("font loop", font)
             # textmeting        
             bbox = font.getbbox(text)  
             # (left, top, right, bottom)        
@@ -1990,7 +1993,8 @@ class Markdown_Editor(QMainWindow):
 
         #return ImageFont.truetype(font_path, best)
 
-    def generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author(self, meta, bg_path_, logo_path=None, output_path="cover.jpg"):
+    def generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author(
+            self, meta, bg_path_, logo_path=None, output_path="cover.jpg"):
         # Afmetingen volgens EPUB-conventies
         width, height = 1600, 2560
 
@@ -2025,9 +2029,9 @@ class Markdown_Editor(QMainWindow):
 
         # Titelblok achtergrond
         block_height = 500
-        block_color = (30, 30, 30, 200)  # Semi-transparant donkergrijs
-        block = Image.new("RGBA", (width, block_height), block_color)
-        bg.paste(block, (0, 200), block)
+        #block_color = (30, 30, 30, 200)  # Semi-transparant donkergrijs
+        #block = Image.new("RGBA", (width, block_height), block_color)
+        #bg.paste(block, (0, 200), block)
         # Titel
         
         #text = title
@@ -2035,29 +2039,31 @@ class Markdown_Editor(QMainWindow):
         #box_w = 1600
         #box_h = 500
         font, pos = self.fit_text(title, font_path, width, block_height)
-
-
-        #w = draw.textlength(title)
-
-
-        #draw.text(((width - w) / 2, 250), title, fill="white", font=font)
         draw.text(pos, title, fill="white", font=font)
 
 
         # Subtitel
         if subtitle:
-            #w = draw.textlength(subtitle)
-            font, pos = self.fit_text(subtitle, font_path, width, block_height+500)
+            # Schaduw
+            font, pos = self.fit_text(subtitle, font_path, width, block_height, box_xy=(3,253))
+            draw.text(pos, subtitle, fill="black", font=font)
+            # Hoofdkleur
+            font, pos = self.fit_text(subtitle, font_path, width, block_height, box_xy=(0,250))
             draw.text(pos, subtitle, fill="lightgray", font=font)
-            #draw.text(((width - w) / 2, 320), subtitle, fill="lightgray")
+
 
         # Auteur
-        #w = draw.textlength(author)
-        #draw.text(((width - w) / 2, 400), author, fill="lightgray")
+
+        # Schaduw
+        font, pos = self.fit_text(author, font_path, width, block_height, box_xy=(3,2003))
+        draw.text(pos, author, fill="black", font=font)
+        # Hoofdkleur
         font, pos = self.fit_text(author, font_path, width, block_height, box_xy=(0,2000))
         draw.text(pos, author, fill="lightgray", font=font)
 
+        
 
+        """
         # Project + versie
         footer = f"{project} {version}".strip()
         if footer:
@@ -2074,6 +2080,7 @@ class Markdown_Editor(QMainWindow):
             lx = (width - logo.width) // 2
             ly = 200 + (block_height - logo.height) // 2
             bg.paste(logo, (lx, ly), logo)
+        """
         print("bg.save", bg)
         #bg.save(output_path, "JPEG", quality=95)
         bg.save(output_path, "PNG", quality=95)
