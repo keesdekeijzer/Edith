@@ -972,12 +972,6 @@ class Markdown_Editor(QMainWindow):
         dlg.setIcon(QMessageBox.Icon.Critical)
         dlg.show()
 
-    # self.import_pdf_as_text
-    # > self.pdf_to_text(path)
-
-    # self.import_pdf_as_md
-
-
     def pdf_to_text(self, path):
         text = []
         with pdfplumber.open(path) as pdf:
@@ -1219,6 +1213,9 @@ class Markdown_Editor(QMainWindow):
 
         if not path:
             return
+
+        if not path.endswith(".pdf"):
+            path = path + ".pdf"
         
         try:
             md_text = self.editor.toPlainText()
@@ -1325,6 +1322,9 @@ class Markdown_Editor(QMainWindow):
 
         if not path:
             return
+        
+        if not path.endswith(".docx"):
+            path = path + ".docx"
         
         md_text = self.editor.toPlainText()
         self.export_markdown_to_word(md_text, path)
