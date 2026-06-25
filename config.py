@@ -13,6 +13,7 @@ configuratie = {
     'opslaglocatie': OPSLAGLOCATIE,
     'favoriete_font': ("Arial", 12),
     'language': 'en',  # opties: 'nl', 'en', 'de'
+    'font_path' : "/home/kees/Data/FreeSerif.ttf",
 }
 
 nu = datetime.datetime.now()
