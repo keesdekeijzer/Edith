@@ -2289,6 +2289,10 @@ identifier: {identifier}
         # xml version='1.0' encoding='utf-8'?
         regels = md_text.split("\n")
         for regel in regels:
+            if "![](imported_epub/images" in regel:  # paden voor afbeeldingen toevoegen
+                vervanging = "![](" + configuratie["opslaglocatie"] + "imported_epub/images"
+                regel = regel.replace("![](imported_epub/images", vervanging)
+                nw_text += regel + "\n"
             if regel == "xml version='1.0' encoding='utf-8'?":
                 regel = ""
             else:
