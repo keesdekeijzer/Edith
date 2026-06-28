@@ -68,6 +68,14 @@ class Markdown_Editor(QMainWindow):
         
         self.taal = configuratie.get("language", "nl")
 
+        config = self.load_config()
+        if config["darkmode"] == "light":
+            self.lichte_modus()
+        elif config["darkmode"] == "dark":
+            self.donkere_modus()
+        else:
+            self.blauwe_modus()
+
         # Central widget        
         self.editor = CodeEditor()  
         container = QWidget()
@@ -2652,6 +2660,13 @@ identifier: {identifier}
                 return False
         return True    
 
+    def load_config(self):
+        try:
+            with open("config.yaml", "r", encoding='utf-8') as f:
+                config = yaml.safe_load(f)
+        except FileNotFoundError:
+            config = {}
+        return config
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
