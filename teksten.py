@@ -706,3 +706,4 @@ meldingen_de["Dit vervangt alle Romeinse cijfers die alleen op een regel staan, 
 meldingen_nl["Alle Romeinse cijfers vervangen"] = "Alle Romeinse cijfers vervangen"
 meldingen_en["Alle Romeinse cijfers vervangen"] = "Replace all Roman numerals"
 meldingen_de["Alle Romeinse cijfers vervangen"] = "Alle Römische Zahlen ersetzen"
+

@@ -1,14 +1,31 @@
 from PyQt6.QtWidgets import QDialog, QLabel, QMessageBox, QRadioButton, QVBoxLayout, QPushButton as QButton
 import yaml
 
+from teksten_config import config_meldingen_de, config_meldingen_en, config_meldingen_nl
+
+from config import configuratie
+
 class ConfiguratieBewerken(QDialog):
     def __init__(self, taal='nl'):
         super().__init__()
         self.taal = taal
-        self.setWindowTitle("Configuratie bewerken")
+        
         self.setModal(True)
         self.setup_ui()
-        self.test()
+        #self.test()
+
+        self.taal = configuratie.get("language", "nl")
+
+        self.config_meldingen = {}
+
+        if self.taal == "en":
+            self.config_meldingen = config_meldingen_en
+        elif self.taal == "de":
+            self.config_meldingen = config_meldingen_de
+        else:
+            self.config_meldingen = config_meldingen_nl
+
+        self.setWindowTitle(self.config_meldingen["Configuratie bewerken"])
 
     def setup_ui(self):
         layout = QVBoxLayout()
@@ -49,11 +66,13 @@ class ConfiguratieBewerken(QDialog):
         with open("config.yaml", "w", encoding='utf-8') as f:
             yaml.safe_dump(config, f, sort_keys=False)
 
+    """
     def test(self):
         config = self.load_config()
         print(config)
         config['darkmode'] = 'light'
         self.save_config(config)
+    """
 
     def bevestig_mode(self):
         print("Mode opgeslagen!")

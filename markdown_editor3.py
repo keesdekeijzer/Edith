@@ -68,7 +68,10 @@ class Markdown_Editor(QMainWindow):
         
         self.taal = configuratie.get("language", "nl")
 
+        # read config
         config = self.load_config()
+
+        # darkmode
         if config["darkmode"] == "light":
             self.lichte_modus()
         elif config["darkmode"] == "dark":
