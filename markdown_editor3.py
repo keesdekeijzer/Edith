@@ -2579,14 +2579,17 @@ identifier: {identifier}
         from woordvervangingen import VERVANGINGEN
         genormaliseerde_tekst = ""
         regellijst = self.editor.toPlainText().split('\n')
+        aantal_vervangen = 0
         for n, r in enumerate(regellijst):
             woorden = r.split()
             for i, woord in enumerate(woorden):
                 if woord in VERVANGINGEN:
                     woorden[i] = VERVANGINGEN[woord]
+                    aantal_vervangen += 1
                 elif woord[-1] in leestekens:
                     if woord[:-1] in VERVANGINGEN:
                         woorden[i] = VERVANGINGEN[woord[:-1]] + woord[-1]
+                        aantal_vervangen += 1
             genormaliseerde_regel = ' '.join(woorden)
             if n == len(regellijst) -1:
                 genormaliseerde_tekst += genormaliseerde_regel
@@ -2594,6 +2597,7 @@ identifier: {identifier}
             else:
                 genormaliseerde_tekst += genormaliseerde_regel + "\n" 
         self.editor.setPlainText(genormaliseerde_tekst)
+        print("woorden vervangen klaar", aantal_vervangen, "woorden vervangen")  # NL
 
     def alle_romeinse_cijfers_vervangen(self):
         QMessageBox.about(self, self.meldingen["Alle Romeinse cijfers vervangen"], 
