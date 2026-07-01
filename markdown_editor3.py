@@ -2603,6 +2603,7 @@ identifier: {identifier}
         QMessageBox.about(self, self.meldingen["Alle Romeinse cijfers vervangen"], 
                               self.meldingen["Dit vervangt alle Romeinse cijfers die alleen op een regel staan, of die aan het einde van een regel staan."])
         genormaliseerde_tekst = ""
+        aantal_vervangen = 0
         regellijst = self.editor.toPlainText().split('\n')
         for n, r in enumerate(regellijst):
             woorden = r.split()
@@ -2610,6 +2611,7 @@ identifier: {identifier}
             if aantal_woorden > 0:
                 if self.is_dit_een_romeins_cijfer(woorden[aantal_woorden - 1]):
                     woorden[aantal_woorden - 1] = self.romeinse_cijfers_omzetten(woorden[aantal_woorden - 1])
+                    aantal_vervangen += 1
             genormaliseerde_regel = ' '.join(woorden)
             if n == len(regellijst) -1:
                 genormaliseerde_tekst += genormaliseerde_regel
@@ -2617,6 +2619,7 @@ identifier: {identifier}
             else:
                 genormaliseerde_tekst += genormaliseerde_regel + "\n" 
         self.editor.setPlainText(genormaliseerde_tekst)
+        print("aantal vervangingen van Romeinse cijfers:", aantal_vervangen)
         
     def romeinse_cijfers_vervangen(self):
         print("romeinse cijfers vervangen")
