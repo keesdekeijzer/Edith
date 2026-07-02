@@ -2572,7 +2572,18 @@ identifier: {identifier}
     def configuratie_bewerken(self):
         self.config_venster = ConfiguratieBewerken(self.taal)
         self.config_venster.show()
-        
+        #self.load_config()
+        config = self.load_config()
+        if config.get('darkmode') == 'light':
+            self.lichte_modus()
+            print("lichte modus")
+        elif config.get('darkmode') == 'dark':
+            self.donkere_modus()
+            print("donkere modus")
+        else:
+            self.blauwe_modus()
+            print("blauwe modus")
+
     def woorden_vervangen(self):
         # dit is hoofdlettergevoelig
         leestekens = "!?;:,.'\""  #  als een woord meer dan 1 leesteken bevat, dan gaat deze niet mee
