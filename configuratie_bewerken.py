@@ -90,3 +90,4 @@ class ConfiguratieBewerken(QDialog):
     def melding_opgeslagen(self):
         print("Configuratie opgeslagen!")
         QMessageBox.information(self, "Opgeslagen", "Configuratie is opgeslagen!")
+        self.close()

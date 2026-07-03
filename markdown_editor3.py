@@ -2573,16 +2573,18 @@ identifier: {identifier}
         self.config_venster = ConfiguratieBewerken(self.taal)
         self.config_venster.show()
         #self.load_config()
-        config = self.load_config()
-        if config.get('darkmode') == 'light':
+        y_config = self.load_config()  # yaml-bestand laden
+        print("config", y_config)
+        modus = y_config.get('darkmode', 'light')
+        self.modus_wijzigen(modus)
+
+    def modus_wijzigen(self, modus):
+        if modus == "light":
             self.lichte_modus()
-            print("lichte modus")
-        elif config.get('darkmode') == 'dark':
+        elif modus == "dark":
             self.donkere_modus()
-            print("donkere modus")
         else:
             self.blauwe_modus()
-            print("blauwe modus")
 
     def woorden_vervangen(self):
         # dit is hoofdlettergevoelig
