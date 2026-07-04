@@ -20,6 +20,15 @@ Spellingcontrole is op afroep beschikbaar, maar is wel langzaam.
 
 Een favoriet font is in te stellen in het config.py bestand.
 
-Via woorden vervagen kan op basis van een woordenlijst de tekst worden gemoderniseerd.
+Via woorden vervangen kan op basis van een woordenlijst de tekst worden gemoderniseerd.
 
+Configuratie aanpassen via het menupunt onder Extra geeft de mogelijkheid om lichte modus, donkere modus of blauwe modus in te stellen.
+
+Het linkervenster is het edit-venster voor tekst of Markdown.
+Het middenvenster is een navigatievenster waar je op hoofdstuktitels kunt klikken om daar in het edit-venster naar toe te gaan.
+Het rechtervenster is het preview-venster waar je de HTML rendering ziet van wat er in het edit-venster staat.
+
+Het linker- en rechervenster moeten synchroon scrollen. Dit gaat niet geheel gelijkmatig als er afbeeldingen in de preview staan.
+
+Er zijn ook 2 functies om Romeinse cijfers te vervangen door "normale" cijfers. De eerste functie vervangt alleen geselecteerde Romeinse cijfers en de tweede functie vervangt alle Romeinse cijfers in de tekst indien ze als laatste (of als enige) in een regel staan.
 
