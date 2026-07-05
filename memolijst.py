@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QMainWindow, QFileDialog, QMessageBox, QLabel
 # from mainwindow import Ui_MainWindow
 from PyQt6.uic import loadUi
 from PyQt6.QtGui import QTextCursor
-import sqlite3
+import sqlite3, yaml
 
 
 # pyuic6 -o mainwindow.py mainwindow.ui
@@ -80,7 +80,8 @@ class MemoLijst(QMainWindow):
         self.actionSluiten.triggered.connect(self.sluiten   )
 
     def check_dark_mode(self):
-        dm = configuratie["darkmode"]
+        config = self.load_config()
+        dm = config["darkmode"]
         print(f'donkere modus voor memo lijst: {dm}')
         if dm == 'dark':
             self.setStyleSheet(DONKER)
@@ -88,6 +89,14 @@ class MemoLijst(QMainWindow):
             self.setStyleSheet(BLAUW)
         else:
             self.setStyleSheet("")
+
+    def load_config(self):
+        try:
+            with open("config.yaml", "r", encoding='utf-8') as f:
+                config = yaml.safe_load(f)
+        except FileNotFoundError:
+            config = {}
+        return config
 
     def exporteren(self):
         print('exporteren memo lijst')

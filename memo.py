@@ -2,7 +2,7 @@ import sys
 from PyQt6.QtWidgets import QMainWindow, QMessageBox
 # from mainwindow import Ui_MainWindow
 from PyQt6.uic import loadUi
-import sqlite3
+import sqlite3, yaml
 
 # pyuic6 -o mainwindow.py mainwindow.ui
 
@@ -75,7 +75,8 @@ class Memo(QMainWindow):
             self.connection.commit()   
 
     def check_dark_mode(self):
-        dm = configuratie["darkmode"]
+        config = self.load_config()
+        dm = config["darkmode"]
         print(f'donkere modus voor memo: {dm}')
         if dm == 'dark':
             self.setStyleSheet(DONKER)
@@ -83,6 +84,14 @@ class Memo(QMainWindow):
             self.setStyleSheet('')
         elif dm == 'blue':
             self.setStyleSheet(BLAUW)
+
+    def load_config(self):
+        try:
+            with open("config.yaml", "r", encoding='utf-8') as f:
+                config = yaml.safe_load(f)
+        except FileNotFoundError:
+            config = {}
+        return config
 
 
     def opslaan_memo(self):
