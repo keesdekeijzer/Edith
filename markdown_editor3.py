@@ -599,7 +599,7 @@ class Markdown_Editor(QMainWindow):
 
     def nieuw(self):        
         if self.unsaved_changes:
-            print("-nieuw- Onopgeslagen wijzigingen, waarschuwen")
+            #print("-nieuw- Onopgeslagen wijzigingen, waarschuwen")
             reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
                                          self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
             if reply == QMessageBox.StandardButton.Yes:
@@ -675,7 +675,7 @@ class Markdown_Editor(QMainWindow):
         # waarschuwen bij onopgeslagen wijzigingen
         """
         if self.unsaved_changes:
-            print("-afsluiten- Onopgeslagen wijzigingen, waarschuwen")
+            #print("-afsluiten- Onopgeslagen wijzigingen, waarschuwen")
             reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
                                          self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
             if reply == QMessageBox.StandardButton.Yes:
@@ -900,8 +900,8 @@ class Markdown_Editor(QMainWindow):
         font, ok = QFontDialog.getFont()
         if ok:
             self.editor.setFont(font)
-            print(f"Font ingesteld op: {font.family()}, grootte: {font.pointSize()}")
-            print(font.toString())
+            #print(f"Font ingesteld op: {font.family()}, grootte: {font.pointSize()}")
+            #print(font.toString())
 
     def set_font(self, font_name, font_size):
         font = QFont(font_name, font_size)
@@ -1375,7 +1375,7 @@ class Markdown_Editor(QMainWindow):
         # 6. Body
         body_item = epub.EpubHtml(title=title, file_name="body.xhtml", lang="nl")
         body_item.content = html
-        print("HTML:", html)
+        #print("HTML:", html)
         book.add_item(body_item)
 
         # TOC + spine
@@ -1505,7 +1505,7 @@ class Markdown_Editor(QMainWindow):
         #cover_path = self.generate_epub_cover(meta, logo_path=cover_file)
         # self, meta, bg_path, logo_path=None, output_path="cover.jpg"
         bg_path = cover_file
-        print("bg_path",bg_path)
+        #print("bg_path",bg_path)
         cover_path = self.generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author(
             meta, cover_file, output_path="cover.jpg")
         # Afmetingen volgens EPUB-conventies
@@ -1633,16 +1633,6 @@ class Markdown_Editor(QMainWindow):
             filtered.append(i)
         book.items = filtered
 
-        # Debug check: confirm cover.xhtml exists and not empty
-        """
-        cp = next((i for i in book.get_items() if i.file_name == "cover.xhtml"), None)
-        if cp is None or (hasattr(cp, "get_body_content") and not cp.get_body_content().strip()):    
-            raise RuntimeError("cover.xhtml ontbreekt of is leeg")
-
-        for i in book.get_items():    
-            body = getattr(i, "get_body_content", lambda: None)()    
-            print(i.file_name, "empty" if not body or not str(body).strip() else "ok")
-        """
         # check
 
         # debug: toon alle items en of body leeg is
@@ -1664,7 +1654,7 @@ class Markdown_Editor(QMainWindow):
         epub.write_epub(output_path, book, {"pretty": True})            
 
     def closeEvent(self, event):
-        print("Close event triggered")
+        #print("Close event triggered")
         if self.unsaved_changes:
             reply = QMessageBox.question(self, self.meldingen['Waarschuwing'], 
                                          self.meldingen['Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?'],
@@ -2040,12 +2030,7 @@ class Markdown_Editor(QMainWindow):
         block_height = 500
         # Titel
         
-        #text = title
-        #font_path = "/home/kees/Data/FreeSerif.ttf"
         font_path = configuratie["font_path"]
-        print("font_path", font_path)
-        #box_w = 1600
-        #box_h = 500
         font, pos = self.fit_text(title, font_path, width, block_height)
         draw.text(pos, title, fill="white", font=font)
 
@@ -2574,7 +2559,7 @@ identifier: {identifier}
         self.config_venster.show()
         #self.load_config()
         y_config = self.load_config()  # yaml-bestand laden
-        print("config", y_config)
+        #print("config", y_config)
         modus = y_config.get('darkmode', 'light')
         self.modus_wijzigen(modus)
 
@@ -2610,7 +2595,7 @@ identifier: {identifier}
             else:
                 genormaliseerde_tekst += genormaliseerde_regel + "\n" 
         self.editor.setPlainText(genormaliseerde_tekst)
-        print("woorden vervangen klaar", aantal_vervangen, "woorden vervangen")  # NL
+        #print("woorden vervangen klaar", aantal_vervangen, "woorden vervangen")  # NL
 
     def alle_romeinse_cijfers_vervangen(self):
         QMessageBox.about(self, self.meldingen["Alle Romeinse cijfers vervangen"], 
@@ -2632,10 +2617,10 @@ identifier: {identifier}
             else:
                 genormaliseerde_tekst += genormaliseerde_regel + "\n" 
         self.editor.setPlainText(genormaliseerde_tekst)
-        print("aantal vervangingen van Romeinse cijfers:", aantal_vervangen)
+        #print("aantal vervangingen van Romeinse cijfers:", aantal_vervangen)
         
     def romeinse_cijfers_vervangen(self):
-        print("romeinse cijfers vervangen")
+        #print("romeinse cijfers vervangen")
         # indien selectie, dan selectie omzetten
         selectie = self.editor.textCursor()
         if selectie.hasSelection():
