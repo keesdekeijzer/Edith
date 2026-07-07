@@ -1457,6 +1457,11 @@ class Markdown_Editor(QMainWindow):
             #html = self.markdown_to_html(md)
             compleet = "# " + title + "\n" + md
             html = render_markdown(compleet)
+            # paden van afbeeldingen aanpassen naar relatieve paden in imported_epub/images
+            # dit gaat niet goed als de src al een relatieve pad is, dan wordt het pad verkeerd aangepast
+            # afbeeldingen worden ook nog niet meegenomen in de EPUB, dat moet nog worden toegevoegd
+            html = re.sub(r'src="([^"]+)"', lambda m: f'src="imported_epub/images/{os.path.basename(m.group(1))}"', html)
+
             html_chapters.append((title, html))
         return html_chapters
 
@@ -1486,6 +1491,7 @@ class Markdown_Editor(QMainWindow):
         title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
         author = meta.get("author", self.meldingen["Onbekende Auteur"])
         cover_file = meta.get("cover_file", "")
+        identifier = meta.get("identifier", "id123456")
 
         # Zonder H1 koppen komt hier niets uit
 
@@ -1498,6 +1504,7 @@ class Markdown_Editor(QMainWindow):
         book.set_title(title)
         book.add_author(author)
         book.set_language("nl")
+        book.set_identifier(identifier)
 
         if not cover_file:
             cover_file = "assets/cover.jpg"
