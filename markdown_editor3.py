@@ -6,6 +6,7 @@ from PyQt6 import QtCore
 from PyQt6.QtWidgets import QApplication, QCheckBox, QFileDialog, QInputDialog, QLabel, QLineEdit, QMainWindow, QPushButton, QTextEdit
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
+import ebooklib
 import language_tool_python
 from configuratie_bewerken import ConfiguratieBewerken
 from highlighter_markdown import MarkdownHighlighter
@@ -900,8 +901,7 @@ class Markdown_Editor(QMainWindow):
         font, ok = QFontDialog.getFont()
         if ok:
             self.editor.setFont(font)
-            #print(f"Font ingesteld op: {font.family()}, grootte: {font.pointSize()}")
-            #print(font.toString())
+
 
     def set_font(self, font_name, font_size):
         font = QFont(font_name, font_size)
@@ -1545,23 +1545,7 @@ class Markdown_Editor(QMainWindow):
         # einde cover ==============
 
 
-        #cover_path = self.generate_epub_cover(meta, logo_path="assets/cover.jpg")
-        #cover_path = "assets/cover.jpg"
-
-        #cover_path = self.generate_epub_cover_with_background(meta, bg_path="assets/background.jpg", logo_path="assets/logo.png")
-
-        #with open(cover_path, "rb") as f:
-            #book.set_cover("cover.jpg", f.read())
-
-        # cover
-        #with open('cover.jpg', 'rb') as f:    
-            #cover_bytes = f.read()
-            #book.set_cover('cover.jpg', cover_bytes)
-        #cover_item = epub.EpubItem(uid='cover', file_name='images/cover.jpg',                           
-                                   #media_type='image/jpeg', content=cover_bytes)
-
-        #cover_page = epub.EpubHtml(title='Cover', file_name='cover.xhtml', lang='nl')
-        
+       
         #cover_page.content = \
         '''<?xml version="1.0" encoding="utf-8"?>
         <html xmlns="http://www.w3.org/1999/xhtml">
@@ -1569,12 +1553,7 @@ class Markdown_Editor(QMainWindow):
         <img src="images/cover.jpg" alt="Cover" style="max-width:100%"/>
         </body>
         </html>'''
-        #book.add_item(cover_page)
-        #print("cover_page:", cover_page)
 
-        #book.toc = (epub.Link('cover.xhtml', 'Cover', 'cover'),)
-
-        #print("(2) cover_page.content", cover_page.content)
 
         # 3. Hoofdstukken toevoegen
         epub_items = self.create_epub_chapters(book, html_chapters)
@@ -1582,17 +1561,11 @@ class Markdown_Editor(QMainWindow):
         # 4. TOC
         book.toc = self.build_epub_toc(epub_items)
 
-        # 5. Spine
-        #book.spine = ["nav"] + epub_items
 
         # 6. Navigatie
-        #book.add_item(epub.EpubNcx())
-
-        #book.add_item(epub.EpubNav())
-
         # remove
         book.items = [i for i in book.get_items() if i.file_name not in ('nav.xhtml','toc.ncx')]
-            # add proper ones
+        # add proper ones
         book.add_item(epub.EpubNcx())
         book.add_item(epub.EpubNav())
 
@@ -1611,16 +1584,8 @@ class Markdown_Editor(QMainWindow):
         
 
         # 5. Spine
-        #book.spine = ["nav"] + epub_items
-        #print("book.spine:", book.spine)
-
-        #book.toc = (epub.Link('cover.xhtml','Cover','cover'),)  # ok
-        #book.spine = ['nav', cover_page] + epub_items
         book.spine = ["nav"] + epub_items
 
-        # 8. EPUB opslaan
-        # Print cover_page.content.strip() vóór write_epub om te verifiëren dat het niet leeg is.
-        #print("laatste test:",cover_page.content.strip())
 
         # Verwijder bestaande lege/duplicate cover.xhtml items
         filtered = []
@@ -1658,7 +1623,44 @@ class Markdown_Editor(QMainWindow):
 
         # einde check
 
-        epub.write_epub(output_path, book, {"pretty": True})            
+
+        """
+        # … je metadata/spine/chapters …
+        img_path = "images/cover.png"  # lokaal pad
+        img_name = "images/cover.png" # pad binnen de epub
+
+        with open(img_path, "rb") as f:    
+            img_bytes = f.read()
+
+        img_item = epub.EpubItem(    
+        uid=img_name,    
+        file_name=img_name,    
+        media_type="image/png",    
+        content=img_bytes,)
+        book.add_item(img_item)
+        """
+        """
+        for item in book.get_items_of_type(ebooklib.ITEM_DOCUMENT): # geeft cover en xhtml items
+            if hasattr(item, "content"):
+                print(f"Processing item: {item.file_name}")
+                #item.content = re.sub(r'src="([^"]+)"', lambda m: f'src="images/{os.path.basename(m.group(1))}"', item.content)
+        """
+
+        epub.write_epub(output_path, book, {"pretty": True})       
+
+
+    def extract_images_(self, book, output_dir):  # aanpassen om afbeeldingen uit EPUB te extraheren
+        mapping = {}
+
+        for item in book.get_items():
+            ct = self.content_type(item)
+            if ct == "image/jpeg" or ct == "image/png" or ct.startswith("image/"):
+                filename = os.path.basename(item.file_name)
+                output_path = os.path.join(output_dir, filename)
+                with open(output_path, "wb") as f:
+                    f.write(item.get_content())
+                mapping[item.file_name] = output_path
+        return mapping     
 
     def closeEvent(self, event):
         #print("Close event triggered")
@@ -2242,6 +2244,8 @@ identifier: {identifier}
                 with open(output_path, "wb") as f:
                     f.write(item.get_content())
                 mapping[item.file_name] = output_path
+        print(f"Extracted {len(mapping)} images to {output_dir}")
+        print(f"Image mapping: {mapping}")
         return mapping
 
     def rewrite_image_paths(self, md_text, mapping):
@@ -2251,9 +2255,17 @@ identifier: {identifier}
 
     def epub_to_markdown(self, epub_path, output_dir=configuratie["opslaglocatie"]):
         output_dir = os.path.join(output_dir, "epub_files")
+        #output_dir = os.path.join(output_dir, "")
         output_images_dir = os.path.join(output_dir, "images")
         html_items, book = self.extract_epub_html(epub_path)
         fm = self.epub_metadata_to_frontmatter(book)
+
+        print(f"EPUB path: {epub_path}")
+        print(f"Output directory: {output_dir}")
+        print(f"Output images directory: {output_images_dir}")
+        print(f"Number of HTML items: {len(html_items)}")
+        print(f"Number of images: {len([item for item in book.get_items() if self.content_type(item).startswith('image/')])}")
+        print(f"Frontmatter:\n{fm}")
 
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
