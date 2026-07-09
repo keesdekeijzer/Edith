@@ -20,7 +20,7 @@ from pathlib import Path
 from PyQt6.QtCore import QRegularExpression, QUrl, Qt
 from PyQt6.QtGui import QColor, QFont, QImage, QGuiApplication, QAction, QTextCharFormat, QTextCursor, QWindow
 from PyQt6.QtCore import QStandardPaths
-import os
+import os, glob
 from frontmatter_panel import FrontmatterPanel
 import pdfplumber
 import pytesseract
@@ -1624,8 +1624,27 @@ class Markdown_Editor(QMainWindow):
         # einde check
 
 
-        """
+        
         # … je metadata/spine/chapters …
+        opslag = configuratie["opslaglocatie"]
+
+        # alle afbeeldingen die in epub_files/images/ staan toevoegen aan de EPUB, zodat ze beschikbaar zijn voor de hoofdstukken
+
+        # for item in epub_files/images/*.png:  # of .jpg, afhankelijk van je afbeeldingen
+        local_images = glob.glob(opslag + "epub_files/images/*.png") + glob.glob(opslag + "epub_files/images/*.jpg")
+        print("Local images found:", local_images)
+        for img_path in local_images:
+            img_name = "imported_epub/images/" + os.path.basename(img_path)  # alleen de bestandsnaam
+            with open(img_path, "rb") as f:
+                img_bytes = f.read()
+            img_item = epub.EpubItem(    
+            uid=img_name,    
+            file_name=img_name,    
+            media_type="image/png",    
+            content=img_bytes,)
+            book.add_item(img_item)
+            print(f"Added image to EPUB: {img_name}")
+        """
         img_path = "images/cover.png"  # lokaal pad
         img_name = "images/cover.png" # pad binnen de epub
 
@@ -1746,229 +1765,7 @@ class Markdown_Editor(QMainWindow):
         #self.zoek_venster = ZoekEnVervang()
         #self.zoek_venster.show()
         ...
-    """
-    def generate_epub_cover_with_background(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
-        # Afmetingen volgens EPUB-conventies
-        width, height = 1600, 2560
 
-        # Achtergrond
-        if os.path.exists(bg_path):
-            bg = Image.open(bg_path).convert("RGB")
-            bg = bg.resize((width, height), Image.LANCZOS)
-        else:
-            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
-
-        draw = ImageDraw.Draw(bg)
-
-        # Metadata
-        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
-        author = meta.get("author", self.meldingen["Onbekende Auteur"])
-        project = meta.get("project", "")
-        version = meta.get("version", "")
-
-        # Titel
-        w = draw.textlength(title)
-        draw.text(((width - w) / 2, 200), title, fill="white")
-
-        # Auteur
-        w = draw.textlength(author)
-        draw.text(((width - w) / 2, 300), author, fill="lightgray")
-
-        # Project + versie
-        footer = f"{project} {version}".strip()
-        if footer:
-            w = draw.textlength(footer)
-            draw.text(((width - w) / 2, height - 50), footer, fill="lightgray")
-
-        # Logo (optioneel)
-        if logo_path and os.path.exists(logo_path):
-            logo = Image.open(logo_path).convert("RGBA")
-            target_w = int(width * 0.2)
-            aspect = logo.height / logo.width
-            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
-
-            lx = (width - logo.width) // 2
-            ly = int(height * 0.10)
-            bg.paste(logo, (lx, ly), logo)
-
-        bg.save(output_path, "JPEG", quality=95)
-        return output_path
-
-    def generate_epub_cover_with_background_and_gradient(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
-        # Afmetingen volgens EPUB-conventies
-        width, height = 1600, 2560
-
-        # Achtergrond
-        if os.path.exists(bg_path):
-            bg = Image.open(bg_path).convert("RGB")
-            bg = bg.resize((width, height), Image.LANCZOS)
-        else:
-            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
-
-        # Gradient overlay
-        gradient = Image.new("L", (1, height), color=0xFF)
-        for y in range(height):
-            gradient.putpixel((0, y), int(255 * (1 - y / height)))  # van wit naar transparant
-        alpha_gradient = gradient.resize((width, height))
-        black_img = Image.new("RGBA", (width, height), color=(0, 0, 0, 255))
-        black_img.putalpha(alpha_gradient)
-        bg = Image.alpha_composite(bg.convert("RGBA"), black_img)
-
-        draw = ImageDraw.Draw(bg)
-
-        # Metadata
-        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
-        author = meta.get("author", self.meldingen["Onbekende Auteur"])
-        project = meta.get("project", "")
-        version = meta.get("version", "")
-
-        # Titel
-        w = draw.textlength(title)
-        draw.text(((width - w) / 2, 200), title, fill="white")
-
-        # Auteur
-        w = draw.textlength(author)
-        draw.text(((width - w) / 2, 300), author, fill="lightgray")
-
-        # Project + versie
-        footer = f"{project} {version}".strip()
-        if footer:
-            w = draw.textlength(footer)
-            draw.text(((width - w) / 2, height - 50), footer, fill="lightgray")
-
-        # Logo (optioneel)
-        if logo_path and os.path.exists(logo_path):
-            logo = Image.open(logo_path).convert("RGBA")
-            target_w = int(width * 0.2)
-            aspect = logo.height / logo.width
-            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
-
-            lx = (width - logo.width) // 2
-            ly = int(height * 0.10)
-            bg.paste(logo, (lx, ly), logo)
-
-        bg.save(output_path, "JPEG", quality=95)
-        return output_path
-    
-    def generate_epub_cover_with_background_and_gradient_and_title_block(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
-        # Afmetingen volgens EPUB-conventies
-        width, height = 1600, 2560
-
-        # Achtergrond
-        if os.path.exists(bg_path):
-            bg = Image.open(bg_path).convert("RGB")
-            bg = bg.resize((width, height), Image.LANCZOS)
-        else:
-            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
-
-        # Gradient overlay
-        gradient = Image.new("L", (1, height), color=0xFF)
-        for y in range(height):
-            gradient.putpixel((0, y), int(255 * (1 - y / height)))  # van wit naar transparant
-        alpha_gradient = gradient.resize((width, height))
-        black_img = Image.new("RGBA", (width, height), color=(0, 0, 0, 255))
-        black_img.putalpha(alpha_gradient)
-        bg = Image.alpha_composite(bg.convert("RGBA"), black_img)
-
-        draw = ImageDraw.Draw(bg)
-
-        # Metadata
-        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
-        author = meta.get("author", self.meldingen["Onbekende Auteur"])
-        project = meta.get("project", "")
-        version = meta.get("version", "")
-
-        # Titelblok achtergrond
-        block_height = 400
-        block_color = (30, 30, 30, 200)  # Semi-transparant donkergrijs
-        block = Image.new("RGBA", (width, block_height), block_color)
-        bg.paste(block, (0, 200), block)
-        # Titel
-        w = draw.textlength(title)
-        draw.text(((width - w) / 2, 250), title, fill="white")
-        # Auteur
-        w = draw.textlength(author)
-        draw.text(((width - w) / 2, 350), author, fill="lightgray")
-        # Project + versie
-        footer = f"{project} {version}".strip()
-        if footer:
-            w = draw.textlength(footer)
-            draw.text(((width - w) / 2, 550), footer, fill="lightgray")
-        # Logo (optioneel)
-        if logo_path and os.path.exists(logo_path):
-            logo = Image.open(logo_path).convert("RGBA")
-            target_w = int(width * 0.2)
-            aspect = logo.height / logo.width
-            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
-
-            lx = (width - logo.width) // 2
-            ly = 200 + (block_height - logo.height) // 2
-            bg.paste(logo, (lx, ly), logo)
-        bg.save(output_path, "JPEG", quality=95)
-        return output_path
-    
-    def generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
-        # Afmetingen volgens EPUB-conventies
-        width, height = 1600, 2560
-
-        # Achtergrond
-        if os.path.exists(bg_path):
-            bg = Image.open(bg_path).convert("RGB")
-            bg = bg.resize((width, height), Image.LANCZOS)
-        else:
-            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
-
-        # Gradient overlay
-        gradient = Image.new("L", (1, height), color=0xFF)
-        for y in range(height):
-            gradient.putpixel((0, y), int(255 * (1 - y / height)))  # van wit naar transparant
-        alpha_gradient = gradient.resize((width, height))
-        black_img = Image.new("RGBA", (width, height), color=(0, 0, 0, 255))
-        black_img.putalpha(alpha_gradient)
-        bg = Image.alpha_composite(bg.convert("RGBA"), black_img)
-
-        draw = ImageDraw.Draw(bg)
-
-        # Metadata
-        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
-        subtitle = meta.get("subtitle", "")
-        author = meta.get("author", self.meldingen["Onbekende Auteur"])
-        project = meta.get("project", "")
-        version = meta.get("version", "")
-
-        # Titelblok achtergrond
-        block_height = 500
-        block_color = (30, 30, 30, 200)  # Semi-transparant donkergrijs
-        block = Image.new("RGBA", (width, block_height), block_color)
-        bg.paste(block, (0, 200), block)
-        # Titel
-        w = draw.textlength(title)
-        draw.text(((width - w) / 2, 250), title, fill="white")
-        # Subtitel
-        if subtitle:
-            w = draw.textlength(subtitle)
-            draw.text(((width - w) / 2, 320), subtitle, fill="lightgray")
-        # Auteur
-        w = draw.textlength(author)
-        draw.text(((width - w) / 2, 400), author, fill="lightgray")
-        # Project + versie
-        footer = f"{project} {version}".strip()
-        if footer:
-            w = draw.textlength(footer)
-            draw.text(((width - w) / 2, 550), footer, fill="lightgray")
-        # Logo (optioneel)
-        if logo_path and os.path.exists(logo_path):
-            logo = Image.open(logo_path).convert("RGBA")
-            target_w = int(width * 0.2)
-            aspect = logo.height / logo.width
-            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
-
-            lx = (width - logo.width) // 2
-            ly = 200 + (block_height - logo.height) // 2
-            bg.paste(logo, (lx, ly), logo)
-        bg.save(output_path, "JPEG", quality=95)
-        return output_path
-    """
     def fit_text(self, text, font_path, box_w, box_h, box_xy=(0,0), start_size=10, max_size=300):   
         x0, y0 = box_xy 
         # Binary search op fontszie    
@@ -2068,131 +1865,7 @@ class Markdown_Editor(QMainWindow):
         #bg.save(output_path, "JPEG", quality=95)
         bg.save(output_path, "PNG", quality=95)
         return output_path
-    """
-    def generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author_and_project(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
-        # Afmetingen volgens EPUB-conventies
-        width, height = 1600, 2560
 
-        # Achtergrond
-        if os.path.exists(bg_path):
-            bg = Image.open(bg_path).convert("RGB")
-            bg = bg.resize((width, height), Image.LANCZOS)
-        else:
-            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
-
-        # Gradient overlay
-        gradient = Image.new("L", (1, height), color=0xFF)
-        for y in range(height):
-            gradient.putpixel((0, y), int(255 * (1 - y / height)))  # van wit naar transparant
-        alpha_gradient = gradient.resize((width, height))
-        black_img = Image.new("RGBA", (width, height), color=(0, 0, 0, 255))
-        black_img.putalpha(alpha_gradient)
-        bg = Image.alpha_composite(bg.convert("RGBA"), black_img)
-
-        draw = ImageDraw.Draw(bg)
-
-        # Metadata
-        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
-        subtitle = meta.get("subtitle", "")
-        author = meta.get("author", self.meldingen["Onbekende Auteur"])
-        project = meta.get("project", "")
-        version = meta.get("version", "")
-
-        # Titelblok achtergrond
-        block_height = 500
-        block_color = (30, 30, 30, 200)  # Semi-transparant donkergrijs
-        block = Image.new("RGBA", (width, block_height), block_color)
-        bg.paste(block, (0, 200), block)
-        # Titel
-        w = draw.textlength(title)
-        draw.text(((width - w) / 2, 250), title, fill="white")
-        # Subtitel
-        if subtitle:
-            w = draw.textlength(subtitle)
-            draw.text(((width - w) / 2, 320), subtitle, fill="lightgray")
-        # Auteur
-        w = draw.textlength(author)
-        draw.text(((width - w) / 2, 400), author, fill="lightgray")
-        # Project + versie
-        footer = f"{project} {version}".strip()
-        if footer:
-            w = draw.textlength(footer)
-            draw.text(((width - w) / 2, 550), footer, fill="lightgray")
-        # Logo (optioneel)
-        if logo_path and os.path.exists(logo_path):
-            logo = Image.open(logo_path).convert("RGBA")
-            target_w = int(width * 0.2)
-            aspect = logo.height / logo.width
-            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
-
-            lx = (width - logo.width) // 2
-            ly = 200 + (block_height - logo.height) // 2
-            bg.paste(logo, (lx, ly), logo)
-        bg.save(output_path, "JPEG", quality=95)
-        return output_path
-
-    def generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author_and_project_and_version(self, meta, bg_path, logo_path=None, output_path="cover.jpg"):
-        # Afmetingen volgens EPUB-conventies
-        width, height = 1600, 2560
-
-        # Achtergrond
-        if os.path.exists(bg_path):
-            bg = Image.open(bg_path).convert("RGB")
-            bg = bg.resize((width, height), Image.LANCZOS)
-        else:
-            bg = Image.new("RGB", (width, height), color=(245, 245, 245))
-
-        # Gradient overlay
-        gradient = Image.new("L", (1, height), color=0xFF)
-        for y in range(height):
-            gradient.putpixel((0, y), int(255 * (1 - y / height)))  # van wit naar transparant
-        alpha_gradient = gradient.resize((width, height))
-        black_img = Image.new("RGBA", (width, height), color=(0, 0, 0, 255))
-        black_img.putalpha(alpha_gradient)
-        bg = Image.alpha_composite(bg.convert("RGBA"), black_img)
-
-        draw = ImageDraw.Draw(bg)
-
-        # Metadata
-        title = meta.get("title", self.meldingen["Mijn Markdown Boek"])
-        subtitle = meta.get("subtitle", "")
-        author = meta.get("author", self.meldingen["Onbekende Auteur"])
-        project = meta.get("project", "")
-        version = meta.get("version", "")
-
-        # Titelblok achtergrond
-        block_height = 500
-        block_color = (30, 30, 30, 200)  # Semi-transparant donkergrijs
-        block = Image.new("RGBA", (width, block_height), block_color)
-        bg.paste(block, (0, 200), block)
-        # Titel
-        w = draw.textlength(title)
-        draw.text(((width - w) / 2, 250), title, fill="white")
-        # Subtitel
-        if subtitle:
-            w = draw.textlength(subtitle)
-            draw.text(((width - w) / 2, 320), subtitle, fill="lightgray")
-        # Auteur
-        w = draw.textlength(author)
-        draw.text(((width - w) / 2, 400), author, fill="lightgray")
-        # Project + versie
-        footer = f"{project} {version}".strip()
-        if footer:
-            w = draw.textlength(footer)
-            draw.text(((width - w) / 2, 550), footer, fill="lightgray")
-        # Logo (optioneel)
-        if logo_path and os.path.exists(logo_path):
-            logo = Image.open(logo_path).convert("RGBA")
-            target_w = int(width * 0.2)
-            aspect = logo.height / logo.width
-            logo = logo.resize((target_w, int(target_w * aspect)), Image.LANCZOS)
-
-            lx = (width - logo.width) // 2
-            ly = 200 + (block_height - logo.height) // 2
-            bg.paste(logo, (lx, ly), logo)
-        bg.save(output_path, "JPEG", quality=95)
-        return output_path
-    """
     def extract_epub_html(self, epub_path):
         book = epub.read_epub(epub_path)
         html_items = []
@@ -2251,12 +1924,14 @@ identifier: {identifier}
     def rewrite_image_paths(self, md_text, mapping):
         for epub_path, local_path in mapping.items():
             md_text = md_text.replace(epub_path, local_path)
+            print(f"Rewriting image path: {epub_path} -> {local_path}")
         return md_text
 
     def epub_to_markdown(self, epub_path, output_dir=configuratie["opslaglocatie"]):
         output_dir = os.path.join(output_dir, "epub_files")
         #output_dir = os.path.join(output_dir, "")
-        output_images_dir = os.path.join(output_dir, "images")
+        #output_images_dir = os.path.join(output_dir, "images")
+        output_images_dir = "images"  # relative path for markdown
         html_items, book = self.extract_epub_html(epub_path)
         fm = self.epub_metadata_to_frontmatter(book)
 
