@@ -1342,67 +1342,7 @@ class Markdown_Editor(QMainWindow):
 
         QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Word-document opgeslagen!"])
 
-    def export_markdown_to_epub_zonder_hoofdstukken(self, md_text, output_path):
-        # 1. Metadata
-        meta = self.extract_metadata(md_text)
-        title = meta.get("title", "Mijn Markdown Boek")
-        author = meta.get("author", "Onbekende Auteur")
-
-        # 2. Markdown -> HTML
-        html = render_markdown(md_text)
-
-        # 3. EPUB object aanmaken
-        book = epub.EpubBook()
-        book.set_identifier("id123456")
-        book.set_title(title)
-        book.add_author(author)
-        book.set_language("nl")
-
-        # 4. Cover afbeelding (optioneel)
-        # cover_path = "path/to/cover.jpg"
-        # if os.path.exists(cover_path):
-        #     with open(cover_path, "rb") as f:
-        #         book.set_cover("cover.jpg", f.read())
-
-        # 5. TOC genereren
-        headings = self.extract_headings(md_text)
-        toc_html = self.build_clickable_toc(headings)
-
-        toc_item = epub.EpubHtml(title="Inhoudsopgave", file_name="toc.xhtml", lang="nl")
-        toc_item.content = toc_html
-        book.add_item(toc_item)
-
-        # 6. Body
-        body_item = epub.EpubHtml(title=title, file_name="body.xhtml", lang="nl")
-        body_item.content = html
-        #print("HTML:", html)
-        book.add_item(body_item)
-
-        # TOC + spine
-        book.toc = (epub.Link("toc.xhtml", "Inhoudsopgave", "toc"), epub.Link("body.xhtml", title, "body"))
-
-        book.spine = ["nav", toc_item, body_item]
-
-        # 8. Navigatie
-        book.add_item(epub.EpubNcx())
-        book.add_item(epub.EpubNav())
-
-        # 9. CSS (optioneel)
-        style = """
-        body { font-family: Arial, sans-serif; line-height: 1.5; padding: 1em; }
-        h1 { font-size: 2em; margin-top: 1em; }
-        h2 { font-size: 1.5em; margin-top: 1em; }
-        h3 { font-size: 1.2em; margin-top: 1em; }
-        p { margin-bottom: 1em; }
-        pre { font-family: "Courier New", monospace; background: #f4f4f4; padding: 1em; overflow-x: auto; }
-        code { font-family: "Courier New", monospace; background: #f4f4f4; padding: 0.2em 0.4em; }
-        img { max-width: 100%; height: auto; }
-        """
-        css = epub.EpubItem(uid="style", file_name="style.css", media_type="text/css", content=style)
-        book.add_item(css)
-
-        # 10.EPUB opslaan
-        epub.write_epub(output_path, book, {})
+    
 
     def export_epub(self):
         path, _ = QFileDialog.getSaveFileName(
@@ -1628,13 +1568,16 @@ class Markdown_Editor(QMainWindow):
         # … je metadata/spine/chapters …
         opslag = configuratie["opslaglocatie"]
 
+        #opslag_in_epub = "imported_epub/images/"
+        opslag_in_epub = "images/"
+
         # alle afbeeldingen die in epub_files/images/ staan toevoegen aan de EPUB, zodat ze beschikbaar zijn voor de hoofdstukken
 
         # for item in epub_files/images/*.png:  # of .jpg, afhankelijk van je afbeeldingen
         local_images = glob.glob(opslag + "epub_files/images/*.png") + glob.glob(opslag + "epub_files/images/*.jpg")
         print("Local images found:", local_images)
         for img_path in local_images:
-            img_name = "imported_epub/images/" + os.path.basename(img_path)  # alleen de bestandsnaam
+            img_name = opslag_in_epub + os.path.basename(img_path)  # alleen de bestandsnaam
             with open(img_path, "rb") as f:
                 img_bytes = f.read()
             img_item = epub.EpubItem(    
@@ -1644,26 +1587,7 @@ class Markdown_Editor(QMainWindow):
             content=img_bytes,)
             book.add_item(img_item)
             print(f"Added image to EPUB: {img_name}")
-        """
-        img_path = "images/cover.png"  # lokaal pad
-        img_name = "images/cover.png" # pad binnen de epub
 
-        with open(img_path, "rb") as f:    
-            img_bytes = f.read()
-
-        img_item = epub.EpubItem(    
-        uid=img_name,    
-        file_name=img_name,    
-        media_type="image/png",    
-        content=img_bytes,)
-        book.add_item(img_item)
-        """
-        """
-        for item in book.get_items_of_type(ebooklib.ITEM_DOCUMENT): # geeft cover en xhtml items
-            if hasattr(item, "content"):
-                print(f"Processing item: {item.file_name}")
-                #item.content = re.sub(r'src="([^"]+)"', lambda m: f'src="images/{os.path.basename(m.group(1))}"', item.content)
-        """
 
         epub.write_epub(output_path, book, {"pretty": True})       
 
@@ -1932,6 +1856,7 @@ identifier: {identifier}
         #output_dir = os.path.join(output_dir, "")
         #output_images_dir = os.path.join(output_dir, "images")
         output_images_dir = "images"  # relative path for markdown
+        local_output_images_dir = os.path.join(output_dir, "images")  # actual output path for saving images
         html_items, book = self.extract_epub_html(epub_path)
         fm = self.epub_metadata_to_frontmatter(book)
 
@@ -1945,11 +1870,15 @@ identifier: {identifier}
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
-        if not os.path.exists(output_images_dir):
+        if not os.path.exists(local_output_images_dir):  # create the images directory if it doesn't exist
+            os.makedirs(local_output_images_dir)
+
+        if not os.path.exists(output_images_dir):  # create the images directory if it doesn't exist
             os.makedirs(output_images_dir)
 
         # afbeeldingen
-        img_map = self.extract_images(book, output_images_dir)
+        #img_map = self.extract_images(book, output_images_dir)
+        img_map = self.extract_images(book, local_output_images_dir)
 
         # hoofdstukken converteren
         chapters_md = []
