@@ -74,6 +74,8 @@ class Memo(QMainWindow):
             ''')
             self.connection.commit()   
 
+        self.taal = configuratie.get("language", "nl")
+
     def check_dark_mode(self):
         config = self.load_config()
         dm = config["darkmode"]
@@ -117,7 +119,12 @@ class Memo(QMainWindow):
             connection.commit()
 
             print(f"Inserted memo record for {titel}.")
-            QMessageBox.about(self, "Opgeslagen", f"Het is gelukt! Memo {titel} opgeslagen.")
+            if self.taal == "en":
+                QMessageBox.about(self, "Saved", f"Success! Memo {titel} saved.")
+            elif self.taal == "de":
+                QMessageBox.about(self, "Gespeichert", f"Erfolg! Memo {titel} gespeichert.")
+            else:
+                QMessageBox.about(self, "Opgeslagen", f"Het is gelukt! Memo {titel} opgeslagen.")
 
     def zoeken_memo(self):
         print('zoeken memo')
@@ -147,7 +154,12 @@ class Memo(QMainWindow):
                 self.plainTextEdit.setPlainText(titel[1])
             else:
                 self.plainTextEdit.setPlainText("Geen memo gevonden")
-                QMessageBox.about(self, "Niet gevonden", "Geen memo gevonden met dat zoekwoord.")
+                if self.taal == "en":
+                    QMessageBox.about(self, "Not Found", "No memo found with that search term.")
+                elif self.taal == "de":
+                    QMessageBox.about(self, "Nicht gefunden", "Kein Memo mit diesem Suchbegriff gefunden.")
+                else:
+                    QMessageBox.about(self, "Niet gevonden", "Geen memo gevonden met dat zoekwoord.")
 
     def verwijderen_memo(self):
         print('verwijderen memo')
@@ -172,6 +184,11 @@ class Memo(QMainWindow):
 
             # Print a confirmation message
             print(f"Deleted memo record for {te_verwijderen}.")
-            QMessageBox.about(self, "Verwijderd", "Het is gelukt. Memo is verwijderd.")
+            if self.taal == "en":
+                QMessageBox.about(self, "Deleted", "Success! Memo deleted.")
+            elif self.taal == "de":
+                QMessageBox.about(self, "Gelöscht", "Erfolg! Memo gelöscht.")
+            else:
+                QMessageBox.about(self, "Verwijderd", "Het is gelukt. Memo is verwijderd.")
         self.lineEdit.clear()
         self.plainTextEdit.clear()  
