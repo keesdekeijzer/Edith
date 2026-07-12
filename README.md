@@ -32,3 +32,9 @@ Het linker- en rechervenster moeten synchroon scrollen. Dit gaat niet geheel gel
 
 Er zijn ook 2 functies om Romeinse cijfers te vervangen door "normale" cijfers. De eerste functie vervangt alleen geselecteerde Romeinse cijfers en de tweede functie vervangt alle Romeinse cijfers in de tekst indien ze als laatste (of als enige) in een regel staan.
 
+## Paden
+
+Bij import epub: afbeeldingen krijgen volledig lokaal pad: "/home/.../.../epub_files/images/...jpg"
+
+Bij export epub: afbeeldingen komen in "images" in de epub, maar de verwijzing in de html is naar src="imported_epub/images/...jpg"
+

@@ -75,9 +75,11 @@ class MemoLijst(QMainWindow):
             self.textBrowser.setHtml(vulling)
             self.textBrowser.moveCursor(QTextCursor.MoveOperation.Start)
 
+        self.taal = configuratie.get("language", "nl")
+
         self.actionExporteren.triggered.connect(self.exporteren)
         
-        self.actionSluiten.triggered.connect(self.sluiten   )
+        self.actionSluiten.triggered.connect(self.sluiten)
 
     def check_dark_mode(self):
         config = self.load_config()
@@ -131,7 +133,12 @@ class MemoLijst(QMainWindow):
             with open(pathname[0], 'w') as f:
                 f.write(filetext)
             self.current_path = pathname[0]
-            QMessageBox.about(self, "Geëxporteerd", "Het is gelukt. Memo lijst is geëxporteerd naar een bestand.")
+            if self.taal == 'nl':
+                QMessageBox.about(self, "Geëxporteerd", "Het is gelukt. Memo lijst is geëxporteerd naar een bestand.")
+            elif self.taal == 'en':
+                QMessageBox.about(self, "Exported", "Success! Memo list has been exported to a file.")
+            elif self.taal == 'de':
+                QMessageBox.about(self, "Exportiert", "Erfolg! Memo-Liste wurde in eine Datei exportiert.")
         except Exception as e:
             self.dialog_critical(str(e))
 
