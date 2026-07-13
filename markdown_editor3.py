@@ -613,7 +613,7 @@ class Markdown_Editor(QMainWindow):
 
     def openen(self):        
         if self.unsaved_changes:
-            print("-openen- Onopgeslagen wijzigingen, waarschuwen")
+            #print("-openen- Onopgeslagen wijzigingen, waarschuwen")
             reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
                                          self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
             if reply == QMessageBox.StandardButton.Yes:
@@ -1400,7 +1400,9 @@ class Markdown_Editor(QMainWindow):
             # paden van afbeeldingen aanpassen naar relatieve paden in imported_epub/images
             # dit gaat niet goed als de src al een relatieve pad is, dan wordt het pad verkeerd aangepast
             # afbeeldingen worden ook nog niet meegenomen in de EPUB, dat moet nog worden toegevoegd
-            html = re.sub(r'src="([^"]+)"', lambda m: f'src="imported_epub/images/{os.path.basename(m.group(1))}"', html)
+            #html = re.sub(r'src="([^"]+)"', lambda m: f'src="imported_epub/images/{os.path.basename(m.group(1))}"', html)
+            html = re.sub(r'src="([^"]+)"', lambda m: f'src="images/{os.path.basename(m.group(1))}"', html)
+
 
             html_chapters.append((title, html))
         return html_chapters
@@ -1575,7 +1577,7 @@ class Markdown_Editor(QMainWindow):
 
         # for item in epub_files/images/*.png:  # of .jpg, afhankelijk van je afbeeldingen
         local_images = glob.glob(opslag + "epub_files/images/*.png") + glob.glob(opslag + "epub_files/images/*.jpg")
-        print("Local images found:", local_images)
+        #print("Local images found:", local_images)
         for img_path in local_images:
             img_name = opslag_in_epub + os.path.basename(img_path)  # alleen de bestandsnaam
             with open(img_path, "rb") as f:
@@ -1841,14 +1843,14 @@ identifier: {identifier}
                 with open(output_path, "wb") as f:
                     f.write(item.get_content())
                 mapping[item.file_name] = output_path
-        print(f"Extracted {len(mapping)} images to {output_dir}")
-        print(f"Image mapping: {mapping}")
+        #print(f"Extracted {len(mapping)} images to {output_dir}")
+        #print(f"Image mapping: {mapping}")
         return mapping
 
     def rewrite_image_paths(self, md_text, mapping):
         for epub_path, local_path in mapping.items():
             md_text = md_text.replace(epub_path, local_path)
-            print(f"Rewriting image path: {epub_path} -> {local_path}")
+            #print(f"Rewriting image path: {epub_path} -> {local_path}")
         return md_text
 
     def epub_to_markdown(self, epub_path, output_dir=configuratie["opslaglocatie"]):
@@ -1860,12 +1862,12 @@ identifier: {identifier}
         html_items, book = self.extract_epub_html(epub_path)
         fm = self.epub_metadata_to_frontmatter(book)
 
-        print(f"EPUB path: {epub_path}")
-        print(f"Output directory: {output_dir}")
-        print(f"Output images directory: {output_images_dir}")
-        print(f"Number of HTML items: {len(html_items)}")
-        print(f"Number of images: {len([item for item in book.get_items() if self.content_type(item).startswith('image/')])}")
-        print(f"Frontmatter:\n{fm}")
+        #print(f"EPUB path: {epub_path}")
+        #print(f"Output directory: {output_dir}")
+        #print(f"Output images directory: {output_images_dir}")
+        #print(f"Number of HTML items: {len(html_items)}")
+        #print(f"Number of images: {len([item for item in book.get_items() if self.content_type(item).startswith('image/')])}")
+        #print(f"Frontmatter:\n{fm}")
 
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
@@ -1912,6 +1914,7 @@ identifier: {identifier}
                 vervanging = "![](" + configuratie["opslaglocatie"] + "imported_epub/images"
                 regel = regel.replace("![](imported_epub/images", vervanging)
                 nw_text += regel + "\n"
+                #print(f"Rewriting image path in markdown: {regel} -> {vervanging}")
             if regel == "xml version='1.0' encoding='utf-8'?":
                 regel = ""
             else:
