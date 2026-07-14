@@ -673,16 +673,6 @@ class Markdown_Editor(QMainWindow):
 
     def afsluiten(self):
         QMessageBox.information(self, self.meldingen["Afsluiten"], self.meldingen["Programma afsluiten."])
-        # waarschuwen bij onopgeslagen wijzigingen
-        """
-        if self.unsaved_changes:
-            #print("-afsluiten- Onopgeslagen wijzigingen, waarschuwen")
-            reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
-                                         self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
-            if reply == QMessageBox.StandardButton.Yes:
-                self.opslaan()
-        """
-        #CodeEditor.close(self)
         # Alle vensters sluiten
         for widget in QApplication.topLevelWidgets():
             widget.close()
@@ -1797,9 +1787,7 @@ class Markdown_Editor(QMainWindow):
         html_items = []
 
         for item in book.get_items():
-            #print(f"Item: {item.get_name()} - {item.get_type()}")
             ct = self.content_type(item)
-            #print(f"Content type: {ct}")
 
             if ct == "application/xhtml+xml":
                 html_items.append((item.get_name(), item.get_content().decode("utf-8")))
@@ -1843,8 +1831,6 @@ identifier: {identifier}
                 with open(output_path, "wb") as f:
                     f.write(item.get_content())
                 mapping[item.file_name] = output_path
-        #print(f"Extracted {len(mapping)} images to {output_dir}")
-        #print(f"Image mapping: {mapping}")
         return mapping
 
     def rewrite_image_paths(self, md_text, mapping):
@@ -1862,13 +1848,6 @@ identifier: {identifier}
         html_items, book = self.extract_epub_html(epub_path)
         fm = self.epub_metadata_to_frontmatter(book)
 
-        #print(f"EPUB path: {epub_path}")
-        #print(f"Output directory: {output_dir}")
-        #print(f"Output images directory: {output_images_dir}")
-        #print(f"Number of HTML items: {len(html_items)}")
-        #print(f"Number of images: {len([item for item in book.get_items() if self.content_type(item).startswith('image/')])}")
-        #print(f"Frontmatter:\n{fm}")
-
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)
 
@@ -1879,7 +1858,6 @@ identifier: {identifier}
             os.makedirs(output_images_dir)
 
         # afbeeldingen
-        #img_map = self.extract_images(book, output_images_dir)
         img_map = self.extract_images(book, local_output_images_dir)
 
         # hoofdstukken converteren
@@ -1982,13 +1960,17 @@ identifier: {identifier}
         start_pos = cursor.selectionEnd() if cursor.hasSelection() else cursor.position()
         #if self.case_cb.isChecked():
         # plain search from int position
-        it = doc.find(text, start_pos)        
+        it = doc.find(text, start_pos)      
+        print("self.case_cb.isChecked()", self.case_cb.isChecked())  
         if it.isNull():            
             it = doc.find(text, 0)    # wrap around to start of document
         else:        
             # regex with case-insensitive option        
-            regex = QRegularExpression(text)        
-            regex.setPatternOptions(QRegularExpression.PatternOption.CaseInsensitiveOption)
+            regex = QRegularExpression(text)    
+            if not self.case_cb.isChecked():    
+                regex.setPatternOptions(QRegularExpression.PatternOption.CaseInsensitiveOption)
+            else:
+                regex.setPatternOptions(QRegularExpression.PatternOption.NoPatternOption)
             it = doc.find(regex, start_pos)        
             if it.isNull():            
                 it = doc.find(regex, 0)  # wrap around to start of document
@@ -2007,26 +1989,28 @@ identifier: {identifier}
         cur = self.editor.textCursor()
         pos = cur.selectionStart() if cur.hasSelection() else cur.position()
 
-        if self.case_cb.isChecked():
-            it = doc.find(text, 0)
-        else:
-            regex = QRegularExpression(text)
+
+        regex = QRegularExpression(text)
+        it = doc.find(regex, 0)
+        if not self.case_cb.isChecked():
             regex.setPatternOptions(QRegularExpression.PatternOption.CaseInsensitiveOption)
-            it = doc.find(regex, 0)
+        else:
+            regex.setPatternOptions(QRegularExpression.PatternOption.NoPatternOption)
+
 
         last = None
         while not it.isNull() and it.selectionEnd() <= pos:
             last = it
-            it = doc.find(text, it.selectionEnd())
+            it = doc.find(regex, it.selectionEnd())
         if last:
             self.editor.setTextCursor(last)
         else:
             # wrap to last match in document
-            it = doc.find(text, 0)
+            it = doc.find(regex, 0)
             last = None
             while not it.isNull():
                 last = it
-                it = doc.find(text, it.selectionEnd())
+                it = doc.find(regex, it.selectionEnd())
             if last:
                 self.editor.setTextCursor(last)
         self.update_highlight()
@@ -2066,11 +2050,16 @@ identifier: {identifier}
             doc = self.editor.document()
             #flags = 0 if self.case_cb.isChecked() else getattr(__import__('PyQt6.Qt', fromlist=['Qt']).Qt, 'CaseInsensitive', 0)
             flags = 0
-            it = doc.find(find_text, 0)
+            regex = QRegularExpression(find_text)
+            if not self.case_cb.isChecked():
+                regex.setPatternOptions(QRegularExpression.PatternOption.CaseInsensitiveOption)
+            else:
+                regex.setPatternOptions(QRegularExpression.PatternOption.NoPatternOption)
+            it = doc.find(regex, 0)
             cursors = []
             while not it.isNull():
                 cursors.append(it)
-                it = doc.find(find_text, it.selectionEnd())
+                it = doc.find(regex, it.selectionEnd())
 
             # Create ExtraSelection objects
             for c in cursors:
@@ -2246,8 +2235,7 @@ identifier: {identifier}
         #print("aantal vervangingen van Romeinse cijfers:", aantal_vervangen)
         
     def romeinse_cijfers_vervangen(self):
-        #print("romeinse cijfers vervangen")
-        # indien selectie, dan selectie omzetten
+        # indien er een selectie is, dan alleen de selectie omzetten
         selectie = self.editor.textCursor()
         if selectie.hasSelection():
             geselecteerde_tekst = selectie.selectedText()
@@ -2257,11 +2245,7 @@ identifier: {identifier}
             QMessageBox.about(self, self.meldingen["Geen Selectie"], 
                               self.meldingen["Selecteer eerst tekst om om te zetten naar cijfers."])
 
-        # indien geen selectie, dan pop-up met de vraag of alle Romeinse cijfers in de tekst vervangen moeten worden
-        ...
-        # indien alles vervangen moet worden, dan alles vdervangen
-        ...
-    
+   
 
     def romeinse_cijfers_omzetten(self, romein_str):
         rom_num = {

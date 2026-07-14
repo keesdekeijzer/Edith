@@ -39,3 +39,7 @@ Bij import epub: afbeeldingen krijgen volledig lokaal pad: "/home/.../.../epub_f
 Bij export epub: afbeeldingen komen in "images" in de epub, de verwijzing in de html is naar src="images/...jpg"
 
 Misschien handig om de map images van te voren te legen of the backuppen, want anders komen afbeeldingen van eerdere epubs ook weer mee.
+
+## Zoeken en vervangen
+
+Zoeken is niet hoofdlettergevoelig, maar vervangen wel als dat is aangezet.
