@@ -49,6 +49,7 @@ from memo import Memo
 from memolijst import MemoLijst
 
 from teksten import menu_teksten_nl, menu_teksten_en, menu_teksten_de, meldingen_de, meldingen_en, meldingen_nl
+from keuze_teksten import keuze_teksten_nl, keuze_teksten_en, keuze_teksten_de
 
 
 class Markdown_Editor(QMainWindow):
@@ -105,6 +106,16 @@ class Markdown_Editor(QMainWindow):
         else:
             menu_teksten = menu_teksten_nl
             self.meldingen = meldingen_nl
+
+        keuze_teksten = {}
+
+        if self.taal == "en":
+            keuze_teksten = keuze_teksten_en
+        elif self.taal == "de":
+            keuze_teksten = keuze_teksten_de
+        else:
+            keuze_teksten = keuze_teksten_nl
+
 
         actie = {}
 
@@ -227,6 +238,10 @@ class Markdown_Editor(QMainWindow):
         maak_menu_punt(self, "sneltoetsen_alt_actie", menu_teksten["Sneltoetsen (Alt)"], "", self.sneltoetsen_alt)
 
         maak_menu_punt(self, "markdown_actie", menu_teksten["Markdown"], "", self.markdown_overzicht)
+
+        # verder uitwerken van menu's en acties kan hier worden toegevoegd indien nodig
+        for key, value in keuze_teksten.items():
+            print(f"Keuze tekst: {key} -> {value}")
         
         # Maak menubalk en menu's        
         
@@ -305,6 +320,8 @@ class Markdown_Editor(QMainWindow):
         invoegen_menu.addAction(actie["if_name_is_main_actie"])
         invoegen_menu.addAction(actie["frontmatter_actie"])
         invoegen_menu.addAction(actie["frontmatter_epub_actie"])
+
+        invoegen_menu = self.menuBar().addMenu(menu_teksten["Teksten"])
 
         extra_menu = self.menuBar().addMenu(menu_teksten["Extra"])
         extra_menu.addAction(actie["memo_actie"])

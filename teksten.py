@@ -323,6 +323,10 @@ menu_teksten_nl["Alle Romeinse cijfers vervangen"] = "Alle Romeinse cijfers verv
 menu_teksten_en["Alle Romeinse cijfers vervangen"] = "Replace all Roman numerals"
 menu_teksten_de["Alle Romeinse cijfers vervangen"] = "Alle Römische Zahlen ersetzen"
 
+menu_teksten_nl["Teksten"] = "Teksten"
+menu_teksten_en["Teksten"] = "Texts"
+menu_teksten_de["Teksten"] = "Texte"
+
 #
 # Meldingen
 #
