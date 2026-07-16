@@ -52,6 +52,23 @@ from teksten import menu_teksten_nl, menu_teksten_en, menu_teksten_de, meldingen
 from keuze_teksten import keuze_teksten_nl, keuze_teksten_en, keuze_teksten_de
 
 
+menuBarStyle = """
+            QMenuBar {
+                background: #2b2b2b;
+                color: #e6e6e6;
+                border-bottom: 1px solid #444;
+                                     padding: 5px;
+            }
+            QMenuBar::item {
+                padding: 5px 10px;
+                border: 1px solid transparent;
+            }
+            QMenuBar::item:selected {
+                background: #444;
+            }
+        """
+
+
 class Markdown_Editor(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -107,14 +124,14 @@ class Markdown_Editor(QMainWindow):
             menu_teksten = menu_teksten_nl
             self.meldingen = meldingen_nl
 
-        keuze_teksten = {}
+        self.keuze_teksten = {}
 
         if self.taal == "en":
-            keuze_teksten = keuze_teksten_en
+            self.keuze_teksten = keuze_teksten_en
         elif self.taal == "de":
-            keuze_teksten = keuze_teksten_de
+            self.keuze_teksten = keuze_teksten_de
         else:
-            keuze_teksten = keuze_teksten_nl
+            self.keuze_teksten = keuze_teksten_nl
 
 
         actie = {}
@@ -239,29 +256,35 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "markdown_actie", menu_teksten["Markdown"], "", self.markdown_overzicht)
 
+        maak_menu_punt(self, "keuzetekst1_actie", self.keuze_teksten["Keuze 1"], "Alt+1", self.keuze_1)
+
+        maak_menu_punt(self, "keuzetekst2_actie", self.keuze_teksten["Keuze 2"], "Alt+2", self.keuze_2)
+
+        maak_menu_punt(self, "keuzetekst3_actie", self.keuze_teksten["Keuze 3"], "Alt+3", self.keuze_3)
+
+        maak_menu_punt(self, "keuzetekst4_actie", self.keuze_teksten["Keuze 4"], "Alt+4", self.keuze_4)
+
+        maak_menu_punt(self, "keuzetekst5_actie", self.keuze_teksten["Keuze 5"], "Alt+5", self.keuze_5)
+
+        maak_menu_punt(self, "keuzetekst6_actie", self.keuze_teksten["Keuze 6"], "Alt+6", self.keuze_6)
+
+        maak_menu_punt(self, "keuzetekst7_actie", self.keuze_teksten["Keuze 7"], "Alt+7", self.keuze_7)
+
+        maak_menu_punt(self, "keuzetekst8_actie", self.keuze_teksten["Keuze 8"], "Alt+8", self.keuze_8)
+
+        maak_menu_punt(self, "keuzetekst9_actie", self.keuze_teksten["Keuze 9"], "Alt+9", self.keuze_9)
+
+        maak_menu_punt(self, "keuzetekst10_actie", self.keuze_teksten["Keuze 10"], "Alt+0", self.keuze_10)
+
         # verder uitwerken van menu's en acties kan hier worden toegevoegd indien nodig
-        for key, value in keuze_teksten.items():
+        for key, value in self.keuze_teksten.items():
             print(f"Keuze tekst: {key} -> {value}")
         
         # Maak menubalk en menu's        
         
 
         # set style for menubar and menu's
-        self.menuBar().setStyleSheet("""
-            QMenuBar {
-                background: #2b2b2b;
-                color: #e6e6e6;
-                border-bottom: 1px solid #444;
-                                     padding: 5px;
-            }
-            QMenuBar::item {
-                padding: 5px 10px;
-                border: 1px solid transparent;
-            }
-            QMenuBar::item:selected {
-                background: #444;
-            }
-        """)
+        self.menuBar().setStyleSheet(menuBarStyle)
         
         bestand_menu = self.menuBar().addMenu(menu_teksten["Bestand"])        
         bestand_menu.addAction(actie["nieuw_actie"])        
@@ -322,6 +345,16 @@ class Markdown_Editor(QMainWindow):
         invoegen_menu.addAction(actie["frontmatter_epub_actie"])
 
         invoegen_menu = self.menuBar().addMenu(menu_teksten["Teksten"])
+        invoegen_menu.addAction(actie["keuzetekst1_actie"])
+        invoegen_menu.addAction(actie["keuzetekst2_actie"])
+        invoegen_menu.addAction(actie["keuzetekst3_actie"])
+        invoegen_menu.addAction(actie["keuzetekst4_actie"])
+        invoegen_menu.addAction(actie["keuzetekst5_actie"])
+        invoegen_menu.addAction(actie["keuzetekst6_actie"])
+        invoegen_menu.addAction(actie["keuzetekst7_actie"])
+        invoegen_menu.addAction(actie["keuzetekst8_actie"])
+        invoegen_menu.addAction(actie["keuzetekst9_actie"])
+        invoegen_menu.addAction(actie["keuzetekst10_actie"])
 
         extra_menu = self.menuBar().addMenu(menu_teksten["Extra"])
         extra_menu.addAction(actie["memo_actie"])
@@ -2302,6 +2335,36 @@ identifier: {identifier}
         except FileNotFoundError:
             config = {}
         return config
+
+    def keuze_1(self):
+        QMessageBox.information(self, self.keuze_teksten["Keuze 1"], self.meldingen["Je hebt keuze 1 geselecteerd."])
+
+    def keuze_2(self):
+        QMessageBox.information(self, self.keuze_teksten["Keuze 2"], self.meldingen["Je hebt keuze 2 geselecteerd."])
+
+    def keuze_3(self):
+        QMessageBox.information(self, self.keuze_teksten["Keuze 3"], self.meldingen["Je hebt keuze 3 geselecteerd."])
+
+    def keuze_4(self):
+        QMessageBox.information(self, self.keuze_teksten["Keuze 4"], self.meldingen["Je hebt keuze 4 geselecteerd."])
+
+    def keuze_5(self):
+        QMessageBox.information(self, self.keuze_teksten["Keuze 5"], self.meldingen["Je hebt keuze 5 geselecteerd."])
+
+    def keuze_6(self):
+        QMessageBox.information(self, self.keuze_teksten["Keuze 6"], self.meldingen["Je hebt keuze 6 geselecteerd."])
+
+    def keuze_7(self):
+        QMessageBox.information(self, self.keuze_teksten["Keuze 7"], self.meldingen["Je hebt keuze 7 geselecteerd."])
+
+    def keuze_8(self):
+        QMessageBox.information(self, self.keuze_teksten["Keuze 8"], self.meldingen["Je hebt keuze 8 geselecteerd."])
+
+    def keuze_9(self):
+        QMessageBox.information(self, self.keuze_teksten["Keuze 9"], self.meldingen["Je hebt keuze 9 geselecteerd."])
+
+    def keuze_10(self):
+        QMessageBox.information(self, self.keuze_teksten["Keuze 10"], self.meldingen["Je hebt keuze 10 geselecteerd."])
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

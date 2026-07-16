@@ -711,3 +711,42 @@ meldingen_nl["Alle Romeinse cijfers vervangen"] = "Alle Romeinse cijfers vervang
 meldingen_en["Alle Romeinse cijfers vervangen"] = "Replace all Roman numerals"
 meldingen_de["Alle Romeinse cijfers vervangen"] = "Alle Römische Zahlen ersetzen"
 
+meldingen_nl["Je hebt keuze 1 geselecteerd."] = "Je hebt keuze 1 geselecteerd."
+meldingen_en["Je hebt keuze 1 geselecteerd."] = "You have selected option 1."
+meldingen_de["Je hebt keuze 1 geselecteerd."] = "Sie haben Option 1 ausgewählt."
+
+meldingen_nl["Je hebt keuze 2 geselecteerd."] = "Je hebt keuze 2 geselecteerd."
+meldingen_en["Je hebt keuze 2 geselecteerd."] = "You have selected option 2."
+meldingen_de["Je hebt keuze 2 geselecteerd."] = "Sie haben Option 2 ausgewählt."
+
+meldingen_nl["Je hebt keuze 3 geselecteerd."] = "Je hebt keuze 3 geselecteerd."
+meldingen_en["Je hebt keuze 3 geselecteerd."] = "You have selected option 3."
+meldingen_de["Je hebt keuze 3 geselecteerd."] = "Sie haben Option 3 ausgewählt."
+
+meldingen_nl["Je hebt keuze 4 geselecteerd."] = "Je hebt keuze 4 geselecteerd."
+meldingen_en["Je hebt keuze 4 geselecteerd."] = "You have selected option 4."
+meldingen_de["Je hebt keuze 4 geselecteerd."] = "Sie haben Option 4 ausgewählt."
+
+meldingen_nl["Je hebt keuze 5 geselecteerd."] = "Je hebt keuze 5 geselecteerd."
+meldingen_en["Je hebt keuze 5 geselecteerd."] = "You have selected option 5."
+meldingen_de["Je hebt keuze 5 geselecteerd."] = "Sie haben Option 5 ausgewählt."
+
+meldingen_nl["Je hebt keuze 6 geselecteerd."] = "Je hebt keuze 6 geselecteerd."
+meldingen_en["Je hebt keuze 6 geselecteerd."] = "You have selected option 6."
+meldingen_de["Je hebt keuze 6 geselecteerd."] = "Sie haben Option 6 ausgewählt."
+
+meldingen_nl["Je hebt keuze 7 geselecteerd."] = "Je hebt keuze 7 geselecteerd."
+meldingen_en["Je hebt keuze 7 geselecteerd."] = "You have selected option 7."
+meldingen_de["Je hebt keuze 7 geselecteerd."] = "Sie haben Option 7 ausgewählt."
+
+meldingen_nl["Je hebt keuze 8 geselecteerd."] = "Je hebt keuze 8 geselecteerd."
+meldingen_en["Je hebt keuze 8 geselecteerd."] = "You have selected option 8."
+meldingen_de["Je hebt keuze 8 geselecteerd."] = "Sie haben Option 8 ausgewählt."
+
+meldingen_nl["Je hebt keuze 9 geselecteerd."] = "Je hebt keuze 9 geselecteerd."
+meldingen_en["Je hebt keuze 9 geselecteerd."] = "You have selected option 9."
+meldingen_de["Je hebt keuze 9 geselecteerd."] = "Sie haben Option 9 ausgewählt."
+
+meldingen_nl["Je hebt keuze 10 geselecteerd."] = "Je hebt keuze 10 geselecteerd."
+meldingen_en["Je hebt keuze 10 geselecteerd."] = "You have selected option 10."
+meldingen_de["Je hebt keuze 10 geselecteerd."] = "Sie haben Option 10 ausgewählt."
