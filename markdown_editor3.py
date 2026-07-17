@@ -50,7 +50,7 @@ from memolijst import MemoLijst
 
 from teksten import menu_teksten_nl, menu_teksten_en, menu_teksten_de, meldingen_de, meldingen_en, meldingen_nl
 from keuze_teksten import keuze_teksten_nl, keuze_teksten_en, keuze_teksten_de
-
+from keuze_teksten_inhoud import keuze_teksten_inhoud
 
 menuBarStyle = """
             QMenuBar {
@@ -2338,34 +2338,44 @@ identifier: {identifier}
 
     def keuze_1(self):
         QMessageBox.information(self, self.keuze_teksten["Keuze 1"], self.meldingen["Je hebt keuze 1 geselecteerd."])
+        print(keuze_teksten_inhoud["Keuze 1"])
 
     def keuze_2(self):
         QMessageBox.information(self, self.keuze_teksten["Keuze 2"], self.meldingen["Je hebt keuze 2 geselecteerd."])
+        print(keuze_teksten_inhoud["Keuze 2"])
 
     def keuze_3(self):
         QMessageBox.information(self, self.keuze_teksten["Keuze 3"], self.meldingen["Je hebt keuze 3 geselecteerd."])
+        print(keuze_teksten_inhoud["Keuze 3"])
 
     def keuze_4(self):
         QMessageBox.information(self, self.keuze_teksten["Keuze 4"], self.meldingen["Je hebt keuze 4 geselecteerd."])
+        print(keuze_teksten_inhoud["Keuze 4"])
 
     def keuze_5(self):
         QMessageBox.information(self, self.keuze_teksten["Keuze 5"], self.meldingen["Je hebt keuze 5 geselecteerd."])
+        print(keuze_teksten_inhoud["Keuze 5"])
 
     def keuze_6(self):
         QMessageBox.information(self, self.keuze_teksten["Keuze 6"], self.meldingen["Je hebt keuze 6 geselecteerd."])
+        print(keuze_teksten_inhoud["Keuze 6"])
 
     def keuze_7(self):
         QMessageBox.information(self, self.keuze_teksten["Keuze 7"], self.meldingen["Je hebt keuze 7 geselecteerd."])
+        print(keuze_teksten_inhoud["Keuze 7"])
 
     def keuze_8(self):
         QMessageBox.information(self, self.keuze_teksten["Keuze 8"], self.meldingen["Je hebt keuze 8 geselecteerd."])
+        print(keuze_teksten_inhoud["Keuze 8"])
 
     def keuze_9(self):
         QMessageBox.information(self, self.keuze_teksten["Keuze 9"], self.meldingen["Je hebt keuze 9 geselecteerd."])
+        print(keuze_teksten_inhoud["Keuze 9"])
 
     def keuze_10(self):
         QMessageBox.information(self, self.keuze_teksten["Keuze 10"], self.meldingen["Je hebt keuze 10 geselecteerd."])
-
+        print(keuze_teksten_inhoud["Keuze 10"])
+5
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Markdown_Editor()
