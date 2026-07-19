@@ -3,7 +3,8 @@ import sys
 
 from PyQt6 import QtWidgets
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QApplication, QCheckBox, QFileDialog, QInputDialog, QLabel, QLineEdit, QMainWindow, QPushButton, QTextEdit
+from PyQt6.QtWidgets import QApplication, QCheckBox, QFileDialog, QInputDialog, QLabel
+from PyQt6.QtWidgets import QLineEdit, QMainWindow, QPushButton, QTextEdit, QPlainTextEdit
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 import ebooklib
