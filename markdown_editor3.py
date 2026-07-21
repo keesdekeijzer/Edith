@@ -53,6 +53,10 @@ from teksten import menu_teksten_nl, menu_teksten_en, menu_teksten_de, meldingen
 from keuze_teksten import keuze_teksten_nl, keuze_teksten_en, keuze_teksten_de
 from keuze_teksten_inhoud import keuze_teksten_inhoud
 
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
+
+
 menuBarStyle = """
             QMenuBar {
                 background: #2b2b2b;
@@ -1728,11 +1732,13 @@ class Markdown_Editor(QMainWindow):
         img.save(output_path, "JPEG", quality=95)
         return output_path
 
+    """
     def zoeken_en_vervangen(self):
         #self.zoek_venster = ZoekEnVervang()
         #self.zoek_venster.show()
         ...
-
+    """
+        
     def fit_text(self, text, font_path, box_w, box_h, box_xy=(0,0), start_size=10, max_size=300):   
         x0, y0 = box_xy 
         # Binary search op fontszie    
@@ -2338,45 +2344,110 @@ identifier: {identifier}
         return config
 
     def keuze_1(self):
-        QMessageBox.information(self, self.keuze_teksten["Keuze 1"], self.meldingen["Je hebt keuze 1 geselecteerd."])
-        print(keuze_teksten_inhoud["Keuze 1"])
+        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 1"])
 
     def keuze_2(self):
-        QMessageBox.information(self, self.keuze_teksten["Keuze 2"], self.meldingen["Je hebt keuze 2 geselecteerd."])
-        print(keuze_teksten_inhoud["Keuze 2"])
+        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 2"])
 
     def keuze_3(self):
-        QMessageBox.information(self, self.keuze_teksten["Keuze 3"], self.meldingen["Je hebt keuze 3 geselecteerd."])
-        print(keuze_teksten_inhoud["Keuze 3"])
+        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 3"])
 
     def keuze_4(self):
-        QMessageBox.information(self, self.keuze_teksten["Keuze 4"], self.meldingen["Je hebt keuze 4 geselecteerd."])
-        print(keuze_teksten_inhoud["Keuze 4"])
+        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 4"])
 
     def keuze_5(self):
-        QMessageBox.information(self, self.keuze_teksten["Keuze 5"], self.meldingen["Je hebt keuze 5 geselecteerd."])
-        print(keuze_teksten_inhoud["Keuze 5"])
+        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 5"])
 
     def keuze_6(self):
-        QMessageBox.information(self, self.keuze_teksten["Keuze 6"], self.meldingen["Je hebt keuze 6 geselecteerd."])
-        print(keuze_teksten_inhoud["Keuze 6"])
+        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 6"])
 
     def keuze_7(self):
-        QMessageBox.information(self, self.keuze_teksten["Keuze 7"], self.meldingen["Je hebt keuze 7 geselecteerd."])
-        print(keuze_teksten_inhoud["Keuze 7"])
+        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 7"])
 
     def keuze_8(self):
-        QMessageBox.information(self, self.keuze_teksten["Keuze 8"], self.meldingen["Je hebt keuze 8 geselecteerd."])
-        print(keuze_teksten_inhoud["Keuze 8"])
+        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 8"])
 
     def keuze_9(self):
-        QMessageBox.information(self, self.keuze_teksten["Keuze 9"], self.meldingen["Je hebt keuze 9 geselecteerd."])
-        print(keuze_teksten_inhoud["Keuze 9"])
+        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 9"])
 
     def keuze_10(self):
-        QMessageBox.information(self, self.keuze_teksten["Keuze 10"], self.meldingen["Je hebt keuze 10 geselecteerd."])
-        print(keuze_teksten_inhoud["Keuze 10"])
-5
+        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 10"])
+
+
+    # Versleuteling en ontsleuteling van tekst met AES-GCM
+    def derive_key_from_password(self, password: str, salt: bytes) -> bytes:
+        kdf = Scrypt(salt=salt, length=32, n=2**15, r=8, p=1)
+        return kdf.derive(password.encode("utf-8"))
+
+    def encrypt_file(self, input_path: str, output_path: str, password: str) -> None:
+        nonce = os.urandom(12)
+        salt = os.urandom(16)
+
+        key = self.derive_key_from_password(password, salt)
+        aesgcm = AESGCM(key)
+
+        with open(input_path, "rb") as f:
+            plaintext = f.read()
+
+        ciphertext = aesgcm.encrypt(nonce, plaintext, associated_data=None)
+
+        magic = b"PW01"
+        with open(output_path, "wb") as f:
+            f.write(magic)
+            f.write(salt)
+            f.write(nonce)
+            f.write(ciphertext)
+
+        """
+        # Verwacht: FILE_PASSWORD=...
+        password = os.environ.get("FILE_PASSWORD")
+        if not password:
+            raise SystemExit("Ontbrekende omgevingsvariabele: FILE_PASSWORD")
+
+
+
+        encrypt_file(sys.argv[1], sys.argv[2], password)
+        print("Versleuteld:", sys.argv[2])
+        """
+
+    def decrypt_file(self, input_path: str, output_path: str, password: str) -> None:
+        with open(input_path, "rb") as f:
+            data = f.read()
+
+        magic = data[:4]
+        if magic != b"PW01":
+            raise ValueError("Niet-herkend bestand (magic header klopt niet).")
+
+        salt = data[4:20]
+        nonce = data[20:32]
+        ciphertext = data[32:]
+
+        key = self.derive_key_from_password(password, salt)
+        aesgcm = AESGCM(key)
+
+        plaintext = aesgcm.decrypt(nonce, ciphertext, associated_data=None)
+
+        with open(output_path, "wb") as f:
+            f.write(plaintext)
+
+    """
+    password = os.environ.get("FILE_PASSWORD")
+    if not password:
+        raise SystemExit("Ontbrekende omgevingsvariabele: FILE_PASSWORD")
+
+    import sys
+    if len(sys.argv) != 3:
+        print('Gebruik: python decrypt_file.py <input> <output>')
+        raise SystemExit(1)
+
+    decrypt_file(sys.argv[1], sys.argv[2], password)
+    print("Ontsleuteld:", sys.argv[2])
+    """
+
+
+
+
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Markdown_Editor()
