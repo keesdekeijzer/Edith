@@ -327,6 +327,15 @@ menu_teksten_nl["Teksten"] = "Teksten"
 menu_teksten_en["Teksten"] = "Texts"
 menu_teksten_de["Teksten"] = "Texte"
 
+menu_teksten_nl["Versleutel Bestand"] = "Versleutel Bestand"
+menu_teksten_en["Versleutel Bestand"] = "Encrypt File"
+menu_teksten_de["Versleutel Bestand"] = "Datei verschlüsseln"
+
+menu_teksten_nl["Ontsleutel Bestand"] = "Ontsleutel Bestand"
+menu_teksten_en["Ontsleutel Bestand"] = "Decrypt File"
+menu_teksten_de["Ontsleutel Bestand"] = "Datei entschlüsseln"
+
+
 #
 # Meldingen
 #
@@ -748,5 +757,70 @@ meldingen_en["Je hebt keuze 9 geselecteerd."] = "You have selected option 9."
 meldingen_de["Je hebt keuze 9 geselecteerd."] = "Sie haben Option 9 ausgewählt."
 
 meldingen_nl["Je hebt keuze 10 geselecteerd."] = "Je hebt keuze 10 geselecteerd."
-meldingen_en["Je hebt keuze 10 geselecteerd."] = "You have selected option 10."
+meldingen_en["Je hebt keuze 10 geselecteerdWachtwoord invoeren."] = "You have selected option 10."
 meldingen_de["Je hebt keuze 10 geselecteerd."] = "Sie haben Option 10 ausgewählt."
+
+meldingen_nl["Versleutel Bestand"] = "Versleutel Bestand"
+meldingen_en["Versleutel Bestand"] = "Encrypt File"
+meldingen_de["Versleutel Bestand"] = "Datei verschlüsseln"
+
+meldingen_nl["Alle bestanden (*)"] = "Alle bestanden (*)"
+meldingen_en["Alle bestanden (*)"] = "All files (*)"
+meldingen_de["Alle bestanden (*)"] = "Alle Dateien (*)"
+
+meldingen_nl["Versleutelde bestanden (*.enc)"] = "Versleutelde bestanden (*.enc)"
+meldingen_en["Versleutelde bestanden (*.enc)"] = "Encrypted files (*.enc)"
+meldingen_de["Versleutelde bestanden (*.enc)"] = "Verschlüsselte Dateien (*.enc)"
+
+meldingen_nl["Wachtwoord invoeren"] = "Wachtwoord invoeren"
+meldingen_en["Wachtwoord invoeren"] = "Enter password"
+meldingen_de["Wachtwoord invoeren"] = "Passwort eingeben"
+
+meldingen_nl["Voer een wachtwoord in voor versleuteling:"] = "Voer een wachtwoord in voor versleuteling:"
+meldingen_en["Voer een wachtwoord in voor versleuteling:"] = "Enter a password for encryption:"
+meldingen_de["Voer een wachtwoord in voor versleuteling:"] = "Geben Sie ein Passwort für die Verschlüsselung ein:"
+
+meldingen_nl["Succes"] = "Succes"
+meldingen_en["Succes"] = "Success"
+meldingen_de["Succes"] = "Erfolg"
+
+meldingen_nl["Bestand succesvol versleuteld!"] = "Bestand succesvol versleuteld!"
+meldingen_en["Bestand succesvol versleuteld!"] = "File successfully encrypted!"
+meldingen_de["Bestand succesvol versleuteld!"] = "Datei erfolgreich verschlüsselt!"
+
+meldingen_nl["Fout"] = "Fout"
+meldingen_en["Fout"] = "Error"
+meldingen_de["Fout"] = "Fehler"
+
+meldingen_nl["Fout bij versleuteling"] = "Fout bij versleuteling"
+meldingen_en["Fout bij versleuteling"] = "Error during encryption"
+meldingen_de["Fout bij versleuteling"] = "Fehler bei der Verschlüsselung"
+
+meldingen_nl["Ontsleutel Bestand"] = "Ontsleutel Bestand"
+meldingen_en["Ontsleutel Bestand"] = "Decrypt File"
+meldingen_de["Ontsleutel Bestand"] = "Datei entschlüsseln"
+
+meldingen_nl["Ontsleutelde bestanden (*.dec)"] = "Ontsleutelde bestanden (*.dec)"
+meldingen_en["Ontsleutelde bestanden (*.dec)"] = "Decrypted files (*.dec)"
+meldingen_de["Ontsleutelde bestanden (*.dec)"] = "Entschlüsselte Dateien (*.dec)"
+
+meldingen_nl["Versleutelde bestanden (*.enc)"] = "Versleutelde bestanden (*.enc)"
+meldingen_en["Versleutelde bestanden (*.enc)"] = "Encrypted files (*.enc)"
+meldingen_de["Versleutelde bestanden (*.enc)"] = "Verschlüsselte Dateien (*.enc)"
+
+meldingen_nl["Voer het wachtwoord in voor ontsleuteling:"] = "Voer het wachtwoord in voor ontsleuteling:"
+meldingen_en["Voer het wachtwoord in voor ontsleuteling:"] = "Enter the password for decryption:"
+meldingen_de["Voer het wachtwoord in voor ontsleuteling:"] = "Geben Sie das Passwort für die Entschlüsselung ein:"
+
+meldingen_nl["Bestand succesvol ontsleuteld!"] = "Bestand succesvol ontsleuteld!"
+meldingen_en["Bestand succesvol ontsleuteld!"] = "File successfully decrypted!"
+meldingen_de["Bestand succesvol ontsleuteld!"] = "Datei erfolgreich entschlüsselt!"
+
+meldingen_nl["Fout bij ontsleuteling"] = "Fout bij ontsleuteling"
+meldingen_en["Fout bij ontsleuteling"] = "Error during decryption"
+meldingen_de["Fout bij ontsleuteling"] = "Fehler bei der Entschlüsselung"
+
+meldingen_nl["Opslaan als"] = "Opslaan als"
+meldingen_en["Opslaan als"] = "Save as"
+meldingen_de["Opslaan als"] = "Speichern unter"
+

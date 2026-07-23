@@ -281,6 +281,10 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "keuzetekst10_actie", self.keuze_teksten["Keuze 10"], "Alt+0", self.keuze_10)
 
+        maak_menu_punt(self, "versleutel_actie", menu_teksten["Versleutel Bestand"], "", self.versleutelen)
+
+        maak_menu_punt(self, "ontsleutel_actie", menu_teksten["Ontsleutel Bestand"], "", self.ontsleutelen)
+
         # verder uitwerken van menu's en acties kan hier worden toegevoegd indien nodig
         for key, value in self.keuze_teksten.items():
             print(f"Keuze tekst: {key} -> {value}")
@@ -365,6 +369,8 @@ class Markdown_Editor(QMainWindow):
         extra_menu.addAction(actie["memo_actie"])
         extra_menu.addAction(actie["memolijst_actie"])
         extra_menu.addAction(actie["configuratie_bewerken_actie"])
+        extra_menu.addAction(actie["versleutel_actie"])
+        extra_menu.addAction(actie["ontsleutel_actie"])
 
         hulp_menu = self.menuBar().addMenu(menu_teksten["Help"])
         hulp_menu.addAction(actie["over_actie"])
@@ -2444,8 +2450,76 @@ identifier: {identifier}
     print("Ontsleuteld:", sys.argv[2])
     """
 
+    def versleutelen(self):
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            self.meldingen["Versleutel Bestand"],
+            "",
+            self.meldingen["Alle bestanden (*)"]
+        )
+
+        if not path:
+            return
+
+        output_path, _ = QFileDialog.getSaveFileName(
+            self,
+            self.meldingen["Opslaan als"],
+            "",
+            self.meldingen["Versleutelde bestanden (*.enc)"]
+        )
+
+        if not output_path:
+            return
+
+        password, ok = QInputDialog.getText(
+            self,
+            self.meldingen["Wachtwoord invoeren"],
+            self.meldingen["Voer een wachtwoord in voor versleuteling:"],
+            QLineEdit.EchoMode.Password
+        )
+
+        if ok and password:
+            try:
+                self.encrypt_file(path, output_path, password)
+                QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Bestand succesvol versleuteld!"])
+            except Exception as e:
+                QMessageBox.critical(self, self.meldingen["Fout"], f"{self.meldingen['Fout bij versleuteling']}: {e}")
 
 
+    def ontsleutelen(self):
+        path, _ = QFileDialog.getOpenFileName(
+            self,
+            self.meldingen["Ontsleutel Bestand"],
+            "",
+            self.meldingen["Versleutelde bestanden (*.enc)"]
+        )
+
+        if not path:
+            return
+
+        output_path, _ = QFileDialog.getSaveFileName(
+            self,
+            self.meldingen["Opslaan als"],
+            "",
+            self.meldingen["Alle bestanden (*)"]
+        )
+
+        if not output_path:
+            return
+
+        password, ok = QInputDialog.getText(
+            self,
+            self.meldingen["Wachtwoord invoeren"],
+            self.meldingen["Voer het wachtwoord in voor ontsleuteling:"],
+            QLineEdit.EchoMode.Password
+        )
+
+        if ok and password:
+            try:
+                self.decrypt_file(path, output_path, password)
+                QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Bestand succesvol ontsleuteld!"])
+            except Exception as e:
+                QMessageBox.critical(self, self.meldingen["Fout"], f"{self.meldingen['Fout bij ontsleuteling']}: {e}")
 
 
 if __name__ == "__main__":
