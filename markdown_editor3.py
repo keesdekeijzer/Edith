@@ -56,6 +56,8 @@ from keuze_teksten_inhoud import keuze_teksten_inhoud
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
 
+from help_window import HelpWindow
+
 
 menuBarStyle = """
             QMenuBar {
@@ -261,6 +263,8 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "markdown_actie", menu_teksten["Markdown"], "", self.markdown_overzicht)
 
+        maak_menu_punt(self, "help_actie", menu_teksten["Help"], "F1", self.edith_help)
+
         maak_menu_punt(self, "keuzetekst1_actie", self.keuze_teksten["Keuze 1"], "Alt+1", self.keuze_1)
 
         maak_menu_punt(self, "keuzetekst2_actie", self.keuze_teksten["Keuze 2"], "Alt+2", self.keuze_2)
@@ -377,6 +381,7 @@ class Markdown_Editor(QMainWindow):
         hulp_menu.addAction(actie["sneltoetsen_actie"])
         hulp_menu.addAction(actie["sneltoetsen_alt_actie"])
         hulp_menu.addAction(actie["markdown_actie"])
+        hulp_menu.addAction(actie["help_actie"])
 
 
         v_layout = QVBoxLayout()
@@ -984,6 +989,17 @@ class Markdown_Editor(QMainWindow):
 
     def markdown_overzicht(self):
         QMessageBox.about(self, self.meldingen["Markdown"], self.meldingen["Markdown_help"])
+
+    def edith_help(self):
+        print("Help venster openen")
+        help_venster = HelpWindow()
+
+        print("Help venster aangemaakt")
+        help_venster.show()
+        
+        print("Help venster getoond")
+
+
 
     def datum(self):
         nu = datetime.datetime.now()
@@ -1737,14 +1753,7 @@ class Markdown_Editor(QMainWindow):
 
         img.save(output_path, "JPEG", quality=95)
         return output_path
-
-    """
-    def zoeken_en_vervangen(self):
-        #self.zoek_venster = ZoekEnVervang()
-        #self.zoek_venster.show()
-        ...
-    """
-        
+    
     def fit_text(self, text, font_path, box_w, box_h, box_xy=(0,0), start_size=10, max_size=300):   
         x0, y0 = box_xy 
         # Binary search op fontszie    
