@@ -992,10 +992,10 @@ class Markdown_Editor(QMainWindow):
 
     def edith_help(self):
         print("Help venster openen")
-        help_venster = HelpWindow()
+        self.help_venster = HelpWindow()
 
         print("Help venster aangemaakt")
-        help_venster.show()
+        self.help_venster.show()
         
         print("Help venster getoond")
 

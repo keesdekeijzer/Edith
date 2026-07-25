@@ -65,6 +65,13 @@ class HelpWindow(QMainWindow):
     def load_help_content(self, content):
         self.web_view.setHtml(content)
 
+    def closeEvent(self, event):        
+        # Clean up the web view and other resources       
+        self.setParent(None)
+        self.deleteLater()
+        self.web_view = None
+        super().closeEvent(event)
+
 
 
 if __name__ == "__main__":
