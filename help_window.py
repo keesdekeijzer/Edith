@@ -63,7 +63,11 @@ class HelpWindow(QMainWindow):
             self.web_view.setHtml("<h1>Please enter a search query.</h1>")
 
     def load_help_content(self, content):
-        self.web_view.setHtml(content)
+        help_file_path = os.path.join(os.path.dirname(__file__), "help_content.html")
+        if os.path.exists(help_file_path):
+            self.web_view.load(QUrl.fromLocalFile(help_file_path))
+        else:
+            self.web_view.setHtml(content)
 
     def closeEvent(self, event):        
         # Clean up the web view and other resources       
