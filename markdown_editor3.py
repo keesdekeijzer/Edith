@@ -381,6 +381,7 @@ class Markdown_Editor(QMainWindow):
         hulp_menu.addAction(actie["sneltoetsen_actie"])
         hulp_menu.addAction(actie["sneltoetsen_alt_actie"])
         hulp_menu.addAction(actie["markdown_actie"])
+        # nog meertalig toevoegen indien nodig
         hulp_menu.addAction(actie["help_actie"])
 
 
