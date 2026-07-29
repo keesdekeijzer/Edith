@@ -1,7 +1,7 @@
 keuze_teksten_inhoud = {}
 
-keuze_teksten_inhoud["Keuze 1"] = "Inhoud van keuze 1"
-keuze_teksten_inhoud["Keuze 2"] = "Inhoud van keuze 2"
+keuze_teksten_inhoud["Keuze 1"] = "The author and publisher have provided this e-book to you without Digital Rights Management software (DRM) applied so that you can enjoy reading it on your personal devices. This e-book is for your personal use only. You may not print or post this e-book, or make this e-book publicly available in any way. You may not copy, reproduce, or upload this e-book, other than to read it on one of your personal devices."
+keuze_teksten_inhoud["Keuze 2"] = "This is a work of fiction. All the characters and events portrayed in this book are fictional, and any resemblance to real people or incidents is purely coincidental."
 keuze_teksten_inhoud["Keuze 3"] = "Inhoud van keuze 3"
 keuze_teksten_inhoud["Keuze 4"] = "Inhoud van keuze 4"
 keuze_teksten_inhoud["Keuze 5"] = "Inhoud van keuze 5"
