@@ -2295,8 +2295,12 @@ identifier: {identifier}
             woorden = r.split()
             aantal_woorden = len(woorden)
             if aantal_woorden > 0:
+                if woorden[aantal_woorden - 1].endswith("."):
+                    if self.is_dit_een_romeins_cijfer(woorden[aantal_woorden - 1][:-1]):
+                        woorden[aantal_woorden - 1] = self.romeinse_cijfers_omzetten(woorden[aantal_woorden - 1][:-1]) + "."
+                        aantal_vervangen += 1
                 if self.is_dit_een_romeins_cijfer(woorden[aantal_woorden - 1]):
-                    woorden[aantal_woorden - 1] = self.romeinse_cijfers_omzetten(woorden[aantal_woorden - 1])
+                    woorden[aantal_woorden - 1] = self.romeinse_cijfers_omzetten(woorden[aantal_woorden - 1]) + "."
                     aantal_vervangen += 1
             genormaliseerde_regel = ' '.join(woorden)
             if n == len(regellijst) -1:

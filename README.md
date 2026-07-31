@@ -30,7 +30,7 @@ Het rechtervenster is het preview-venster waar je de HTML rendering ziet van wat
 
 Het linker- en rechervenster moeten synchroon scrollen. Dit gaat niet geheel gelijkmatig als er afbeeldingen in de preview staan.
 
-Er zijn ook 2 functies om Romeinse cijfers te vervangen door "normale" cijfers. De eerste functie vervangt alleen geselecteerde Romeinse cijfers en de tweede functie vervangt alle Romeinse cijfers in de tekst indien ze als laatste (of als enige) in een regel staan.
+Er zijn ook 2 functies om Romeinse cijfers te vervangen door "normale" cijfers. De eerste functie vervangt alleen geselecteerde Romeinse cijfers en de tweede functie vervangt alle Romeinse cijfers in de tekst indien ze als laatste (of als enige) in een regel staan. Deze functie voegt ook een punt toe achter het cijfer als er nog geen staat.
 
 ## Paden
 
