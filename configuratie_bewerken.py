@@ -40,6 +40,12 @@ class ConfiguratieBewerken(QDialog):
         layout.addWidget(self.mode_choice2)
         layout.addWidget(self.mode_choice3)
 
+        label3 = QLabel("Current language: " + configuratie.get("language", "nl"))
+        layout.addWidget(label3)
+
+        label4 = QLabel("Selected language: " + configuratie.get("language", "nl"))
+        layout.addWidget(label4)
+
         config = self.load_config()
         if config.get('darkmode') == 'light':
             self.mode_choice1.setChecked(True)
