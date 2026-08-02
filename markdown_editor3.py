@@ -1,4 +1,5 @@
 import datetime
+import shutil
 import sys
 
 from PyQt6 import QtWidgets
@@ -1918,6 +1919,9 @@ identifier: {identifier}
         #output_images_dir = os.path.join(output_dir, "images")
         output_images_dir = "images"  # relative path for markdown
         local_output_images_dir = os.path.join(output_dir, "images")  # actual output path for saving images
+        # local_output_images_dir moet eerst leeggemaakt worden als het al bestaat, anders blijven oude afbeeldingen staan
+        if os.path.exists(local_output_images_dir):
+            shutil.rmtree(local_output_images_dir)
         html_items, book = self.extract_epub_html(epub_path)
         fm = self.epub_metadata_to_frontmatter(book)
 
