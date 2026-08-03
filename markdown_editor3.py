@@ -291,8 +291,8 @@ class Markdown_Editor(QMainWindow):
         maak_menu_punt(self, "ontsleutel_actie", menu_teksten["Ontsleutel Bestand"], "", self.ontsleutelen)
 
         # verder uitwerken van menu's en acties kan hier worden toegevoegd indien nodig
-        for key, value in self.keuze_teksten.items():
-            print(f"Keuze tekst: {key} -> {value}")
+        #for key, value in self.keuze_teksten.items():
+            #print(f"Keuze tekst: {key} -> {value}")
         
         # Maak menubalk en menu's        
         
@@ -1444,7 +1444,8 @@ class Markdown_Editor(QMainWindow):
                 parts.append(hoofstuktitel)
                 hoofdstuk_inhoud = ""
             else:
-                hoofdstuk_inhoud += regel + "\n"
+                #hoofdstuk_inhoud += regel + "\n"
+                hoofdstuk_inhoud += regel
                 if hoofdstuk_inhoud.strip():
                     hoofdstuk_inhoud += "\n"
         if hoofdstuk_inhoud.strip():
