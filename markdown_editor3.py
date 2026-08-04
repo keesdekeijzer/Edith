@@ -1524,9 +1524,9 @@ class Markdown_Editor(QMainWindow):
         #cover_path = self.generate_epub_cover(meta, logo_path=cover_file)
         # self, meta, bg_path, logo_path=None, output_path="cover.jpg"
         bg_path = cover_file
-        #print("bg_path",bg_path)
+        #print("(1527) output_path",output_path)  # /home/kees/Data/...epub
         cover_path = self.generate_epub_cover_with_background_and_gradient_and_title_block_and_subtitle_and_author(
-            meta, cover_file, output_path="cover.jpg")
+            meta, cover_file, output_path="images/cover.jpg")  # wel of geen images/ maakt niet uit
         # Afmetingen volgens EPUB-conventies
         
         
@@ -1538,7 +1538,7 @@ class Markdown_Editor(QMainWindow):
 
 
         # set_cover (optioneel maar helpt readers)
-        book.set_cover("cover.jpg", cover_bytes)
+        book.set_cover("images/cover.jpg", cover_bytes)
         # expliciet image item op dezelfde path als in cover.xhtml <img src="images/cover.jpg">
         cover_item = epub.EpubItem(uid="cover_image",    
                                    file_name="images/cover.jpg",    
