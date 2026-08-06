@@ -665,6 +665,10 @@ meldingen_nl["Bestand geexporteerd als tekstbestand!"] = "Bestand geexporteerd a
 meldingen_en["Bestand geexporteerd als tekstbestand!"] = "File exported as text file!"
 meldingen_de["Bestand geexporteerd als tekstbestand!"] = "Datei als Textdatei exportiert!"
 
+meldingen_nl["Bestand geëxporteerd als tekstbestand!"] = "Bestand geëxporteerd als tekstbestand!"
+meldingen_en["Bestand geëxporteerd als tekstbestand!"] = "File exported as text file!"
+meldingen_de["Bestand geëxporteerd als tekstbestand!"] = "Datei als Textdatei exportiert!"
+
 # Spelling controleren
 meldingen_nl["Spelling controleren"] = "Spelling controleren..."
 meldingen_en["Spelling controleren"] = "Check spelling..."
