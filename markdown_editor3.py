@@ -179,6 +179,8 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "export_txt_actie", menu_teksten["Exporteer als tekst"], "", self.export_txt)
 
+        maak_menu_punt(self, "export_txt_per_hoofdstuk_actie", menu_teksten["Exporteer als tekstbestand per hoofdstuk"], "", self.export_txt_per_chapter)
+
         maak_menu_punt(self, "afsluiten_actie", menu_teksten["Afsluiten"], "Ctrl+Q", self.afsluiten)
  
         # Bewerken - Kopieren, Plakken, Knippen, Zoeken, Alles selecteren, Ongedaan maken, Opnieuw doen,
@@ -315,6 +317,7 @@ class Markdown_Editor(QMainWindow):
         bestand_menu.addAction(actie["export_word_actie"])
         bestand_menu.addAction(actie["export_epub_actie"])
         bestand_menu.addAction(actie["export_txt_actie"])
+        bestand_menu.addAction(actie["export_txt_per_hoofdstuk_actie"])
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["afsluiten_actie"])
 
@@ -2197,6 +2200,60 @@ identifier: {identifier}
             QMessageBox.critical(self, self.meldingen["Fout"], f"{self.meldingen['Fout bij exporteren']}: {e}")
         else:
             QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Bestand geëxporteerd als tekstbestand!"])
+
+    def markdown_to_text_per_chapter(self, md_text, strip_frontmatter=True):
+        if strip_frontmatter:
+            md_text = re.sub(r"^---\n.*?\n---\n", "", md_text, flags=re.DOTALL)
+        chapters = self.split_into_chapters(md_text)
+        #print("chapters", chapters)
+        chapter_texts = []
+        for chapter in chapters:
+            #print("chapter", chapter[:50])
+            #val = chapter  # the thing you call .strip() on
+            #print(type(val), len(val))
+
+            html = markdown(chapter[1])  # chapter[1] is the content of the chapter
+            #print("html", len(html))
+            soup = BeautifulSoup(html, "html.parser")
+            text = soup.get_text("\n")
+            lines = [line.strip() for line in text.splitlines()]
+            chapter_texts.append("\n".join(lines).strip())
+        return chapter_texts
+
+    def export_txt_per_chapter(self):
+        path, _ = QFileDialog.getSaveFileName(
+            self,
+            self.meldingen["Exporteer als Tekstbestand per Hoofdstuk"],
+            "",
+            self.meldingen["Tekstbestanden (*.txt)"]
+        )
+
+        if not path:
+            return
+        
+        md_text = self.editor.toPlainText()
+        #print("md_text", md_text)
+        chapter_texts = self.markdown_to_text_per_chapter(md_text)
+        #print("chapter_texts", chapter_texts)
+
+        #from pathlib import Path
+
+        naam_zonder_ext = Path(path).stem
+        print(naam_zonder_ext)  # mapbestand
+
+
+        for i, chapter_text in enumerate(chapter_texts):
+            try:
+                with open(path + f"_deel_{i + 1}.txt", "w", encoding="utf-8") as f:
+                        f.write(f"{naam_zonder_ext} - deel {i + 1}:\n\n")
+                        f.write(chapter_text)
+                        f.write("\n\n")
+            except Exception as e:
+                QMessageBox.critical(self, self.meldingen["Fout"], f"{self.meldingen['Fout bij exporteren']}: {e}")
+            #else:
+                #QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Bestand geëxporteerd als tekstbestand per hoofdstuk!"])
+        QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Bestand geëxporteerd als tekstbestand per hoofdstuk!"])
+
 
     def spellcheck(self):
         QMessageBox.information(self, self.meldingen["Spellcheck"], f"{self.meldingen['Spelling controleren']}\n{self.meldingen['Dit kan lang duren']}\n{self.meldingen['Heb dan geduld.']}\n{self.meldingen['Als het klaar is krijg je daar een melding van.']}")

@@ -335,6 +335,10 @@ menu_teksten_nl["Ontsleutel Bestand"] = "Ontsleutel Bestand"
 menu_teksten_en["Ontsleutel Bestand"] = "Decrypt File"
 menu_teksten_de["Ontsleutel Bestand"] = "Datei entschlüsseln"
 
+menu_teksten_nl["Exporteer als tekstbestand per hoofdstuk"] = "Exporteer als tekstbestand per hoofdstuk"
+menu_teksten_en["Exporteer als tekstbestand per hoofdstuk"] = "Export as text file per chapter"
+menu_teksten_de["Exporteer als tekstbestand per hoofdstuk"] = "Als Textdatei pro Kapitel exportieren"
+
 
 #
 # Meldingen
@@ -827,4 +831,12 @@ meldingen_de["Fout bij ontsleuteling"] = "Fehler bei der Entschlüsselung"
 meldingen_nl["Opslaan als"] = "Opslaan als"
 meldingen_en["Opslaan als"] = "Save as"
 meldingen_de["Opslaan als"] = "Speichern unter"
+
+meldingen_nl["Bestand geëxporteerd als tekstbestand per hoofdstuk!"] = "Bestand geëxporteerd als tekstbestand per hoofdstuk!"
+meldingen_en["Bestand geëxporteerd als tekstbestand per hoofdstuk!"] = "File exported as text file per chapter!"
+meldingen_de["Bestand geëxporteerd als tekstbestand per hoofdstuk!"] = "Datei als Textdatei pro Kapitel exportiert!"
+
+meldingen_nl["Exporteer als Tekstbestand per Hoofdstuk"] = "Exporteer als Tekstbestand per Hoofdstuk"
+meldingen_en["Exporteer als Tekstbestand per Hoofdstuk"] = "Export as Text File per Chapter"
+meldingen_de["Exporteer als Tekstbestand per Hoofdstuk"] = "Als Textdatei pro Kapitel exportieren"
 
