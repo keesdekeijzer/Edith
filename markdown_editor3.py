@@ -2204,16 +2204,24 @@ identifier: {identifier}
     def markdown_to_text_per_chapter(self, md_text, strip_frontmatter=True):
         if strip_frontmatter:
             md_text = re.sub(r"^---\n.*?\n---\n", "", md_text, flags=re.DOTALL)
+        md_text = ".\n" + md_text  # prepend a dot to ensure the first chapter is detected
         chapters = self.split_into_chapters(md_text)
         #print("chapters", chapters)
         chapter_texts = []
         for chapter in chapters:
             #print("chapter", chapter[:50])
-            #val = chapter  # the thing you call .strip() on
-            #print(type(val), len(val))
+            val = chapter[0]  # the thing you call .strip() on
+            print(type(val), len(val))
 
-            html = markdown(chapter[1])  # chapter[1] is the content of the chapter
-            #print("html", len(html))
+            #html = markdown(chapter[1])  # chapter[1] is the content of the chapter
+
+            html_0 = markdown(chapter[0])  # chapter[0] is the title of the chapter
+            html_1 = markdown(chapter[1])  # chapter[1] is the content of the chapter
+
+            html = html_0 + "\n\n" + html_1
+
+
+            #print("\n\nhtml", html, "\n\n")
             soup = BeautifulSoup(html, "html.parser")
             text = soup.get_text("\n")
             lines = [line.strip() for line in text.splitlines()]
@@ -2243,9 +2251,12 @@ identifier: {identifier}
 
 
         for i, chapter_text in enumerate(chapter_texts):
+            nummer_str = str(i + 1).zfill(2)  # 01, 02, etc.
+            print(f"Exporting chapter {nummer_str} to {path}_deel_{nummer_str}.txt")
+            print(f"Chapter text length: {len(chapter_text)}")
             try:
-                with open(path + f"_deel_{i + 1}.txt", "w", encoding="utf-8") as f:
-                        f.write(f"{naam_zonder_ext} - deel {i + 1}:\n\n")
+                with open(path + f"_deel_{nummer_str}.txt", "w", encoding="utf-8") as f:
+                        f.write(f"{naam_zonder_ext} - deel {nummer_str}:\n\n")
                         f.write(chapter_text)
                         f.write("\n\n")
             except Exception as e:
