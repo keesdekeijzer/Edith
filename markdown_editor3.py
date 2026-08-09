@@ -52,7 +52,7 @@ from memolijst import MemoLijst
 
 from teksten import menu_teksten_nl, menu_teksten_en, menu_teksten_de, meldingen_de, meldingen_en, meldingen_nl
 from keuze_teksten import keuze_teksten_nl, keuze_teksten_en, keuze_teksten_de
-from keuze_teksten_inhoud import keuze_teksten_inhoud
+from keuze_teksten_inhoud import keuze_teksten_inhoud, keuze_teksten_naam
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
@@ -268,25 +268,25 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "help_actie", menu_teksten["Help"], "F1", self.edith_help)
 
-        maak_menu_punt(self, "keuzetekst1_actie", self.keuze_teksten["Keuze 1"], "Alt+1", self.keuze_1)
+        maak_menu_punt(self, "keuzetekst1_actie", keuze_teksten_naam["Keuze 1"], "Alt+1", self.keuze_1)
 
-        maak_menu_punt(self, "keuzetekst2_actie", self.keuze_teksten["Keuze 2"], "Alt+2", self.keuze_2)
+        maak_menu_punt(self, "keuzetekst2_actie", keuze_teksten_naam["Keuze 2"], "Alt+2", self.keuze_2)
 
-        maak_menu_punt(self, "keuzetekst3_actie", self.keuze_teksten["Keuze 3"], "Alt+3", self.keuze_3)
+        maak_menu_punt(self, "keuzetekst3_actie", keuze_teksten_naam["Keuze 3"], "Alt+3", self.keuze_3)
 
-        maak_menu_punt(self, "keuzetekst4_actie", self.keuze_teksten["Keuze 4"], "Alt+4", self.keuze_4)
+        maak_menu_punt(self, "keuzetekst4_actie", keuze_teksten_naam["Keuze 4"], "Alt+4", self.keuze_4)
 
-        maak_menu_punt(self, "keuzetekst5_actie", self.keuze_teksten["Keuze 5"], "Alt+5", self.keuze_5)
+        maak_menu_punt(self, "keuzetekst5_actie", keuze_teksten_naam["Keuze 5"], "Alt+5", self.keuze_5)
 
-        maak_menu_punt(self, "keuzetekst6_actie", self.keuze_teksten["Keuze 6"], "Alt+6", self.keuze_6)
+        maak_menu_punt(self, "keuzetekst6_actie", keuze_teksten_naam["Keuze 6"], "Alt+6", self.keuze_6)
 
-        maak_menu_punt(self, "keuzetekst7_actie", self.keuze_teksten["Keuze 7"], "Alt+7", self.keuze_7)
+        maak_menu_punt(self, "keuzetekst7_actie", keuze_teksten_naam["Keuze 7"], "Alt+7", self.keuze_7)
 
-        maak_menu_punt(self, "keuzetekst8_actie", self.keuze_teksten["Keuze 8"], "Alt+8", self.keuze_8)
+        maak_menu_punt(self, "keuzetekst8_actie", keuze_teksten_naam["Keuze 8"], "Alt+8", self.keuze_8)
 
-        maak_menu_punt(self, "keuzetekst9_actie", self.keuze_teksten["Keuze 9"], "Alt+9", self.keuze_9)
+        maak_menu_punt(self, "keuzetekst9_actie", keuze_teksten_naam["Keuze 9"], "Alt+9", self.keuze_9)
 
-        maak_menu_punt(self, "keuzetekst10_actie", self.keuze_teksten["Keuze 10"], "Alt+0", self.keuze_10)
+        maak_menu_punt(self, "keuzetekst10_actie", keuze_teksten_naam["Keuze 10"], "Alt+0", self.keuze_10)
 
         maak_menu_punt(self, "versleutel_actie", menu_teksten["Versleutel Bestand"], "", self.versleutelen)
 
@@ -2210,10 +2210,9 @@ identifier: {identifier}
         chapter_texts = []
         for chapter in chapters:
             #print("chapter", chapter[:50])
-            val = chapter[0]  # the thing you call .strip() on
-            print(type(val), len(val))
+            #val = chapter[0]  # the thing you call .strip() on
+            #print(type(val), len(val))
 
-            #html = markdown(chapter[1])  # chapter[1] is the content of the chapter
 
             html_0 = markdown(chapter[0])  # chapter[0] is the title of the chapter
             html_1 = markdown(chapter[1])  # chapter[1] is the content of the chapter
@@ -2247,16 +2246,16 @@ identifier: {identifier}
         #from pathlib import Path
 
         naam_zonder_ext = Path(path).stem
-        print(naam_zonder_ext)  # mapbestand
+        #print(naam_zonder_ext)  # mapbestand
 
 
         for i, chapter_text in enumerate(chapter_texts):
             nummer_str = str(i + 1).zfill(2)  # 01, 02, etc.
-            print(f"Exporting chapter {nummer_str} to {path}_deel_{nummer_str}.txt")
-            print(f"Chapter text length: {len(chapter_text)}")
+            #print(f"Exporting chapter {nummer_str} to {path}_deel_{nummer_str}.txt")
+            #print(f"Chapter text length: {len(chapter_text)}")
             try:
                 with open(path + f"_deel_{nummer_str}.txt", "w", encoding="utf-8") as f:
-                        f.write(f"{naam_zonder_ext} - deel {nummer_str}:\n\n")
+                        f.write(f"{naam_zonder_ext} - deel {nummer_str}.\n\n")
                         f.write(chapter_text)
                         f.write("\n\n")
             except Exception as e:
