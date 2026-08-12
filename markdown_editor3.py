@@ -2058,6 +2058,8 @@ identifier: {identifier}
         if not it.isNull():        
             self.editor.setTextCursor(it)        
             self.update_highlight()
+        else:
+            QMessageBox.information(self, self.meldingen["Zoeken"], self.meldingen["Geen resultaten gevonden."])
 
 
     def find_previous(self):

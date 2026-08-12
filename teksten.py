@@ -840,3 +840,10 @@ meldingen_nl["Exporteer als Tekstbestand per Hoofdstuk"] = "Exporteer als Tekstb
 meldingen_en["Exporteer als Tekstbestand per Hoofdstuk"] = "Export as Text File per Chapter"
 meldingen_de["Exporteer als Tekstbestand per Hoofdstuk"] = "Als Textdatei pro Kapitel exportieren"
 
+meldingen_nl["Geen resultaten gevonden."] = "Geen resultaten gevonden."
+meldingen_en["Geen resultaten gevonden."] = "No results found."
+meldingen_de["Geen resultaten gevonden."] = "Keine Ergebnisse gefunden."
+
+meldingen_nl["Zoeken"] = "Zoeken"
+meldingen_en["Zoeken"] = "Search"
+meldingen_de["Zoeken"] = "Suchen"
