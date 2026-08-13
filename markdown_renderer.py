@@ -1,6 +1,6 @@
 import markdown
 
-def render_markdown(text: str) -> str:
+def render_markdown(text: str, color_mode: str = "light") -> str:
     """Convert Markdown text to HTML."""
     html = markdown.markdown(
         text,
@@ -15,6 +15,13 @@ def render_markdown(text: str) -> str:
         ]
     )
 
+    #print("color-mode: dark;")  # Debugging statement to indicate color mode
+    voorgrondkleur = "#FFFFFF" if color_mode == "dark" else "#000000"
+    achtergrondkleur = "#000000" if color_mode == "dark" else "#FFFFFF"
+
+
+
+
     # Eenvoudige HTML template
     return f"""
     <html>
@@ -24,6 +31,8 @@ def render_markdown(text: str) -> str:
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
                 margin: 2rem;
                 line-height: 1.6;
+                color: {voorgrondkleur};
+                background-color: {achtergrondkleur};
             }}
             img {{
                 max-width: 100%;
