@@ -1316,7 +1316,8 @@ class Markdown_Editor(QMainWindow):
         doc = Document()
         soup = BeautifulSoup(html, "html.parser")
 
-        for el in soup.recursiveChildGenerator():
+        #for el in soup.recursiveChildGenerator():
+        for el in soup.descendants:
             if el.name == "h1":
                 doc.add_heading(el.get_text(), level=1)
             elif el.name == "h2":

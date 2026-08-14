@@ -42,12 +42,14 @@ def render_markdown(text: str, color_mode: str = "light") -> str:
             }}
             pre {{
                 background-color: #CCCCCC;
+                color: #000000;
                 padding: 1rem;
                 border-radius: 5px;
                 overflow-x: auto;
             }}
             code {{
                 background-color: #CCCCCC;
+                color: #000000;
                 padding: 2px 4px;
                 border-radius: 3px;
             }}
