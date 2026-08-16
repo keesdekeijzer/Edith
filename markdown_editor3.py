@@ -4,7 +4,7 @@ import sys
 
 from PyQt6 import QtWidgets
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QApplication, QCheckBox, QFileDialog, QInputDialog, QLabel
+from PyQt6.QtWidgets import QApplication, QCheckBox, QFileDialog, QInputDialog, QLabel, QToolBar
 from PyQt6.QtWidgets import QLineEdit, QMainWindow, QPushButton, QTextEdit, QPlainTextEdit
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
@@ -108,6 +108,19 @@ class Markdown_Editor(QMainWindow):
         else:
             self.blauwe_modus()
             self.color_mode = "blue"
+
+        # Toolbar aanmaken        
+        toolbar = QToolBar("Mijn toolbar", self)        
+        self.addToolBar(toolbar)
+
+        # Acties (knoppen) maken        
+        actie_datum = QAction("Datum", self)        
+        actie_datum.triggered.connect(self.datum)
+        toolbar.addAction(actie_datum)
+
+        actie_tijd = QAction("Tijd", self)        
+        actie_tijd.triggered.connect(self.tijd)
+        toolbar.addAction(actie_tijd)
 
         # Central widget        
         self.editor = CodeEditor()  
@@ -491,6 +504,8 @@ class Markdown_Editor(QMainWindow):
 
         self.editor.verticalScrollBar().valueChanged.connect(self.sync_scroll_to_preview)
 
+    def hello(self):        
+        print("Hello!")
 
     def on_text_changed(self):
         self.unsaved_changes = True
