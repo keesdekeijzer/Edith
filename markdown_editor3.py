@@ -122,6 +122,14 @@ class Markdown_Editor(QMainWindow):
         actie_tijd.triggered.connect(self.tijd)
         toolbar.addAction(actie_tijd)
 
+        actie_md_link = QAction("md link", self)
+        actie_md_link.triggered.connect(self.md_link)
+        toolbar.addAction(actie_md_link)
+
+        actie_md_afbeelding = QAction("md afbeelding", self)
+        actie_md_afbeelding.triggered.connect(self.md_afbeelding)
+        toolbar.addAction(actie_md_afbeelding)
+
         # Central widget        
         self.editor = CodeEditor()  
         container = QWidget()
