@@ -847,3 +847,11 @@ meldingen_de["Geen resultaten gevonden."] = "Keine Ergebnisse gefunden."
 meldingen_nl["Zoeken"] = "Zoeken"
 meldingen_en["Zoeken"] = "Search"
 meldingen_de["Zoeken"] = "Suchen"
+
+meldingen_nl["Hoofdstuk"] = "Hoofdstuk"
+meldingen_en["Hoofdstuk"] = "Chapter"
+meldingen_de["Hoofdstuk"] = "Kapitel"
+
+meldingen_nl["Geen inhoud"] = "Geen inhoud"
+meldingen_en["Geen inhoud"] = "No contents"
+meldingen_de["Geen inhoud"] = "Keine Inhalt"

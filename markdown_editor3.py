@@ -130,6 +130,10 @@ class Markdown_Editor(QMainWindow):
         actie_md_afbeelding.triggered.connect(self.md_afbeelding)
         toolbar.addAction(actie_md_afbeelding)
 
+        actie_if_name_is_main = QAction("if name == main", self)
+        actie_if_name_is_main.triggered.connect(self.if_name_is_main)
+        toolbar.addAction(actie_if_name_is_main)
+
         # Central widget        
         self.editor = CodeEditor()  
         container = QWidget()
@@ -1478,6 +1482,7 @@ class Markdown_Editor(QMainWindow):
                 hoofdstuk_inhoud += regel
                 if hoofdstuk_inhoud.strip():
                     hoofdstuk_inhoud += "\n"
+        #parts.append(hoofstuktitel)
         if hoofdstuk_inhoud.strip():
             parts.append(hoofdstuk_inhoud)
         
@@ -1487,6 +1492,12 @@ class Markdown_Editor(QMainWindow):
         for i in range(1, len(parts), 2):
             title = parts[i].strip()
             content = parts[i+1].strip() if i+1 < len(parts) else ""
+            # voorkomen dat lege hoofdstukken worden toegevoegd
+            #if title or content:
+                #if not title:
+                    #title = self.meldingen["Hoofdstuk"] + f" {len(chapters)+1}"
+                #if not content:
+                    #content = self.meldingen["Geen inhoud"]
             chapters.append((title, content))
 
         return chapters
