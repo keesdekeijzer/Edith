@@ -113,6 +113,26 @@ class Markdown_Editor(QMainWindow):
         toolbar = QToolBar("Mijn toolbar", self)        
         self.addToolBar(toolbar)
 
+        toolbar.setStyleSheet("""
+QToolBar {
+    background: transparent;              /* let palette/theme show through */
+    border: none;
+    spacing: 6px;
+}
+QToolButton {
+    background-color: lightblue;
+    border: solid 1px silver;
+    padding: 6px;
+}
+QToolButton:hover {
+    background-color: rgba(120, 120, 120, 40);
+}
+QToolButton:checked {
+    background-color: rgba(120, 120, 120, 70);
+}
+""")
+
+
         # Acties (knoppen) maken        
         actie_datum = QAction("Datum", self)        
         actie_datum.triggered.connect(self.datum)
@@ -133,6 +153,10 @@ class Markdown_Editor(QMainWindow):
         actie_if_name_is_main = QAction("if name == main", self)
         actie_if_name_is_main.triggered.connect(self.if_name_is_main)
         toolbar.addAction(actie_if_name_is_main)
+
+        actie_frontmatter = QAction("Frontmatter", self)
+        actie_frontmatter.triggered.connect(self.frontmatter)
+        toolbar.addAction(actie_frontmatter)
 
         # Central widget        
         self.editor = CodeEditor()  
@@ -1472,8 +1496,9 @@ class Markdown_Editor(QMainWindow):
         hoofdstuk_inhoud = ""
         for regel in regels:
             if regel.startswith("# "):
-                if hoofdstuk_inhoud:
-                    parts.append(hoofdstuk_inhoud)
+                parts.append(hoofdstuk_inhoud)
+                #if hoofdstuk_inhoud:
+                    #parts.append(hoofdstuk_inhoud)
                 hoofstuktitel = regel[2:].strip()
                 parts.append(hoofstuktitel)
                 hoofdstuk_inhoud = ""
