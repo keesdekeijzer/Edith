@@ -158,6 +158,10 @@ QToolButton:checked {
         actie_frontmatter.triggered.connect(self.frontmatter)
         toolbar.addAction(actie_frontmatter)
 
+        actie_frontmatter_epub = QAction("Frontmatter epub", self)
+        actie_frontmatter_epub.triggered.connect(self.frontmatter_epub)
+        toolbar.addAction(actie_frontmatter_epub)
+
         # Central widget        
         self.editor = CodeEditor()  
         container = QWidget()
