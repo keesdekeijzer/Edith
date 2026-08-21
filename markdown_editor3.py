@@ -162,6 +162,14 @@ QToolButton:checked {
         actie_frontmatter_epub.triggered.connect(self.frontmatter_epub)
         toolbar.addAction(actie_frontmatter_epub)
 
+        actie_versleutel = QAction("Versleutel Bestand", self)
+        actie_versleutel.triggered.connect(self.versleutelen)
+        toolbar.addAction(actie_versleutel)
+
+        actie_ontsleutel = QAction("Ontsleutel Bestand", self)
+        actie_ontsleutel.triggered.connect(self.ontsleutelen)
+        toolbar.addAction(actie_ontsleutel)
+
         # Central widget        
         self.editor = CodeEditor()  
         container = QWidget()
