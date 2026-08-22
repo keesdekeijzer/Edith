@@ -150,9 +150,9 @@ QToolButton:checked {
         actie_md_afbeelding.triggered.connect(self.md_afbeelding)
         toolbar.addAction(actie_md_afbeelding)
 
-        actie_if_name_is_main = QAction("if name == main", self)
-        actie_if_name_is_main.triggered.connect(self.if_name_is_main)
-        toolbar.addAction(actie_if_name_is_main)
+        #actie_if_name_is_main = QAction("if name == main", self)
+        #actie_if_name_is_main.triggered.connect(self.if_name_is_main)
+        #toolbar.addAction(actie_if_name_is_main)
 
         actie_frontmatter = QAction("Frontmatter", self)
         actie_frontmatter.triggered.connect(self.frontmatter)
@@ -306,7 +306,7 @@ QToolButton:checked {
 
         maak_menu_punt(self, "md_afbeelding_actie", menu_teksten["md afbeelding"], "Alt+A", self.md_afbeelding)
 
-        maak_menu_punt(self, "if_name_is_main_actie", menu_teksten["if name == main"], "Alt+I", self.if_name_is_main)
+        #maak_menu_punt(self, "if_name_is_main_actie", menu_teksten["if name == main"], "Alt+I", self.if_name_is_main)
 
         maak_menu_punt(self, "frontmatter_actie", menu_teksten["Frontmatter"], "Alt+F", self.frontmatter)
 
@@ -421,7 +421,7 @@ QToolButton:checked {
         invoegen_menu.addAction(actie["tijd_actie"])
         invoegen_menu.addAction(actie["md_link_actie"])
         invoegen_menu.addAction(actie["md_afbeelding_actie"])
-        invoegen_menu.addAction(actie["if_name_is_main_actie"])
+        #invoegen_menu.addAction(actie["if_name_is_main_actie"])
         invoegen_menu.addAction(actie["frontmatter_actie"])
         invoegen_menu.addAction(actie["frontmatter_epub_actie"])
 
@@ -1096,8 +1096,10 @@ QToolButton:checked {
             md_code = f"![{bestandsnaam}]({pathname[0]})"
             self.editor.insertPlainText(md_code)
 
+    """
     def if_name_is_main(self):
         self.editor.insertPlainText("if__name__ == '__main__':\n    ")
+    """
 
     def frontmatter(self):
         fm = FRONTMATTER_TEXT
