@@ -2619,7 +2619,7 @@ identifier: {identifier}
         path, _ = QFileDialog.getOpenFileName(
             self,
             self.meldingen["Versleutel Bestand"],
-            "",
+            configuratie["opslaglocatie"],
             self.meldingen["Alle bestanden (*)"]
         )
 
@@ -2629,12 +2629,15 @@ identifier: {identifier}
         output_path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Opslaan als"],
-            "",
+            configuratie["opslaglocatie"]  + os.path.basename(path) + ".enc",
             self.meldingen["Versleutelde bestanden (*.enc)"]
         )
 
         if not output_path:
             return
+
+        if not output_path.endswith(".enc"):
+            output_path += ".enc"
 
         password, ok = QInputDialog.getText(
             self,
@@ -2655,7 +2658,7 @@ identifier: {identifier}
         path, _ = QFileDialog.getOpenFileName(
             self,
             self.meldingen["Ontsleutel Bestand"],
-            "",
+            configuratie["opslaglocatie"],
             self.meldingen["Versleutelde bestanden (*.enc)"]
         )
 
@@ -2665,7 +2668,7 @@ identifier: {identifier}
         output_path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Opslaan als"],
-            "",
+            configuratie["opslaglocatie"] + "/ontsleuteld_" + os.path.basename(path).replace(".enc", ""),
             self.meldingen["Alle bestanden (*)"]
         )
 
