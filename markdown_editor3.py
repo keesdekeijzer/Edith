@@ -698,6 +698,7 @@ QToolButton:checked {
             return path_or_uri    
         return Path(path_or_uri).resolve().as_uri()
     
+    """
     def update_frontmatter_from_panel(self, new_data):
         text = self.editor.toPlainText()
 
@@ -717,6 +718,7 @@ QToolButton:checked {
 
         # Preview opnieuw renderen
         self.update_preview()
+    """
 
     def load_highlighter(self):
         path = ""
