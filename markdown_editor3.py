@@ -274,7 +274,7 @@ QToolButton:checked {
 
         maak_menu_punt(self, "woorden_vervangen_actie", menu_teksten["Woorden vervangen"], "", self.woorden_vervangen)
 
-        maak_menu_punt(self, "romeinse_cijfers_vervangen_actie", menu_teksten["Romeinse cijfers vervangen"], "", self.romeinse_cijfers_vervangen)
+        maak_menu_punt(self, "romeinse_cijfers_vervangen_actie", menu_teksten["Romeinse cijfers vervangen"], "Alt+R", self.romeinse_cijfers_vervangen)
 
         maak_menu_punt(self, "alle_romeinse_cijfers_vervangen_actie", menu_teksten["Alle Romeinse cijfers vervangen"], "", self.alle_romeinse_cijfers_vervangen)
 
@@ -2467,9 +2467,20 @@ identifier: {identifier}
     def romeinse_cijfers_vervangen(self):
         # indien er een selectie is, dan alleen de selectie omzetten
         selectie = self.editor.textCursor()
+        spatie_begin = False
+        spatie_eind = False
+        
         if selectie.hasSelection():
             geselecteerde_tekst = selectie.selectedText()
-            cijfers = self.romeinse_cijfers_omzetten(geselecteerde_tekst)
+            if geselecteerde_tekst.startswith(" "):
+                spatie_begin = True
+            if geselecteerde_tekst.endswith(" "):
+                spatie_eind = True
+            cijfers = self.romeinse_cijfers_omzetten(geselecteerde_tekst.strip())
+            if spatie_begin:
+                cijfers = " " + cijfers
+            if spatie_eind:
+                cijfers = cijfers + " "
             selectie.insertText(cijfers)
         else:
             QMessageBox.about(self, self.meldingen["Geen Selectie"], 
