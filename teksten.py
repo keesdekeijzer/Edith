@@ -475,9 +475,9 @@ meldingen_en["Sneltoetsen_help"] = "Ctrl+N: New\nCtrl+O: Open\nCtrl+S: Save\nCtr
 meldingen_de["Sneltoetsen_help"] = "Ctrl+N: Neu\nCtrl+O: Öffnen\nCtrl+S: Speichern\nCtrl+Shift+S: Speichern als\nCtrl+Q: Beenden\nCtrl+C: Kopieren\nCtrl+X: Ausschneiden\nCtrl+V: Einfügen\nCtrl+F: Suchen\nCtrl+Z: Rückgängig\nCtrl+R: Wiederholen\nCtrl+A: Alles auswählen"
 
 # Sneltoetsen_Alt_help
-meldingen_nl["Sneltoetsen_Alt_help"] = "Invoegen:\nAlt+D: Datum\nAlt+T: Tijd\nAlt+L: md link\nAlt+A: md afbeelding\nAlt+I: if name == main\nAlt+F: Frontmatter\n\nBewerken:\nAlt+N: Normaliseren\nAlt+U: Geen hoofdletters\nAlt+S: Schrift\n\n"
-meldingen_en["Sneltoetsen_Alt_help"] = "Insert:\nAlt+D: Date\nAlt+T: Time\nAlt+L: md link\nAlt+A: md image\nAlt+I: if name == main\nAlt+F: Frontmatter\n\nEdit:\nAlt+N: Normalize\nAlt+U: No caps\nAlt+S: Writing\n\n"
-meldingen_de["Sneltoetsen_Alt_help"] = "Einfügen:\nAlt+D: Datum\nAlt+T: Zeit\nAlt+L: md Link\nAlt+A: md Bild\nAlt+I: if name == main\nAlt+F: Frontmatter\n\nBearbeiten:\nAlt+N: Normalisieren\nAlt+U: Keine Großbuchstaben\nAlt+S: Schrift\n\n"
+meldingen_nl["Sneltoetsen_Alt_help"] = "Invoegen:\nAlt+D: Datum\nAlt+T: Tijd\nAlt+L: md link\nAlt+A: md afbeelding\nAlt+I: if name == main\n\nBewerken:\nAlt+N: Normaliseren\nAlt+U: Geen hoofdletters\nAlt+S: Schrift\n\n"
+meldingen_en["Sneltoetsen_Alt_help"] = "Insert:\nAlt+D: Date\nAlt+T: Time\nAlt+L: md link\nAlt+A: md image\nAlt+I: if name == main\n\nEdit:\nAlt+N: Normalize\nAlt+U: No caps\nAlt+S: Writing\n\n"
+meldingen_de["Sneltoetsen_Alt_help"] = "Einfügen:\nAlt+D: Datum\nAlt+T: Zeit\nAlt+L: md Link\nAlt+A: md Bild\nAlt+I: if name == main\n\nBearbeiten:\nAlt+N: Normalisieren\nAlt+U: Keine Großbuchstaben\nAlt+S: Schrift\n\n"
 
 # Markdown
 meldingen_nl["Markdown"] = "Markdown"

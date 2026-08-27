@@ -308,9 +308,9 @@ QToolButton:checked {
 
         #maak_menu_punt(self, "if_name_is_main_actie", menu_teksten["if name == main"], "Alt+I", self.if_name_is_main)
 
-        maak_menu_punt(self, "frontmatter_actie", menu_teksten["Frontmatter"], "Alt+F", self.frontmatter)
+        #maak_menu_punt(self, "frontmatter_actie", menu_teksten["Frontmatter"], "Alt+F", self.frontmatter)
 
-        maak_menu_punt(self, "frontmatter_epub_actie", menu_teksten["Frontmatter epub"], "", self.frontmatter_epub)
+        #maak_menu_punt(self, "frontmatter_epub_actie", menu_teksten["Frontmatter epub"], "", self.frontmatter_epub)
 
         # Apps - Memo, Memolijst
 
@@ -422,8 +422,8 @@ QToolButton:checked {
         invoegen_menu.addAction(actie["md_link_actie"])
         invoegen_menu.addAction(actie["md_afbeelding_actie"])
         #invoegen_menu.addAction(actie["if_name_is_main_actie"])
-        invoegen_menu.addAction(actie["frontmatter_actie"])
-        invoegen_menu.addAction(actie["frontmatter_epub_actie"])
+        #invoegen_menu.addAction(actie["frontmatter_actie"])
+        #invoegen_menu.addAction(actie["frontmatter_epub_actie"])
 
         invoegen_menu = self.menuBar().addMenu(menu_teksten["Teksten"])
         invoegen_menu.addAction(actie["keuzetekst1_actie"])
