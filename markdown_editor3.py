@@ -229,6 +229,8 @@ QToolButton:checked {
 
         maak_menu_punt(self, "opslaan_als_actie", menu_teksten["Opslaan als"], "Ctrl+Alt+S", self.opslaan_als)
 
+        maak_menu_punt(self, "selectie_opslaan_als_actie", menu_teksten["Selectie opslaan als"], "Ctrl+Alt+T", self.selectie_opslaan_als)
+
         maak_menu_punt(self, "importeer_pdf_als_tekst_actie", menu_teksten["Importeer pdf als tekst"], "", self.import_pdf_as_text)
 
         maak_menu_punt(self, "importeer_pdf_als_md_actie", menu_teksten["Importeer pdf als markdown"], "", self.import_pdf_as_md)
@@ -372,6 +374,7 @@ QToolButton:checked {
         bestand_menu.addAction(actie["invoegen_actie"])
         bestand_menu.addAction(actie["opslaan_actie"]) 
         bestand_menu.addAction(actie["opslaan_als_actie"])
+        bestand_menu.addAction(actie["selectie_opslaan_als_actie"])
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["importeer_pdf_als_tekst_actie"])
         bestand_menu.addAction(actie["importeer_pdf_als_md_actie"])
@@ -809,6 +812,21 @@ QToolButton:checked {
         except Exception as e:
             errortekst = self.meldingen["Bestand niet opgeslagen"] + "\n" + str(e)
             self.dialog_critical(errortekst)
+
+    def selectie_opslaan_als(self):
+        selectie = self.editor.textCursor()
+        if selectie.hasSelection():
+            geselecteerde_tekst = selectie.selectedText()
+            try:
+                pathname = QFileDialog.getSaveFileName(self, 'Selectie opslaan als', configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
+                with open(pathname[0], 'w') as f:
+                    f.write(geselecteerde_tekst)
+                self.statusBar().showMessage(self.meldingen["Selectie opgeslagen"])
+            except Exception as e:
+                errortekst = self.meldingen["Selectie niet opgeslagen"] + "\n" + str(e)
+                self.dialog_critical(errortekst)
+        else:
+            QMessageBox.about(self, self.meldingen["Geen Selectie"], self.meldingen["Selecteer eerst tekst om op te slaan."])
 
     def afsluiten(self):
         QMessageBox.information(self, self.meldingen["Afsluiten"], self.meldingen["Programma afsluiten."])

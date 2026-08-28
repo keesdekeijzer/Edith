@@ -339,6 +339,9 @@ menu_teksten_nl["Exporteer als tekstbestand per hoofdstuk"] = "Exporteer als tek
 menu_teksten_en["Exporteer als tekstbestand per hoofdstuk"] = "Export as text file per chapter"
 menu_teksten_de["Exporteer als tekstbestand per hoofdstuk"] = "Als Textdatei pro Kapitel exportieren"
 
+menu_teksten_nl["Selectie opslaan als"] = "Selectie opslaan als"
+menu_teksten_en["Selectie opslaan als"] = "Save selection as"
+menu_teksten_de["Selectie opslaan als"] = "Auswahl speichern als"
 
 #
 # Meldingen
@@ -855,3 +858,16 @@ meldingen_de["Hoofdstuk"] = "Kapitel"
 meldingen_nl["Geen inhoud"] = "Geen inhoud"
 meldingen_en["Geen inhoud"] = "No contents"
 meldingen_de["Geen inhoud"] = "Keine Inhalt"
+
+meldingen_nl["Selectie opgeslagen"] = "Selectie opgeslagen"
+meldingen_en["Selectie opgeslagen"] = "Selection saved"
+meldingen_de["Selectie opgeslagen"] = "Auswahl gespeichert"
+
+meldingen_nl["Selectie niet opgeslagen"] = "Selectie niet opgeslagen"
+meldingen_en["Selectie niet opgeslagen"] = "Selection not saved"
+meldingen_de["Selectie niet opgeslagen"] = "Auswahl nicht gespeichert"
+
+meldingen_nl["Selecteer eerst tekst om op te slaan."] = "Selecteer eerst tekst om op te slaan."
+meldingen_en["Selecteer eerst tekst om op te slaan."] = "Please select text first to save."
+meldingen_de["Selecteer eerst tekst om op te slaan."] = "Bitte zuerst Text auswählen, um zu speichern."
+
