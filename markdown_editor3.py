@@ -132,41 +132,52 @@ QToolButton:checked {
 }
 """)
 
+        self.meldingen = {}
+
+        if self.taal == "en":
+            menu_teksten = menu_teksten_en
+            self.meldingen = meldingen_en
+        elif self.taal == "de":
+            menu_teksten = menu_teksten_de
+            self.meldingen = meldingen_de
+        else:
+            menu_teksten = menu_teksten_nl
+            self.meldingen = meldingen_nl
 
         # Acties (knoppen) maken        
-        actie_datum = QAction("Datum", self)        
+        actie_datum = QAction(menu_teksten["Datum"], self)        
         actie_datum.triggered.connect(self.datum)
         toolbar.addAction(actie_datum)
 
-        actie_tijd = QAction("Tijd", self)        
+        actie_tijd = QAction(menu_teksten["Tijd"], self)        
         actie_tijd.triggered.connect(self.tijd)
         toolbar.addAction(actie_tijd)
 
-        actie_md_link = QAction("md link", self)
+        actie_md_link = QAction(menu_teksten["md link"], self)
         actie_md_link.triggered.connect(self.md_link)
         toolbar.addAction(actie_md_link)
 
-        actie_md_afbeelding = QAction("md afbeelding", self)
+        actie_md_afbeelding = QAction(menu_teksten["md afbeelding"], self)
         actie_md_afbeelding.triggered.connect(self.md_afbeelding)
         toolbar.addAction(actie_md_afbeelding)
 
-        #actie_if_name_is_main = QAction("if name == main", self)
+        #actie_if_name_is_main = QAction(menu_teksten["if name == main"], self)
         #actie_if_name_is_main.triggered.connect(self.if_name_is_main)
         #toolbar.addAction(actie_if_name_is_main)
 
-        actie_frontmatter = QAction("Frontmatter", self)
+        actie_frontmatter = QAction(menu_teksten["Frontmatter"], self)
         actie_frontmatter.triggered.connect(self.frontmatter)
         toolbar.addAction(actie_frontmatter)
 
-        actie_frontmatter_epub = QAction("Frontmatter epub", self)
+        actie_frontmatter_epub = QAction(menu_teksten["Frontmatter epub"], self)
         actie_frontmatter_epub.triggered.connect(self.frontmatter_epub)
         toolbar.addAction(actie_frontmatter_epub)
 
-        actie_versleutel = QAction("Versleutel Bestand", self)
+        actie_versleutel = QAction(menu_teksten["Versleutel Bestand"], self)
         actie_versleutel.triggered.connect(self.versleutelen)
         toolbar.addAction(actie_versleutel)
 
-        actie_ontsleutel = QAction("Ontsleutel Bestand", self)
+        actie_ontsleutel = QAction(menu_teksten["Ontsleutel Bestand"], self)
         actie_ontsleutel.triggered.connect(self.ontsleutelen)
         toolbar.addAction(actie_ontsleutel)
 
@@ -184,17 +195,7 @@ QToolButton:checked {
         self.setCentralWidget(container)
 
         # menu begin
-        self.meldingen = {}
 
-        if self.taal == "en":
-            menu_teksten = menu_teksten_en
-            self.meldingen = meldingen_en
-        elif self.taal == "de":
-            menu_teksten = menu_teksten_de
-            self.meldingen = meldingen_de
-        else:
-            menu_teksten = menu_teksten_nl
-            self.meldingen = meldingen_nl
 
         self.keuze_teksten = {}
 
@@ -761,7 +762,7 @@ QToolButton:checked {
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
         try:
-            fname = QFileDialog.getOpenFileName(self, 'Open bestand', configuratie["opslaglocatie"], 'Alle bestanden (*)')
+            fname = QFileDialog.getOpenFileName(self, self.meldingen["Open bestand"], configuratie["opslaglocatie"], 'Alle bestanden (*)')
             self.setWindowTitle(fname[0])
             self.file_label.setText(fname[0])
             
@@ -776,7 +777,7 @@ QToolButton:checked {
 
     def invoegen(self):
         try:
-            fname = QFileDialog.getOpenFileName(self, 'Tekst of markdown bestand invoegen', configuratie["opslaglocatie"], 'Alle bestanden (*)')
+            fname = QFileDialog.getOpenFileName(self, self.meldingen["Tekst of markdown bestand invoegen"], configuratie["opslaglocatie"], 'Alle bestanden (*)')
             with open(fname[0], 'r') as f:
                 filetext = f.read()
                 self.editor.insertPlainText(filetext)
@@ -800,7 +801,7 @@ QToolButton:checked {
 
     def opslaan_als(self):        
         try:
-            pathname = QFileDialog.getSaveFileName(self, 'Bestand opslaan', configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
+            pathname = QFileDialog.getSaveFileName(self, self.meldingen["Bestand opslaan"], configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
             filetext = self.editor.toPlainText()
             with open(pathname[0], 'w') as f:
                 f.write(filetext)
@@ -818,7 +819,7 @@ QToolButton:checked {
         if selectie.hasSelection():
             geselecteerde_tekst = selectie.selectedText()
             try:
-                pathname = QFileDialog.getSaveFileName(self, 'Selectie opslaan als', configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
+                pathname = QFileDialog.getSaveFileName(self, self.meldingen["Selectie opslaan als"], configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
                 with open(pathname[0], 'w') as f:
                     f.write(geselecteerde_tekst)
                 self.statusBar().showMessage(self.meldingen["Selectie opgeslagen"])

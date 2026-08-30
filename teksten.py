@@ -871,3 +871,18 @@ meldingen_nl["Selecteer eerst tekst om op te slaan."] = "Selecteer eerst tekst o
 meldingen_en["Selecteer eerst tekst om op te slaan."] = "Please select text first to save."
 meldingen_de["Selecteer eerst tekst om op te slaan."] = "Bitte zuerst Text auswählen, um zu speichern."
 
+meldingen_nl["Open bestand"] = "Open bestand"
+meldingen_en["Open bestand"] = "Open file"
+meldingen_de["Open bestand"] = "Datei öffnen"
+
+meldingen_nl["Tekst of markdown bestand invoegen"] = "Tekst of markdown bestand invoegen"
+meldingen_en["Tekst of markdown bestand invoegen"] = "Insert text or markdown file"
+meldingen_de["Tekst of markdown bestand invoegen"] = "Text- oder Markdown-Datei einfügen"
+
+meldingen_nl["Bestand opslaan"] = "Bestand opslaan"
+meldingen_en["Bestand opslaan"] = "Save file"
+meldingen_de["Bestand opslaan"] = "Datei speichern"
+
+meldingen_nl["Selectie opslaan als"] = "Selectie opslaan als"
+meldingen_en["Selectie opslaan als"] = "Save selection as"
+meldingen_de["Selectie opslaan als"] = "Auswahl speichern als"
