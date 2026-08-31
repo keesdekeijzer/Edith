@@ -1161,7 +1161,7 @@ QToolButton:checked {
         self.editor.setPlainText(md)
 
     def import_pdf_as_text(self):
-        path, _ = QFileDialog.getOpenFileName(self, self.meldingen["Kies een pdf om te importeren"], "", self.meldingen["PDF-bestanden (*.pdf)"])
+        path, _ = QFileDialog.getOpenFileName(self, self.meldingen["Kies een pdf om te importeren"], configuratie["opslaglocatie"], self.meldingen["PDF-bestanden (*.pdf)"])
         if not path:
             return
         try:
@@ -1176,7 +1176,7 @@ QToolButton:checked {
         self.file_label.setText("?")
 
     def import_pdf_as_md(self):
-        path, _ = QFileDialog.getOpenFileName(self, self.meldingen["Kies een pdf om te importeren"], "", self.meldingen["PDF-bestanden (*.pdf)"])
+        path, _ = QFileDialog.getOpenFileName(self, self.meldingen["Kies een pdf om te importeren"], configuratie["opslaglocatie"], self.meldingen["PDF-bestanden (*.pdf)"])
         if not path:
             return
         try:
@@ -1379,7 +1379,7 @@ QToolButton:checked {
         path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Exporteer naar PDF"],
-            "",
+            configuratie["opslaglocatie"],
             self.meldingen["PDF-bestanden (*.pdf)"]
         )
 
@@ -1489,7 +1489,7 @@ QToolButton:checked {
         path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Exporteer naar Word"],
-            "",
+            configuratie["opslaglocatie"],
             self.meldingen["Word-bestanden (*.docx)"]
         )
 
@@ -1510,7 +1510,7 @@ QToolButton:checked {
         path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Exporteer naar EPUB"],
-            "",
+            configuratie["opslaglocatie"],
             self.meldingen["EPUB-bestanden (*.epub)"]
         )
 
@@ -2055,7 +2055,7 @@ identifier: {identifier}
         path, _ = QFileDialog.getOpenFileName(
             self,
             self.meldingen["Importeer EPUB"],
-            "",
+            configuratie["opslaglocatie"],
             self.meldingen["EPUB-bestanden (*.epub)"]
         )
 
@@ -2283,7 +2283,7 @@ identifier: {identifier}
         path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Exporteer als Tekstbestand"],
-            "",
+            configuratie["opslaglocatie"],
             self.meldingen["Tekstbestanden (*.txt)"]
         )
 
@@ -2331,7 +2331,7 @@ identifier: {identifier}
         path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Exporteer als Tekstbestand per Hoofdstuk"],
-            "",
+            configuratie["opslaglocatie"],
             self.meldingen["Tekstbestanden (*.txt)"]
         )
 

@@ -47,6 +47,7 @@ class ConfiguratieBewerken(QDialog):
         layout.addWidget(label4)
 
         config = self.load_config()
+
         if config.get('darkmode') == 'light':
             self.mode_choice1.setChecked(True)
         elif config.get('darkmode') == 'dark':
@@ -83,6 +84,10 @@ class ConfiguratieBewerken(QDialog):
     def bevestig_mode(self):
         print("Mode opgeslagen!")
         config = self.load_config()
+
+        #config["language"] = configuratie.get("language", "nl")
+        #print("config", config)
+
         if self.mode_choice1.isChecked():
             config['darkmode'] = 'light'
         elif self.mode_choice2.isChecked():
