@@ -109,6 +109,14 @@ class Markdown_Editor(QMainWindow):
             self.blauwe_modus()
             self.color_mode = "blue"
 
+        # taal
+        if config.get("language") == "nl":
+            self.taal = "nl"
+        elif config.get("language") == "en":
+            self.taal = "en"
+        else:
+            self.taal = "de"
+
         # Toolbar aanmaken        
         toolbar = QToolBar("Mijn toolbar", self)        
         self.addToolBar(toolbar)

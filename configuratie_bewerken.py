@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QDialog, QLabel, QMessageBox, QRadioButton, QVBoxLayout, QPushButton as QButton
+from PyQt6.QtWidgets import QButtonGroup, QDialog, QLabel, QMessageBox, QRadioButton, QVBoxLayout, QPushButton as QButton
 import yaml
 
 from teksten_config import config_meldingen_de, config_meldingen_en, config_meldingen_nl
@@ -11,7 +11,7 @@ class ConfiguratieBewerken(QDialog):
         self.taal = taal
         
         self.setModal(True)
-        self.setup_ui()
+        #self.setup_ui()
         #self.test()
 
         self.taal = configuratie.get("language", "nl")
@@ -25,26 +25,46 @@ class ConfiguratieBewerken(QDialog):
         else:
             self.config_meldingen = config_meldingen_nl
 
+        self.setup_ui()
+
         self.setWindowTitle(self.config_meldingen["Configuratie bewerken"])
 
     def setup_ui(self):
         layout = QVBoxLayout()
-        label = QLabel("Hier kun je de configuratie bewerken.")
+        label = QLabel(self.config_meldingen["Hier kun je de configuratie bewerken."])
         layout.addWidget(label)
         label2 = QLabel("Light mode / Dark mode / Blue mode")
         layout.addWidget(label2)
+
+        self.groep_mode = QButtonGroup(self)
         self.mode_choice1 = QRadioButton("Light mode")
         self.mode_choice2 = QRadioButton("Dark mode")
         self.mode_choice3 = QRadioButton("Blue mode")
         layout.addWidget(self.mode_choice1)
         layout.addWidget(self.mode_choice2)
         layout.addWidget(self.mode_choice3)
+        self.groep_mode.addButton(self.mode_choice1, 1) 
+        self.groep_mode.addButton(self.mode_choice2, 2)
+        self.groep_mode.addButton(self.mode_choice3, 3)
+        
 
-        label3 = QLabel("Current language: " + configuratie.get("language", "nl"))
+        label3 = QLabel("Language / Taal / Sprache")
         layout.addWidget(label3)
 
-        label4 = QLabel("Selected language: " + configuratie.get("language", "nl"))
-        layout.addWidget(label4)
+        #label4 = QLabel("Selected language: " + configuratie.get("language", "nl"))
+        #layout.addWidget(label4)
+
+        self.groep_taal = QButtonGroup(self)
+        self.mode_choice4 = QRadioButton("Dutch")
+        self.mode_choice5 = QRadioButton("English")
+        self.mode_choice6 = QRadioButton("German")
+        layout.addWidget(self.mode_choice4)
+        layout.addWidget(self.mode_choice5)
+        layout.addWidget(self.mode_choice6)
+        self.groep_taal.addButton(self.mode_choice4, 1)
+        self.groep_taal.addButton(self.mode_choice5, 2)
+        self.groep_taal.addButton(self.mode_choice6, 3)
+        
 
         config = self.load_config()
 
@@ -54,6 +74,13 @@ class ConfiguratieBewerken(QDialog):
             self.mode_choice2.setChecked(True)
         else:
             self.mode_choice3.setChecked(True)
+
+        if config.get('language') == 'nl':
+            self.mode_choice4.setChecked(True)
+        elif config.get('language') == 'en':    
+            self.mode_choice5.setChecked(True)
+        else:
+            self.mode_choice6.setChecked(True)
 
         mode_btn = QButton("Opslaan")
         layout.addWidget(mode_btn)  
@@ -94,6 +121,14 @@ class ConfiguratieBewerken(QDialog):
             config['darkmode'] = 'dark'
         else:
             config['darkmode'] = 'blue'
+
+        if self.mode_choice4.isChecked():
+            config['language'] = 'nl'
+        elif self.mode_choice5.isChecked(): 
+            config['language'] = 'en'
+        else:
+            config['language'] = 'de'
+
         self.save_config(config)
         self.melding_opgeslagen()
 
