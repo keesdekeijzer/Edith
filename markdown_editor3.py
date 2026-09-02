@@ -109,6 +109,7 @@ class Markdown_Editor(QMainWindow):
             self.blauwe_modus()
             self.color_mode = "blue"
 
+
         # taal
         if config.get("language") == "nl":
             self.taal = "nl"
@@ -131,6 +132,7 @@ QToolButton {
     background-color: lightblue;
     border: solid 1px silver;
     padding: 6px;
+    color: black;
 }
 QToolButton:hover {
     background-color: rgba(120, 120, 120, 40);
@@ -307,6 +309,10 @@ QToolButton:checked {
 
         maak_menu_punt(self, "naar_einde_actie", menu_teksten["Naar einde"], "Ctrl+End", self.naar_einde)
 
+        maak_menu_punt(self, "naar_begin_regel_actie", menu_teksten["Naar begin regel"], "Ctrl+[", self.naar_begin_regel)
+        
+        maak_menu_punt(self, "naar_einde_regel_actie", menu_teksten["Naar einde regel"], "Ctrl+]", self.naar_einde_regel)
+
         # Invoegen - Datum, Tijd, md link, md afbeelding, if name == main, frontmatter
 
         maak_menu_punt(self, "datum_actie", menu_teksten["Datum"], "Alt+D", self.datum)
@@ -427,6 +433,8 @@ QToolButton:checked {
         navigatie_menu = self.menuBar().addMenu(menu_teksten["Navigatie"])
         navigatie_menu.addAction(actie["naar_begin_actie"])
         navigatie_menu.addAction(actie["naar_einde_actie"])
+        navigatie_menu.addAction(actie["naar_begin_regel_actie"])
+        navigatie_menu.addAction(actie["naar_einde_regel_actie"])
 
         invoegen_menu = self.menuBar().addMenu(menu_teksten["Invoegen"])
         invoegen_menu.addAction(actie["datum_actie"])
@@ -1075,6 +1083,16 @@ QToolButton:checked {
     def naar_einde(self):
         cursor = self.editor.textCursor()
         cursor.movePosition(QTextCursor.MoveOperation.End)
+        self.editor.setTextCursor(cursor)
+
+    def naar_begin_regel(self):
+        cursor = self.editor.textCursor()
+        cursor.movePosition(QTextCursor.MoveOperation.StartOfBlock)
+        self.editor.setTextCursor(cursor)
+
+    def naar_einde_regel(self):
+        cursor = self.editor.textCursor()
+        cursor.movePosition(QTextCursor.MoveOperation.EndOfBlock)
         self.editor.setTextCursor(cursor)
 
     def over(self):        

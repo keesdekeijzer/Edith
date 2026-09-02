@@ -343,6 +343,14 @@ menu_teksten_nl["Selectie opslaan als"] = "Selectie opslaan als"
 menu_teksten_en["Selectie opslaan als"] = "Save selection as"
 menu_teksten_de["Selectie opslaan als"] = "Auswahl speichern als"
 
+menu_teksten_nl["Naar begin regel"] = "Naar begin regel"
+menu_teksten_en["Naar begin regel"] = "Go to beginning of line"
+menu_teksten_de["Naar begin regel"] = "Zum Anfang der Zeile gehen"
+
+menu_teksten_nl["Naar einde regel"] = "Naar einde regel"
+menu_teksten_en["Naar einde regel"] = "Go to end of line"
+menu_teksten_de["Naar einde regel"] = "Zum Ende der Zeile gehen"
+
 #
 # Meldingen
 #
