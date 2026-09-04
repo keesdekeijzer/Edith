@@ -1475,20 +1475,15 @@ QToolButton:checked {
         if not fm:
             return {}
 
-        #  dit gaat fout als er een extra dubbele punt in het item staat, bijvoorbeeld in een URL. Dan wordt de YAML niet goed geparsed.
-        #  dit gaat ook fout als er geen spatie na de dubbele punt staat, bijvoorbeeld "key:value" in plaats van "key: value". Dan wordt de YAML niet goed geparsed.
-        print("Frontmatter gevonden:\n", fm.group(1))
-
         lines = fm.group(1).splitlines()
+        fm_data = {}  # dictionary voor keys en values van frontmatter
         for line in lines:
             if ':' in line:
                 key, value = line.split(':', 1)
-                print(f"Key: '{key.strip()}', Value: '{value.strip()}'")
+                fm_data[key.strip()] = value.strip()
             else:
                 print(f"Geen dubbele punt gevonden in regel: '{line}'")
-        data = yaml.safe_load(fm.group(1))
-        print("Geëxtraheerde metadata:", data)
-        return data or {}
+        return fm_data or {}
 
     def slugify(self, text):
         # Unieke maar stabiele ID
