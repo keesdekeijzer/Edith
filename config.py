@@ -34,7 +34,7 @@ subtitle:
 author: 
 language: nl
 identifier: 
-cover_file: assets/cover.jpg
+cover_file: assets/cover2.jpg
 ---
 """
 

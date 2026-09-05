@@ -1631,9 +1631,25 @@ QToolButton:checked {
             epub.Link(item.file_name, item.title, f"chap{idx}")
               for idx, item in enumerate(epub_chapters, start=0)
               )
+
+    def vind_cover_image(self, md_text):
+        # Zoek naar een afbeelding in de frontmatter
+        meta = self.extract_metadata(md_text)
+        cover_file = meta.get("cover_file", "")
+        if cover_file and os.path.isfile(cover_file):
+            return cover_file
+
+        # Als er geen cover_file is, zoek dan naar de eerste afbeelding in de markdown
+        img_match = re.search(r"!\[.*?\]\((.*?)\)", md_text)
+        if img_match:
+            img_path = img_match.group(1)
+            if os.path.isfile(img_path):
+                return img_path
+
+        return None  # Geen cover gevonden
     
     def export_markdown_to_epub(self, md_text, output_path):
-        meta = self.extract_metadata(md_text) # verbeteren? ----------------------------------------
+        meta = self.extract_metadata(md_text)
         title = meta.get("title", self.meldingen["Mijn Markdown Boek"]) # titel mag geen dubbele punt bevatten
         author = meta.get("author", self.meldingen["Onbekende Auteur"])
         cover_file = meta.get("cover_file", "")
@@ -1652,8 +1668,10 @@ QToolButton:checked {
         book.set_language("nl")
         book.set_identifier(identifier)
 
+        
         if not cover_file:
-            cover_file = "assets/cover.jpg"
+            cover_file = self.vind_cover_image(md_text) or "assets/cover.jpg"  # fallback naar standaard cover
+            #cover_file = "assets/cover.jpg"
 
         #cover_path = self.generate_epub_cover(meta, logo_path=cover_file)
         # self, meta, bg_path, logo_path=None, output_path="cover.jpg"
