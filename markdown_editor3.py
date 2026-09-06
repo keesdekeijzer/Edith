@@ -2275,7 +2275,17 @@ identifier: {identifier}
 
     def update_highlight(self):
         # Clear selections and add new extra selections for all matches.
+        build_find_text = ""
         find_text = self.find_input.text()
+        for char in find_text:
+            if char in "$^|\\":
+                # Escape special regex characters
+                new_find_text = "\\" + char
+            else:
+                new_find_text = char
+            build_find_text += new_find_text
+        find_text = build_find_text
+        #print("update_highlight called with find_text:", find_text)
         extra_selections = []
 
         if find_text:
@@ -2288,6 +2298,8 @@ identifier: {identifier}
             else:
                 regex.setPatternOptions(QRegularExpression.PatternOption.NoPatternOption)
             it = doc.find(regex, 0)
+            #print("regex pattern:", regex.pattern())
+            #print("initial match found:", not it.isNull())
             cursors = []
             while not it.isNull():
                 cursors.append(it)
