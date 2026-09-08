@@ -84,6 +84,10 @@ class Markdown_Editor(QMainWindow):
         self.unsaved_changes = False
         self.current_path = None
 
+        #self.mijn_configuratie["opslaglocatie"] = configuratie.get("opslaglocatie", "/home/kees/Data/")
+        self.mijn_configuratie = self.load_config()  # Load configuration from config.yaml
+        print("Configuratie geladen:", self.mijn_configuratie)
+
         LANG_MAP = {
             "nl": "nld",
             "en": "eng",
@@ -575,6 +579,14 @@ QToolButton:checked {
     def hello(self):        
         print("Hello!")
 
+    def load_config(self):
+        try:
+            with open("config.yaml", "r", encoding='utf-8') as f:
+                config = yaml.safe_load(f)
+        except FileNotFoundError:
+            config = {}
+        return config
+
     def on_text_changed(self):
         self.unsaved_changes = True
         self.statusBar().showMessage(self.meldingen["Onopgeslagen wijzigingen"])
@@ -778,7 +790,7 @@ QToolButton:checked {
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
         try:
-            fname = QFileDialog.getOpenFileName(self, self.meldingen["Open bestand"], configuratie["opslaglocatie"], 'Alle bestanden (*)')
+            fname = QFileDialog.getOpenFileName(self, self.meldingen["Open bestand"], self.mijn_configuratie["opslaglocatie"], 'Alle bestanden (*)')
             self.setWindowTitle(fname[0])
             self.file_label.setText(fname[0])
             
@@ -793,7 +805,7 @@ QToolButton:checked {
 
     def invoegen(self):
         try:
-            fname = QFileDialog.getOpenFileName(self, self.meldingen["Tekst of markdown bestand invoegen"], configuratie["opslaglocatie"], 'Alle bestanden (*)')
+            fname = QFileDialog.getOpenFileName(self, self.meldingen["Tekst of markdown bestand invoegen"], self.mijn_configuratie["opslaglocatie"], 'Alle bestanden (*)')
             with open(fname[0], 'r') as f:
                 filetext = f.read()
                 self.editor.insertPlainText(filetext)
@@ -817,7 +829,7 @@ QToolButton:checked {
 
     def opslaan_als(self):        
         try:
-            pathname = QFileDialog.getSaveFileName(self, self.meldingen["Bestand opslaan"], configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
+            pathname = QFileDialog.getSaveFileName(self, self.meldingen["Bestand opslaan"], self.mijn_configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
             filetext = self.editor.toPlainText()
             with open(pathname[0], 'w') as f:
                 f.write(filetext)
@@ -835,7 +847,7 @@ QToolButton:checked {
         if selectie.hasSelection():
             geselecteerde_tekst = selectie.selectedText()
             try:
-                pathname = QFileDialog.getSaveFileName(self, self.meldingen["Selectie opslaan als"], configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
+                pathname = QFileDialog.getSaveFileName(self, self.meldingen["Selectie opslaan als"], self.mijn_configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
                 with open(pathname[0], 'w') as f:
                     f.write(geselecteerde_tekst)
                 self.statusBar().showMessage(self.meldingen["Selectie opgeslagen"])
@@ -928,11 +940,11 @@ QToolButton:checked {
             QMessageBox.about(self, self.meldingen["Geen Selectie"], self.meldingen["Selecteer eerst tekst om om te zetten naar schrift."])
 
     def lichte_modus(self):
-        configuratie["darkmode"] = 'light'
+        self.mijn_configuratie["darkmode"] = 'light'
         self.setStyleSheet('')
 
     def donkere_modus(self):
-        configuratie["darkmode"] = 'dark'
+        self.mijn_configuratie["darkmode"] = 'dark'
         self.setStyleSheet('''
             QWidget{
                 background-color: rgb(33,33,33);
@@ -946,7 +958,7 @@ QToolButton:checked {
         #window.set_colors("#212121", "#FFFFFF")
 
     def blauwe_modus(self):
-        configuratie["darkmode"] = 'blue'
+        self.mijn_configuratie["darkmode"] = 'blue'
         self.setStyleSheet('''
                 background-color: #0000AA;
                 color: #FFFFFF;
@@ -1072,7 +1084,7 @@ QToolButton:checked {
         self.editor.setFont(font)
 
     def favoriete_font(self):
-        font_name, font_size = configuratie['favoriete_font']
+        font_name, font_size = self.mijn_configuratie['favoriete_font']
         self.set_font(font_name, font_size)
 
     def naar_begin(self):
@@ -1130,14 +1142,14 @@ QToolButton:checked {
         self.editor.insertPlainText(tijd_nu)
 
     def md_link(self):
-        pathname = QFileDialog.getOpenFileName(self, self.meldingen["Bestand openen"], configuratie["opslaglocatie"], self.meldingen["Alle bestanden"])
+        pathname = QFileDialog.getOpenFileName(self, self.meldingen["Bestand openen"], self.mijn_configuratie["opslaglocatie"], self.meldingen["Alle bestanden"])
         if pathname[0]:
             bestandsnaam = pathname[0].split('/')[-1]
             md_code = f"[{bestandsnaam}]({pathname[0]})"
             self.editor.insertPlainText(md_code)
 
     def md_afbeelding(self):
-        pathname = QFileDialog.getOpenFileName(self, self.meldingen["Afbeelding openen"], configuratie["opslaglocatie"], self.meldingen["Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)"])
+        pathname = QFileDialog.getOpenFileName(self, self.meldingen["Afbeelding openen"], self.mijn_configuratie["opslaglocatie"], self.meldingen["Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)"])
         if pathname[0]:
             bestandsnaam = pathname[0].split('/')[-1]
             md_code = f"![{bestandsnaam}]({pathname[0]})"
@@ -1187,7 +1199,7 @@ QToolButton:checked {
         self.editor.setPlainText(md)
 
     def import_pdf_as_text(self):
-        path, _ = QFileDialog.getOpenFileName(self, self.meldingen["Kies een pdf om te importeren"], configuratie["opslaglocatie"], self.meldingen["PDF-bestanden (*.pdf)"])
+        path, _ = QFileDialog.getOpenFileName(self, self.meldingen["Kies een pdf om te importeren"], self.mijn_configuratie["opslaglocatie"], self.meldingen["PDF-bestanden (*.pdf)"])
         if not path:
             return
         try:
@@ -1202,7 +1214,7 @@ QToolButton:checked {
         self.file_label.setText("?")
 
     def import_pdf_as_md(self):
-        path, _ = QFileDialog.getOpenFileName(self, self.meldingen["Kies een pdf om te importeren"], configuratie["opslaglocatie"], self.meldingen["PDF-bestanden (*.pdf)"])
+        path, _ = QFileDialog.getOpenFileName(self, self.meldingen["Kies een pdf om te importeren"], self.mijn_configuratie["opslaglocatie"], self.meldingen["PDF-bestanden (*.pdf)"])
         if not path:
             return
         try:
@@ -1405,7 +1417,7 @@ QToolButton:checked {
         path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Exporteer naar PDF"],
-            configuratie["opslaglocatie"],
+            self.mijn_configuratie["opslaglocatie"],
             self.meldingen["PDF-bestanden (*.pdf)"]
         )
 
@@ -1522,7 +1534,7 @@ QToolButton:checked {
         path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Exporteer naar Word"],
-            configuratie["opslaglocatie"],
+            self.mijn_configuratie["opslaglocatie"],
             self.meldingen["Word-bestanden (*.docx)"]
         )
 
@@ -1543,7 +1555,7 @@ QToolButton:checked {
         path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Exporteer naar EPUB"],
-            configuratie["opslaglocatie"],
+            self.mijn_configuratie["opslaglocatie"],
             self.meldingen["EPUB-bestanden (*.epub)"]
         )
 
@@ -1790,7 +1802,7 @@ QToolButton:checked {
 
         
         # … je metadata/spine/chapters …
-        opslag = configuratie["opslaglocatie"]
+        opslag = self.mijn_configuratie["opslaglocatie"]
 
         #opslag_in_epub = "imported_epub/images/"
         opslag_in_epub = "images/"
@@ -1979,7 +1991,7 @@ QToolButton:checked {
         block_height = 500
         # Titel
         
-        font_path = configuratie["font_path"]
+        font_path = self.mijn_configuratie["font_path"]
         font, pos = self.fit_text(title, font_path, width, block_height)
         draw.text(pos, title, fill="white", font=font)
 
@@ -2066,7 +2078,9 @@ identifier: {identifier}
             #print(f"Rewriting image path: {epub_path} -> {local_path}")
         return md_text
 
-    def epub_to_markdown(self, epub_path, output_dir=configuratie["opslaglocatie"]):
+    def epub_to_markdown(self, epub_path, output_dir=None):
+        if output_dir is None:
+            output_dir=self.mijn_configuratie["opslaglocatie"]
         output_dir = os.path.join(output_dir, "epub_files")
         #output_dir = os.path.join(output_dir, "")
         #output_images_dir = os.path.join(output_dir, "images")
@@ -2106,7 +2120,7 @@ identifier: {identifier}
         path, _ = QFileDialog.getOpenFileName(
             self,
             self.meldingen["Importeer EPUB"],
-            configuratie["opslaglocatie"],
+            self.mijn_configuratie["opslaglocatie"],
             self.meldingen["EPUB-bestanden (*.epub)"]
         )
 
@@ -2119,7 +2133,7 @@ identifier: {identifier}
         regels = md_text.split("\n")
         for regel in regels:
             if "![](imported_epub/images" in regel:  # paden voor afbeeldingen toevoegen
-                vervanging = "![](" + configuratie["opslaglocatie"] + "imported_epub/images"
+                vervanging = "![](" + self.mijn_configuratie["opslaglocatie"] + "imported_epub/images"
                 regel = regel.replace("![](imported_epub/images", vervanging)
                 nw_text += regel + "\n"
                 #print(f"Rewriting image path in markdown: {regel} -> {vervanging}")
@@ -2346,7 +2360,7 @@ identifier: {identifier}
         path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Exporteer als Tekstbestand"],
-            configuratie["opslaglocatie"],
+            self.mijn_configuratie["opslaglocatie"],
             self.meldingen["Tekstbestanden (*.txt)"]
         )
 
@@ -2394,7 +2408,7 @@ identifier: {identifier}
         path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Exporteer als Tekstbestand per Hoofdstuk"],
-            configuratie["opslaglocatie"],
+            self.mijn_configuratie["opslaglocatie"],
             self.meldingen["Tekstbestanden (*.txt)"]
         )
 
@@ -2453,7 +2467,7 @@ identifier: {identifier}
             fmt.setUnderlineStyle(QTextCharFormat.UnderlineStyle.SpellCheckUnderline)
             cursor.setCharFormat(fmt)
         
-        verslaglocatie = configuratie["opslaglocatie"] + "/spellcheck_report.txt"
+        verslaglocatie = self.mijn_configuratie["opslaglocatie"] + "/spellcheck_report.txt"
         with open(verslaglocatie, "w") as f:
             f.write(verslag)
         QMessageBox.information(self, self.meldingen["Spellcheck"], f"{self.meldingen['Spellingcontrole voltooid!']} {len(matches)} {self.meldingen['fouten gevonden.']}\n{self.meldingen['Verslag opgeslagen in']} {verslaglocatie}")
@@ -2714,7 +2728,7 @@ identifier: {identifier}
         path, _ = QFileDialog.getOpenFileName(
             self,
             self.meldingen["Versleutel Bestand"],
-            configuratie["opslaglocatie"],
+            self.mijn_configuratie["opslaglocatie"],
             self.meldingen["Alle bestanden (*)"]
         )
 
@@ -2724,7 +2738,7 @@ identifier: {identifier}
         output_path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Opslaan als"],
-            configuratie["opslaglocatie"]  + os.path.basename(path) + ".enc",
+            self.mijn_configuratie["opslaglocatie"]  + os.path.basename(path) + ".enc",
             self.meldingen["Versleutelde bestanden (*.enc)"]
         )
 
@@ -2753,7 +2767,7 @@ identifier: {identifier}
         path, _ = QFileDialog.getOpenFileName(
             self,
             self.meldingen["Ontsleutel Bestand"],
-            configuratie["opslaglocatie"],
+            self.mijn_configuratie["opslaglocatie"],
             self.meldingen["Versleutelde bestanden (*.enc)"]
         )
 
@@ -2763,7 +2777,7 @@ identifier: {identifier}
         output_path, _ = QFileDialog.getSaveFileName(
             self,
             self.meldingen["Opslaan als"],
-            configuratie["opslaglocatie"] + "/ontsleuteld_" + os.path.basename(path).replace(".enc", ""),
+            self.mijn_configuratie["opslaglocatie"] + "/ontsleuteld_" + os.path.basename(path).replace(".enc", ""),
             self.meldingen["Alle bestanden (*)"]
         )
 

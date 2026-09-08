@@ -1,2 +1,8 @@
+database: /home/kees/Data/memo.db
 darkmode: light
-language: en
+opslaglocatie: /home/kees/Data
+favoriete_font:
+- Arial
+- 12
+language: nl
+font_path: /home/kees/Data/FreeSerif.ttf

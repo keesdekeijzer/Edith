@@ -3,7 +3,7 @@ import yaml
 
 from teksten_config import config_meldingen_de, config_meldingen_en, config_meldingen_nl
 
-from config import configuratie
+#from config import self.configuratie
 
 class ConfiguratieBewerken(QDialog):
     def __init__(self, taal='nl'):
@@ -14,7 +14,9 @@ class ConfiguratieBewerken(QDialog):
         #self.setup_ui()
         #self.test()
 
-        self.taal = configuratie.get("language", "nl")
+        self.configuratie = self.load_config()  # Load configuration from config.yaml
+
+        self.taal = self.configuratie.get("language", "nl")
 
         self.config_meldingen = {}
 
@@ -51,8 +53,6 @@ class ConfiguratieBewerken(QDialog):
         label3 = QLabel("Language / Taal / Sprache")
         layout.addWidget(label3)
 
-        #label4 = QLabel("Selected language: " + configuratie.get("language", "nl"))
-        #layout.addWidget(label4)
 
         self.groep_taal = QButtonGroup(self)
         self.mode_choice4 = QRadioButton("Dutch")
@@ -81,6 +81,18 @@ class ConfiguratieBewerken(QDialog):
             self.mode_choice5.setChecked(True)
         else:
             self.mode_choice6.setChecked(True)
+
+        label4 = QLabel("Save location: ")
+        layout.addWidget(label4)
+
+        self.label5 = QLabel(self.configuratie.get("opslaglocatie", "/home/kees/Data/"))
+        layout.addWidget(self.label5)
+
+        location_btn = QButton("Change location")
+        layout.addWidget(location_btn)
+        location_btn.clicked.connect(self.change_location)
+        #self.label5.setText(self.configuratie.get("opslaglocatie", "/home/kees/Data/"))
+        #layout.addWidget(self.label5)
 
         mode_btn = QButton("Opslaan")
         layout.addWidget(mode_btn)  
@@ -112,7 +124,7 @@ class ConfiguratieBewerken(QDialog):
         print("Mode opgeslagen!")
         config = self.load_config()
 
-        #config["language"] = configuratie.get("language", "nl")
+        #config["language"] = self.configuratie.get("language", "nl")
         #print("config", config)
 
         if self.mode_choice1.isChecked():
@@ -134,6 +146,15 @@ class ConfiguratieBewerken(QDialog):
 
         
     def melding_opgeslagen(self):
-        print("Configuratie opgeslagen!")
-        QMessageBox.information(self, "Opgeslagen", "Configuratie is opgeslagen!")
+        print("self.configuratie opgeslagen!")
+        QMessageBox.information(self, "Opgeslagen", "self.configuratie is opgeslagen!")
         self.close()
+
+    def change_location(self):
+        from PyQt6.QtWidgets import QFileDialog
+        new_location = QFileDialog.getExistingDirectory(self, "Selecteer nieuwe opslaglocatie")
+        if new_location:
+            self.configuratie["opslaglocatie"] = new_location
+            self.save_config(self.configuratie)
+            QMessageBox.information(self, "Opgeslagen", f"Nieuwe opslaglocatie is opgeslagen: {new_location}")
+            self.label5.setText(self.configuratie.get("opslaglocatie", "/home/kees/Data/"))
