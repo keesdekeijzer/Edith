@@ -1160,6 +1160,13 @@ QToolButton:checked {
         self.editor.insertPlainText("if__name__ == '__main__':\n    ")
     """
 
+    def frontmatter_popup(self):
+        fm = self.get_frontmatter()
+        # moet window zijn met velden voor title, author, date, tags, description
+        #self.frontmatter_venster = FrontmatterWindow(fm)
+        #self.frontmatter_venster.show()
+
+
     def frontmatter(self):
         fm = FRONTMATTER_TEXT
         self.editor.insertPlainText(fm)
@@ -1478,6 +1485,27 @@ QToolButton:checked {
 
         # 5. HTML -> DOCX
         self.html_to_docx(full_html, output_path)
+
+    def get_frontmatter(self):  # wordt nog niet gebruikt, maar kan handig zijn voor andere functies
+        """
+        Verwacht YAML frontmatter bovenaan het document.
+        
+        """
+        md_text = self.editor.toPlainText()
+
+        fm = re.match(r"---\n(.*?)\n---", md_text, re.DOTALL)
+        if not fm:
+            return {}
+
+        lines = fm.group(1).splitlines()
+        fm_data = {}  # dictionary voor keys en values van frontmatter
+        for line in lines:
+            if ':' in line:
+                key, value = line.split(':', 1)
+                fm_data[key.strip()] = value.strip()
+            else:
+                print(f"Geen dubbele punt gevonden in regel: '{line}'")
+        return fm_data or {}
 
     def extract_metadata(self, md_text):
         """
