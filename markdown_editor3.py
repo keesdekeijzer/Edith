@@ -4,7 +4,7 @@ import sys
 
 from PyQt6 import QtWidgets
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QApplication, QCheckBox, QFileDialog, QInputDialog, QLabel, QToolBar
+from PyQt6.QtWidgets import QApplication, QCheckBox, QDialog, QFileDialog, QInputDialog, QLabel, QToolBar
 from PyQt6.QtWidgets import QLineEdit, QMainWindow, QPushButton, QTextEdit, QPlainTextEdit
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
@@ -264,6 +264,8 @@ QToolButton:checked {
 
         maak_menu_punt(self, "export_txt_per_hoofdstuk_actie", menu_teksten["Exporteer als tekstbestand per hoofdstuk"], "", self.export_txt_per_chapter)
 
+        maak_menu_punt(self, "epub_tts_teksten_actie", menu_teksten["Exporteer ePub naar TTS-teksten"], "", self.export_epub_to_tts_texts)        
+
         maak_menu_punt(self, "afsluiten_actie", menu_teksten["Afsluiten"], "Ctrl+Q", self.afsluiten)
  
         # Bewerken - Kopieren, Plakken, Knippen, Zoeken, Alles selecteren, Ongedaan maken, Opnieuw doen,
@@ -406,6 +408,7 @@ QToolButton:checked {
         bestand_menu.addAction(actie["export_epub_actie"])
         bestand_menu.addAction(actie["export_txt_actie"])
         bestand_menu.addAction(actie["export_txt_per_hoofdstuk_actie"])
+        bestand_menu.addAction(actie["epub_tts_teksten_actie"])
         bestand_menu.addSeparator()
         bestand_menu.addAction(actie["afsluiten_actie"])
 
@@ -427,6 +430,8 @@ QToolButton:checked {
         bewerken_menu.addAction(actie["woorden_vervangen_actie"])
         bewerken_menu.addAction(actie["romeinse_cijfers_vervangen_actie"])
         bewerken_menu.addAction(actie["alle_romeinse_cijfers_vervangen_actie"])
+        bewerken_menu.addSeparator()
+        bewerken_menu.addAction(actie["frontmatter_actie"])
 
         beeld_menu = self.menuBar().addMenu(menu_teksten["Beeld"])
         beeld_menu.addAction(actie["lichte_modus_actie"])
@@ -448,7 +453,7 @@ QToolButton:checked {
         invoegen_menu.addAction(actie["md_link_actie"])
         invoegen_menu.addAction(actie["md_afbeelding_actie"])
         #invoegen_menu.addAction(actie["if_name_is_main_actie"])
-        invoegen_menu.addAction(actie["frontmatter_actie"])
+        
         #invoegen_menu.addAction(actie["frontmatter_epub_actie"])
 
         invoegen_menu = self.menuBar().addMenu(menu_teksten["Teksten"])
@@ -1167,6 +1172,12 @@ QToolButton:checked {
         # moet window zijn met velden voor title, author, date, tags, description
         self.frontmatter_venster = FrontmatterWindow(fm)
         self.frontmatter_venster.show()
+        if self.frontmatter_venster.exec() == QDialog.DialogCode.Accepted:
+            waarde = self.frontmatter_venster.resultaat
+            print("Ontvangen waarde:", waarde)
+            self.update_frontmatter(waarde)
+        else:
+            print("Venster geannuleerd")
 
 
     def frontmatter(self):
@@ -2434,12 +2445,13 @@ identifier: {identifier}
             chapter_texts.append("\n".join(lines).strip())
         return chapter_texts
 
-    def export_txt_per_chapter(self):
-        path, _ = QFileDialog.getSaveFileName(
-            self,
-            self.meldingen["Exporteer als Tekstbestand per Hoofdstuk"],
-            self.mijn_configuratie["opslaglocatie"],
-            self.meldingen["Tekstbestanden (*.txt)"]
+    def export_txt_per_chapter(self, path=None, naam=""):
+        if not path:
+            path, _ = QFileDialog.getSaveFileName(
+                self,
+                self.meldingen["Exporteer als Tekstbestand per Hoofdstuk"],
+                self.mijn_configuratie["opslaglocatie"],
+                self.meldingen["Tekstbestanden (*.txt)"]
         )
 
         if not path:
@@ -2450,18 +2462,14 @@ identifier: {identifier}
         chapter_texts = self.markdown_to_text_per_chapter(md_text)
         #print("chapter_texts", chapter_texts)
 
-        #from pathlib import Path
-
-        naam_zonder_ext = Path(path).stem
+        naam_zonder_ext = Path(path).stem if not naam else naam
         #print(naam_zonder_ext)  # mapbestand
 
 
         for i, chapter_text in enumerate(chapter_texts):
             nummer_str = str(i + 1).zfill(2)  # 01, 02, etc.
-            #print(f"Exporting chapter {nummer_str} to {path}_deel_{nummer_str}.txt")
-            #print(f"Chapter text length: {len(chapter_text)}")
             try:
-                with open(path + f"_deel_{nummer_str}.txt", "w", encoding="utf-8") as f:
+                with open(path + naam + f"_deel_{nummer_str}.txt", "w", encoding="utf-8") as f:
                         f.write(f"{naam_zonder_ext} - deel {nummer_str}.\n\n")
                         f.write(chapter_text)
                         f.write("\n\n")
@@ -2828,6 +2836,57 @@ identifier: {identifier}
             except Exception as e:
                 QMessageBox.critical(self, self.meldingen["Fout"], f"{self.meldingen['Fout bij ontsleuteling']}: {e}")
 
+    def export_epub_to_tts_texts(self):
+        # get author anf title from frontmatter
+        md_text = self.editor.toPlainText()
+        fm_pattern = r"^---\n.*?\n---\n"
+        fm_match = re.search(fm_pattern, md_text, flags=re.DOTALL)
+        if fm_match:
+            fm_text = fm_match.group(0)
+            fm_lines = fm_text.strip().split("\n")
+            frontmatter = {}
+            for line in fm_lines[1:-1]:  # skip the first and last lines (---)
+                key, value = line.split(":", 1)
+                frontmatter[key.strip()] = value.strip()
+            title = frontmatter.get("title", self.meldingen["Mijn Markdown Boek"])
+            author = frontmatter.get("author", self.meldingen["Onbekende Auteur"])
+        else:
+            title = self.meldingen["Mijn Markdown Boek"]
+            author = self.meldingen["Onbekende Auteur"]
+
+        naam = f"{author} - {title}"
+
+        path1 = self.mijn_configuratie["opslaglocatie"] + "/" + naam + "/"
+        path2 = path1 + "/" + naam + "_TTS_teksten" + "/"
+        if not os.path.exists(path1):
+            os.makedirs(path1)
+        if not os.path.exists(path2):
+            os.makedirs(path2)
+
+        #path = self.mijn_configuratie["opslaglocatie"] + "/" + naam + "_TTS_teksten" + "/"
+        #if not os.path.exists(path):
+            #os.makedirs(path)
+        self.export_txt_per_chapter(path=path2, naam=naam)  # Export the current markdown to text files per chapter
+        
+
+        QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["EPUB succesvol geëxporteerd naar TTS-teksten!"])
+
+
+    def update_frontmatter(self, waarde):
+        md_text = self.editor.toPlainText()
+        fm_pattern = r"^---\n.*?\n---\n"
+        fm_match = re.search(fm_pattern, md_text, flags=re.DOTALL)
+        new_fm_text = "---\n"
+        for key, value in waarde.items():
+            new_fm_text += f"{key}: {value}\n"
+        new_fm_text += "---\n"
+        if fm_match:
+            fm_text = fm_match.group(0)
+            new_md_text = re.sub(fm_pattern, new_fm_text + "\n", md_text, flags=re.DOTALL)
+            self.editor.setPlainText(new_md_text)
+            QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Frontmatter bijgewerkt!"])
+        else:
+            QMessageBox.warning(self, self.meldingen["Waarschuwing"], self.meldingen["Geen frontmatter gevonden om bij te werken."])
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

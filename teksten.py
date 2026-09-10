@@ -351,6 +351,10 @@ menu_teksten_nl["Naar einde regel"] = "Naar einde regel"
 menu_teksten_en["Naar einde regel"] = "Go to end of line"
 menu_teksten_de["Naar einde regel"] = "Zum Ende der Zeile gehen"
 
+menu_teksten_nl["Exporteer ePub naar TTS-teksten"] = "Exporteer ePub naar TTS-teksten"
+menu_teksten_en["Exporteer ePub naar TTS-teksten"] = "Export ePub to TTS texts"
+menu_teksten_de["Exporteer ePub naar TTS-teksten"] = "ePub in TTS-Texte exportieren"
+
 #
 # Meldingen
 #
@@ -894,3 +898,27 @@ meldingen_de["Bestand opslaan"] = "Datei speichern"
 meldingen_nl["Selectie opslaan als"] = "Selectie opslaan als"
 meldingen_en["Selectie opslaan als"] = "Save selection as"
 meldingen_de["Selectie opslaan als"] = "Auswahl speichern als"
+
+meldingen_nl["EPUB succesvol geëxporteerd naar TTS-teksten!"] = "EPUB succesvol geëxporteerd naar TTS-teksten!"
+meldingen_en["EPUB succesvol geëxporteerd naar TTS-teksten!"] = "EPUB successfully exported to TTS texts!"
+meldingen_de["EPUB succesvol geëxporteerd naar TTS-teksten!"] = "EPUB erfolgreich in TTS-Texte exportiert!"
+
+meldingen_nl["Exporteer EPUB naar TTS-teksten"] = "Exporteer EPUB naar TTS-teksten"
+meldingen_en["Exporteer EPUB naar TTS-teksten"] = "Export EPUB to TTS texts"
+meldingen_de["Exporteer EPUB naar TTS-teksten"] = "EPUB in TTS-Texte exportieren"
+
+meldingen_nl["Selecteer uitvoermap voor TTS-teksten"] = "Selecteer uitvoermap voor TTS-teksten"
+meldingen_en["Selecteer uitvoermap voor TTS-teksten"] = "Select output folder for TTS texts"
+meldingen_de["Selecteer uitvoermap voor TTS-teksten"] = "Wählen Sie den Ausgabefolder für TTS-Texte"
+
+meldingen_nl["Frontmatter bijgewerkt!"] = "Frontmatter bijgewerkt!"
+meldingen_en["Frontmatter bijgewerkt!"] = "Frontmatter updated!"
+meldingen_de["Frontmatter bijgewerkt!"] = "Frontmatter aktualisiert!"
+
+meldingen_nl["Geen frontmatter gevonden om bij te werken."] = "Geen frontmatter gevonden om bij te werken."
+meldingen_en["Geen frontmatter gevonden om bij te werken."] = "No frontmatter found to update."
+meldingen_de["Geen frontmatter gevonden om bij te werken."] = "Keine Frontmatter zum Aktualisieren gefunden."
+
+meldingen_nl["Waarschuwing"] = "Waarschuwing"
+meldingen_en["Waarschuwing"] = "Warning"
+meldingen_de["Waarschuwing"] = "Warnung"
