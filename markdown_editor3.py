@@ -59,6 +59,8 @@ from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
 
 from help_window import HelpWindow
 
+from frontmatter_window import FrontmatterWindow
+
 
 menuBarStyle = """
             QMenuBar {
@@ -329,7 +331,7 @@ QToolButton:checked {
 
         #maak_menu_punt(self, "if_name_is_main_actie", menu_teksten["if name == main"], "Alt+I", self.if_name_is_main)
 
-        #maak_menu_punt(self, "frontmatter_actie", menu_teksten["Frontmatter"], "Alt+F", self.frontmatter)
+        maak_menu_punt(self, "frontmatter_actie", menu_teksten["Frontmatter"], "Alt+F", self.frontmatter_popup)
 
         #maak_menu_punt(self, "frontmatter_epub_actie", menu_teksten["Frontmatter epub"], "", self.frontmatter_epub)
 
@@ -446,7 +448,7 @@ QToolButton:checked {
         invoegen_menu.addAction(actie["md_link_actie"])
         invoegen_menu.addAction(actie["md_afbeelding_actie"])
         #invoegen_menu.addAction(actie["if_name_is_main_actie"])
-        #invoegen_menu.addAction(actie["frontmatter_actie"])
+        invoegen_menu.addAction(actie["frontmatter_actie"])
         #invoegen_menu.addAction(actie["frontmatter_epub_actie"])
 
         invoegen_menu = self.menuBar().addMenu(menu_teksten["Teksten"])
@@ -1163,8 +1165,8 @@ QToolButton:checked {
     def frontmatter_popup(self):
         fm = self.get_frontmatter()
         # moet window zijn met velden voor title, author, date, tags, description
-        #self.frontmatter_venster = FrontmatterWindow(fm)
-        #self.frontmatter_venster.show()
+        self.frontmatter_venster = FrontmatterWindow(fm)
+        self.frontmatter_venster.show()
 
 
     def frontmatter(self):
