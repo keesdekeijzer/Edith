@@ -88,7 +88,7 @@ class Markdown_Editor(QMainWindow):
 
         #self.mijn_configuratie["opslaglocatie"] = configuratie.get("opslaglocatie", "/home/kees/Data/")
         self.mijn_configuratie = self.load_config()  # Load configuration from config.yaml
-        print("Configuratie geladen:", self.mijn_configuratie)
+        #print("Configuratie geladen:", self.mijn_configuratie)
 
         LANG_MAP = {
             "nl": "nld",
@@ -834,10 +834,16 @@ QToolButton:checked {
         else:
             self.opslaan_als()
 
-    def opslaan_als(self):        
+    def opslaan_als(self, save_path="_no_name_"):   
+        save_my_path = str(save_path)  # Ensure save_path is a string
+        #print(f"Opslaan als: {save_my_path}")     
         try:
-            pathname = QFileDialog.getSaveFileName(self, self.meldingen["Bestand opslaan"], self.mijn_configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
+            if save_my_path=="False" or save_my_path=="_no_name_":
+                pathname = QFileDialog.getSaveFileName(self, self.meldingen["Bestand opslaan"], self.mijn_configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
+            else:
+                pathname = (save_my_path, 'Tekst bestanden (*.txt)')
             filetext = self.editor.toPlainText()
+            #print(f"Opslaan als: {pathname[0]}")
             with open(pathname[0], 'w') as f:
                 f.write(filetext)
             self.current_path = pathname[0]
@@ -1128,13 +1134,13 @@ QToolButton:checked {
         QMessageBox.about(self, self.meldingen["Markdown"], self.meldingen["Markdown_help"])
 
     def edith_help(self):
-        print("Help venster openen")
+        #print("Help venster openen")
         self.help_venster = HelpWindow()
 
-        print("Help venster aangemaakt")
+        #print("Help venster aangemaakt")
         self.help_venster.show()
         
-        print("Help venster getoond")
+        #print("Help venster getoond")
 
 
 
@@ -1174,7 +1180,7 @@ QToolButton:checked {
         self.frontmatter_venster.show()
         if self.frontmatter_venster.exec() == QDialog.DialogCode.Accepted:
             waarde = self.frontmatter_venster.resultaat
-            print("Ontvangen waarde:", waarde)
+            #print("Ontvangen waarde:", waarde)
             self.update_frontmatter(waarde)
         else:
             print("Venster geannuleerd")
@@ -1707,6 +1713,7 @@ QToolButton:checked {
         author = meta.get("author", self.meldingen["Onbekende Auteur"])
         cover_file = meta.get("cover_file", "")
         identifier = meta.get("identifier", "id123456")
+        language = meta.get("language", "nl")
 
         # Zonder H1 koppen komt hier niets uit
 
@@ -1718,12 +1725,14 @@ QToolButton:checked {
         book = epub.EpubBook()
         book.set_title(title)
         book.add_author(author)
-        book.set_language("nl")
+        book.set_language(language)
         book.set_identifier(identifier)
 
-        
+        default_cover_path = self.mijn_configuratie["opslaglocatie"] + "/cover.jpg" or "assets/cover.jpg"  # standaard cover als fallback
+        #print("default_cover_path", default_cover_path)
+
         if not cover_file:
-            cover_file = self.vind_cover_image(md_text) or "assets/cover.jpg"  # fallback naar standaard cover
+            cover_file = self.vind_cover_image(md_text) or default_cover_path or "assets/cover.jpg"  # fallback naar standaard cover
             #cover_file = "assets/cover.jpg"
 
         #cover_path = self.generate_epub_cover(meta, logo_path=cover_file)
@@ -2589,6 +2598,14 @@ identifier: {identifier}
                 if self.is_dit_een_romeins_cijfer(woorden[aantal_woorden - 1]):
                     woorden[aantal_woorden - 1] = self.romeinse_cijfers_omzetten(woorden[aantal_woorden - 1]) + "."
                     aantal_vervangen += 1
+            if aantal_woorden > 2:
+                if woorden[0]=="#":
+                    if self.is_dit_een_romeins_cijfer(woorden[2]):
+                        woorden[2] = self.romeinse_cijfers_omzetten(woorden[2])
+                        aantal_vervangen += 1
+                    elif woorden[2].endswith(".") and self.is_dit_een_romeins_cijfer(woorden[2][:-1]):
+                        woorden[2] = self.romeinse_cijfers_omzetten(woorden[2][:-1]) + "."
+                        aantal_vervangen += 1
             genormaliseerde_regel = ' '.join(woorden)
             if n == len(regellijst) -1:
                 genormaliseerde_tekst += genormaliseerde_regel
@@ -2837,7 +2854,7 @@ identifier: {identifier}
                 QMessageBox.critical(self, self.meldingen["Fout"], f"{self.meldingen['Fout bij ontsleuteling']}: {e}")
 
     def export_epub_to_tts_texts(self):
-        # get author anf title from frontmatter
+        # get author and title from frontmatter
         md_text = self.editor.toPlainText()
         fm_pattern = r"^---\n.*?\n---\n"
         fm_match = re.search(fm_pattern, md_text, flags=re.DOTALL)
@@ -2866,6 +2883,26 @@ identifier: {identifier}
         #path = self.mijn_configuratie["opslaglocatie"] + "/" + naam + "_TTS_teksten" + "/"
         #if not os.path.exists(path):
             #os.makedirs(path)
+
+        save_path = path1 + naam + ".md"
+        #with open(save_path, "w", encoding="utf-8") as f:
+            #f.write(md_text)
+        self.opslaan_als(save_path=save_path)
+
+        # epub
+        # leegmaken van de map "images" in de opslaglocatie, zodat oude afbeeldingen niet blijven staan
+        images_dir = os.path.join(path1, "epubfiles/images")
+        #print("images_dir", images_dir)
+        if os.path.exists(images_dir):
+            shutil.rmtree(images_dir)
+
+        epub_path = path1 + naam + " - 1" + ".epub"
+        self.export_markdown_to_epub(md_text, epub_path)
+
+        QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["EPUB-boek opgeslagen!"])  
+
+        # txt per hoofdstuk
+
         self.export_txt_per_chapter(path=path2, naam=naam)  # Export the current markdown to text files per chapter
         
 
