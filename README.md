@@ -43,3 +43,18 @@ Misschien handig om de map images van te voren te legen of the backuppen, want a
 ## Zoeken en vervangen
 
 Zoeken is niet hoofdlettergevoelig, maar vervangen wel als dat is aangezet.
+
+## Opslaan
+
+Je kunt ook een tekstselectie opslaan.
+
+## Export voor TTS
+
+Er is een complete export mogelijk vorr TTS. De export omvat een md-bestand die als backup kan dienen, een epub-bestand en een map met tekstbestanden per hoofdstuk.
+
+Het epub bestand krijgt als aanvulling op de naam "- 1" mee, om deze te onderscheiden van het eventuele oorspronkelijke epub bestand.
+
+## Frontmatter
+
+De frontmatter kan in een apart venster bewerkr worden.
+
