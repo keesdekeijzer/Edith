@@ -1523,7 +1523,7 @@ QToolButton:checked {
                 key, value = line.split(':', 1)
                 fm_data[key.strip()] = value.strip()
             else:
-                print(f"Geen dubbele punt gevonden in regel: '{line}'")
+                print(f"Geen dubbele punt gevonden in frontmatter-regel: '{line}'")
         return fm_data or {}
 
     def extract_metadata(self, md_text):
@@ -1541,7 +1541,7 @@ QToolButton:checked {
                 key, value = line.split(':', 1)
                 fm_data[key.strip()] = value.strip()
             else:
-                print(f"Geen dubbele punt gevonden in regel: '{line}'")
+                print(f"Geen dubbele punt gevonden in frontmatter-regel: '{line}'")
         return fm_data or {}
 
     def slugify(self, text):
@@ -2454,7 +2454,7 @@ identifier: {identifier}
             chapter_texts.append("\n".join(lines).strip())
         return chapter_texts
 
-    def export_txt_per_chapter(self, path=None, naam=""):
+    def export_txt_per_chapter(self, path=None, naam="", tts=False):
         if not path:
             path, _ = QFileDialog.getSaveFileName(
                 self,
@@ -2467,18 +2467,18 @@ identifier: {identifier}
             return
         
         md_text = self.editor.toPlainText()
-        #print("md_text", md_text)
         chapter_texts = self.markdown_to_text_per_chapter(md_text)
-        #print("chapter_texts", chapter_texts)
 
         naam_zonder_ext = Path(path).stem if not naam else naam
-        #print(naam_zonder_ext)  # mapbestand
-
+        pathmap = str(Path(path).parent) if not tts else path
 
         for i, chapter_text in enumerate(chapter_texts):
-            nummer_str = str(i + 1).zfill(2)  # 01, 02, etc.
+            nummer_str = str(i + 1).zfill(3)  # 01, 02, etc.
             try:
-                with open(path + naam + f"_deel_{nummer_str}.txt", "w", encoding="utf-8") as f:
+                bestand = naam_zonder_ext + f"_deel_{nummer_str}"
+                bestandsnaam = self.slugify(bestand) + ".txt"
+                opslagnaam = os.path.join(pathmap, bestandsnaam)
+                with open(opslagnaam, "w", encoding="utf-8") as f:
                         f.write(f"{naam_zonder_ext} - deel {nummer_str}.\n\n")
                         f.write(chapter_text)
                         f.write("\n\n")
@@ -2863,8 +2863,9 @@ identifier: {identifier}
             fm_lines = fm_text.strip().split("\n")
             frontmatter = {}
             for line in fm_lines[1:-1]:  # skip the first and last lines (---)
-                key, value = line.split(":", 1)
-                frontmatter[key.strip()] = value.strip()
+                if ":" in line:
+                    key, value = line.split(":", 1)
+                    frontmatter[key.strip()] = value.strip()
             title = frontmatter.get("title", self.meldingen["Mijn Markdown Boek"])
             author = frontmatter.get("author", self.meldingen["Onbekende Auteur"])
         else:
@@ -2903,7 +2904,9 @@ identifier: {identifier}
 
         # txt per hoofdstuk
 
-        self.export_txt_per_chapter(path=path2, naam=naam)  # Export the current markdown to text files per chapter
+        self.export_txt_per_chapter(path=path2, naam=naam, tts=True)  # Export the current markdown to text files per chapter
+        print(f"Exported TTS texts to {path2}")
+        print("naam", naam)
         
 
         QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["EPUB succesvol geëxporteerd naar TTS-teksten!"])
