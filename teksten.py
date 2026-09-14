@@ -355,6 +355,10 @@ menu_teksten_nl["Exporteer ePub naar TTS-teksten"] = "Exporteer ePub naar TTS-te
 menu_teksten_en["Exporteer ePub naar TTS-teksten"] = "Export ePub to TTS texts"
 menu_teksten_de["Exporteer ePub naar TTS-teksten"] = "ePub in TTS-Texte exportieren"
 
+menu_teksten_nl["Hoofdstukken maken"] = "Hoofdstukken maken"
+menu_teksten_en["Hoofdstukken maken"] = "Create chapters"
+menu_teksten_de["Hoofdstukken maken"] = "Kapitel erstellen"
+
 #
 # Meldingen
 #

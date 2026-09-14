@@ -299,6 +299,8 @@ QToolButton:checked {
 
         maak_menu_punt(self, "alle_romeinse_cijfers_vervangen_actie", menu_teksten["Alle Romeinse cijfers vervangen"], "", self.alle_romeinse_cijfers_vervangen)
 
+        maak_menu_punt(self, "hoofdstukken_maken_actie", menu_teksten["Hoofdstukken maken"], "", self.hoofdstukken_maken)
+
         # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
 
         maak_menu_punt(self, "lichte_modus_actie", menu_teksten["Lichte modus"], "", self.lichte_modus)
@@ -430,6 +432,7 @@ QToolButton:checked {
         bewerken_menu.addAction(actie["woorden_vervangen_actie"])
         bewerken_menu.addAction(actie["romeinse_cijfers_vervangen_actie"])
         bewerken_menu.addAction(actie["alle_romeinse_cijfers_vervangen_actie"])
+        bewerken_menu.addAction(actie["hoofdstukken_maken_actie"])
         bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["frontmatter_actie"])
 
@@ -2927,6 +2930,20 @@ identifier: {identifier}
             QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Frontmatter bijgewerkt!"])
         else:
             QMessageBox.warning(self, self.meldingen["Waarschuwing"], self.meldingen["Geen frontmatter gevonden om bij te werken."])
+
+    def hoofdstukken_maken(self):
+        md_text = self.editor.toPlainText()
+        # regels waar alleen cijfers op staan of alleen cijfers met een punt erachter, moeten een markdown kop 1 krijgen
+        lines = md_text.splitlines()
+        new_lines = []
+        for line in lines:
+            stripped_line = line.strip()
+            if stripped_line.isdigit() or (stripped_line[:-1].isdigit() and stripped_line.endswith(".")):
+                new_lines.append("# " + stripped_line)
+            else:
+                new_lines.append(line)
+        new_md_text = "\n".join(new_lines)
+        self.editor.setPlainText(new_md_text)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
