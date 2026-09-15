@@ -926,3 +926,11 @@ meldingen_de["Geen frontmatter gevonden om bij te werken."] = "Keine Frontmatter
 meldingen_nl["Waarschuwing"] = "Waarschuwing"
 meldingen_en["Waarschuwing"] = "Warning"
 meldingen_de["Waarschuwing"] = "Warnung"
+
+meldingen_nl["Hoofdstukken Maken"] = "Hoofdstukken Maken"
+meldingen_en["Hoofdstukken Maken"] = "Create Chapters"
+meldingen_de["Hoofdstukken Maken"] = "Kapitel erstellen"
+
+meldingen_nl["Dit voegt een markdown kop 1 toe aan regels waar alleen cijfers op staan of alleen cijfers met een punt erachter."] = "Dit voegt een markdown kop 1 toe aan regels waar alleen cijfers op staan of alleen cijfers met een punt erachter."
+meldingen_en["Dit voegt een markdown kop 1 toe aan regels waar alleen cijfers op staan of alleen cijfers met een punt erachter."] = "This adds a markdown heading 1 to lines that contain only numbers or numbers followed by a period."
+meldingen_de["Dit voegt een markdown kop 1 toe aan regels waar alleen cijfers op staan of alleen cijfers met een punt erachter."] = "Dies fügt eine markdown Überschrift 1 zu Zeilen hinzu, die nur Zahlen enthalten oder Zahlen gefolgt von einem Punkt."

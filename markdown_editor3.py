@@ -2932,6 +2932,9 @@ identifier: {identifier}
             QMessageBox.warning(self, self.meldingen["Waarschuwing"], self.meldingen["Geen frontmatter gevonden om bij te werken."])
 
     def hoofdstukken_maken(self):
+        QMessageBox.about(self, self.meldingen["Hoofdstukken Maken"], 
+                                      self.meldingen["Dit voegt een markdown kop 1 toe aan regels waar alleen cijfers op staan of alleen cijfers met een punt erachter."])
+                
         md_text = self.editor.toPlainText()
         # regels waar alleen cijfers op staan of alleen cijfers met een punt erachter, moeten een markdown kop 1 krijgen
         lines = md_text.splitlines()

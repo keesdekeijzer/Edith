@@ -50,11 +50,15 @@ Je kunt ook een tekstselectie opslaan.
 
 ## Export voor TTS
 
-Er is een complete export mogelijk vorr TTS. De export omvat een md-bestand die als backup kan dienen, een epub-bestand en een map met tekstbestanden per hoofdstuk.
+Er is een complete export mogelijk voor TTS. De export omvat een md-bestand die als backup kan dienen, een epub-bestand en een map met tekstbestanden per hoofdstuk. De bestandsnamen van de tekstbestanden worden ge-slugified om te voorkomen dat hierin tekens komen die hinder veroorzaken in andere scripts of programma's die deze bestanden inlezen.
 
 Het epub bestand krijgt als aanvulling op de naam "- 1" mee, om deze te onderscheiden van het eventuele oorspronkelijke epub bestand.
 
 ## Frontmatter
 
-De frontmatter kan in een apart venster bewerkr worden.
+De frontmatter kan in een apart venster bewerkt worden.
 
+## Hoofdstukken toevoegen
+
+De functie Hoofdstukken toevoegen is bedoeld voor epub/markdown bestanden.
+De regels waar alleen cijfers op staan of alleen cijfers met een punt erachter, moeten een markdown kop 1 krijgen.
