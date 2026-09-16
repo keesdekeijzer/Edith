@@ -522,13 +522,14 @@ QToolButton:checked {
         top_layout = QHBoxLayout()
         top_layout.addWidget(find_label)
         top_layout.addWidget(self.find_input)
-        top_layout.addWidget(self.case_cb)
+        #top_layout.addWidget(self.case_cb)
         top_layout.addWidget(prev_btn)
         top_layout.addWidget(next_btn)
 
         bottom_layout = QHBoxLayout()
         bottom_layout.addWidget(replace_label)
         bottom_layout.addWidget(self.replace_input)
+        bottom_layout.addWidget(self.case_cb)
         bottom_layout.addWidget(replace_btn)
         bottom_layout.addWidget(replace_all_btn)
 
