@@ -252,7 +252,7 @@ QToolButton:checked {
 
         maak_menu_punt(self, "importeer_pdf_als_md_actie", menu_teksten["Importeer pdf als markdown"], "", self.import_pdf_as_md)
 
-        maak_menu_punt(self, "importeer_epub_actie", menu_teksten["Importeer ePub"], "", self.import_epub)
+        maak_menu_punt(self, "importeer_epub_actie", menu_teksten["Importeer ePub"], "Alt+E", self.import_epub)
 
         maak_menu_punt(self, "export_pdf_actie", menu_teksten["Exporteer als PDF"], "", self.export_pdf)
 
@@ -264,7 +264,7 @@ QToolButton:checked {
 
         maak_menu_punt(self, "export_txt_per_hoofdstuk_actie", menu_teksten["Exporteer als tekstbestand per hoofdstuk"], "", self.export_txt_per_chapter)
 
-        maak_menu_punt(self, "epub_tts_teksten_actie", menu_teksten["Exporteer ePub naar TTS-teksten"], "", self.export_epub_to_tts_texts)        
+        maak_menu_punt(self, "epub_tts_teksten_actie", menu_teksten["Exporteer ePub naar TTS-teksten"], "Alt+Ctrl+E", self.export_epub_to_tts_texts)        
 
         maak_menu_punt(self, "afsluiten_actie", menu_teksten["Afsluiten"], "Ctrl+Q", self.afsluiten)
  
