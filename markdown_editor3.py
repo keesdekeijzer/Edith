@@ -61,6 +61,7 @@ from help_window import HelpWindow
 
 from frontmatter_window import FrontmatterWindow
 
+from utils import slugify  # Import the slugify function from utils.py
 
 menuBarStyle = """
             QMenuBar {
@@ -351,11 +352,11 @@ QToolButton:checked {
         
         maak_menu_punt(self, "over_actie", menu_teksten["Over Edith"], "", self.over)
 
-        maak_menu_punt(self, "sneltoetsen_actie", menu_teksten["Sneltoetsen"], "", self.sneltoetsen)
+        #maak_menu_punt(self, "sneltoetsen_actie", menu_teksten["Sneltoetsen"], "", self.sneltoetsen)
 
-        maak_menu_punt(self, "sneltoetsen_alt_actie", menu_teksten["Sneltoetsen (Alt)"], "", self.sneltoetsen_alt)
+        #maak_menu_punt(self, "sneltoetsen_alt_actie", menu_teksten["Sneltoetsen (Alt)"], "", self.sneltoetsen_alt)
 
-        maak_menu_punt(self, "markdown_actie", menu_teksten["Markdown"], "", self.markdown_overzicht)
+        #maak_menu_punt(self, "markdown_actie", menu_teksten["Markdown"], "", self.markdown_overzicht)
 
         maak_menu_punt(self, "help_actie", menu_teksten["Help"], "F1", self.edith_help)
 
@@ -480,9 +481,9 @@ QToolButton:checked {
 
         hulp_menu = self.menuBar().addMenu(menu_teksten["Help"])
         hulp_menu.addAction(actie["over_actie"])
-        hulp_menu.addAction(actie["sneltoetsen_actie"])
-        hulp_menu.addAction(actie["sneltoetsen_alt_actie"])
-        hulp_menu.addAction(actie["markdown_actie"])
+        #hulp_menu.addAction(actie["sneltoetsen_actie"])
+        #hulp_menu.addAction(actie["sneltoetsen_alt_actie"])
+        #hulp_menu.addAction(actie["markdown_actie"])
         # nog meertalig toevoegen indien nodig
         hulp_menu.addAction(actie["help_actie"])
 
@@ -1126,7 +1127,7 @@ QToolButton:checked {
 
     def over(self):        
         QMessageBox.information(self, self.meldingen["Over Edith"], self.meldingen["Markdown editor met preview."])
-
+    """
     def sneltoetsen(self):
         QMessageBox.about(self, self.meldingen["Sneltoetsen"], self.meldingen["Sneltoetsen_help"])
 
@@ -1136,7 +1137,7 @@ QToolButton:checked {
 
     def markdown_overzicht(self):
         QMessageBox.about(self, self.meldingen["Markdown"], self.meldingen["Markdown_help"])
-
+    """
     def edith_help(self):
         #print("Help venster openen")
         self.help_venster = HelpWindow()
@@ -1548,11 +1549,7 @@ QToolButton:checked {
                 print(f"Geen dubbele punt gevonden in frontmatter-regel: '{line}'")
         return fm_data or {}
 
-    def slugify(self, text):
-        # Unieke maar stabiele ID
-        base = re.sub(r"[^a-zA-Z0-9]+", "-", text).strip("-").lower()
-        h = hashlib.md5(text.encode()).hexdigest()[:6]
-        return f"{base}-{h}"
+
 
     def extract_headings(self, md_text):
         headings = []
@@ -1560,7 +1557,7 @@ QToolButton:checked {
         for match in HEADING_RE.finditer(md_text):
             level = len(match.group(1))
             title = match.group(2).strip()
-            anchor = self.slugify(title)
+            anchor = slugify(title)
             headings.append((level, title, anchor))
         return headings
 
@@ -2480,7 +2477,7 @@ identifier: {identifier}
             nummer_str = str(i + 1).zfill(3)  # 01, 02, etc.
             try:
                 bestand = naam_zonder_ext + f"_deel_{nummer_str}"
-                bestandsnaam = self.slugify(bestand) + ".txt"
+                bestandsnaam = slugify(bestand) + ".txt"
                 opslagnaam = os.path.join(pathmap, bestandsnaam)
                 with open(opslagnaam, "w", encoding="utf-8") as f:
                         f.write(f"{naam_zonder_ext} - deel {nummer_str}.\n\n")
