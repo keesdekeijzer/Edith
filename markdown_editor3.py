@@ -63,21 +63,10 @@ from frontmatter_window import FrontmatterWindow
 
 from utils import slugify  # Import the slugify function from utils.py
 
-menuBarStyle = """
-            QMenuBar {
-                background: #2b2b2b;
-                color: #e6e6e6;
-                border-bottom: 1px solid #444;
-                                     padding: 5px;
-            }
-            QMenuBar::item {
-                padding: 5px 10px;
-                border: 1px solid transparent;
-            }
-            QMenuBar::item:selected {
-                background: #444;
-            }
-        """
+from styles import toolbar_style  # Import the toolbar_style from styles.py
+from styles import menuBar_style  # Import the menuBar_style from styles.py
+
+menuBarStyle = menuBar_style
 
 
 class Markdown_Editor(QMainWindow):
@@ -87,9 +76,7 @@ class Markdown_Editor(QMainWindow):
         self.unsaved_changes = False
         self.current_path = None
 
-        #self.mijn_configuratie["opslaglocatie"] = configuratie.get("opslaglocatie", "/home/kees/Data/")
         self.mijn_configuratie = self.load_config()  # Load configuration from config.yaml
-        #print("Configuratie geladen:", self.mijn_configuratie)
 
         LANG_MAP = {
             "nl": "nld",
@@ -129,25 +116,7 @@ class Markdown_Editor(QMainWindow):
         toolbar = QToolBar("Mijn toolbar", self)        
         self.addToolBar(toolbar)
 
-        toolbar.setStyleSheet("""
-QToolBar {
-    background: transparent;              /* let palette/theme show through */
-    border: none;
-    spacing: 6px;
-}
-QToolButton {
-    background-color: lightblue;
-    border: solid 1px silver;
-    padding: 6px;
-    color: black;
-}
-QToolButton:hover {
-    background-color: rgba(120, 120, 120, 40);
-}
-QToolButton:checked {
-    background-color: rgba(120, 120, 120, 70);
-}
-""")
+        toolbar.setStyleSheet(toolbar_style)
 
         self.meldingen = {}
 
@@ -523,7 +492,6 @@ QToolButton:checked {
         top_layout = QHBoxLayout()
         top_layout.addWidget(find_label)
         top_layout.addWidget(self.find_input)
-        #top_layout.addWidget(self.case_cb)
         top_layout.addWidget(prev_btn)
         top_layout.addWidget(next_btn)
 
@@ -1127,17 +1095,7 @@ QToolButton:checked {
 
     def over(self):        
         QMessageBox.information(self, self.meldingen["Over Edith"], self.meldingen["Markdown editor met preview."])
-    """
-    def sneltoetsen(self):
-        QMessageBox.about(self, self.meldingen["Sneltoetsen"], self.meldingen["Sneltoetsen_help"])
 
-    def sneltoetsen_alt(self):
-        QMessageBox.about(self, self.meldingen["Sneltoetsen Alt"], self.meldingen["Sneltoetsen_Alt_help"])
-
-
-    def markdown_overzicht(self):
-        QMessageBox.about(self, self.meldingen["Markdown"], self.meldingen["Markdown_help"])
-    """
     def edith_help(self):
         #print("Help venster openen")
         self.help_venster = HelpWindow()
@@ -1173,10 +1131,6 @@ QToolButton:checked {
             md_code = f"![{bestandsnaam}]({pathname[0]})"
             self.editor.insertPlainText(md_code)
 
-    """
-    def if_name_is_main(self):
-        self.editor.insertPlainText("if__name__ == '__main__':\n    ")
-    """
 
     def frontmatter_popup(self):
         fm = self.get_frontmatter()
@@ -2343,7 +2297,7 @@ identifier: {identifier}
         build_find_text = ""
         find_text = self.find_input.text()
         for char in find_text:
-            if char in "$^|\\":
+            if char in "$^|\\.*+?()[]{}":
                 # Escape special regex characters
                 new_find_text = "\\" + char
             else:
