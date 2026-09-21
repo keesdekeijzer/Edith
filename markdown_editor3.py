@@ -2331,7 +2331,7 @@ identifier: {identifier}
                 extra = self._make_extra(selection, self.highlight_format)
                 extra_selections.append(extra)
 
-            # If current cursor is on a match, make it highlighted differently
+            # If current cursor is on a match, make it highlighted differently 
             cur = self.editor.textCursor()
             for i, c in enumerate(cursors):
                 if c.selectionStart() <= cur.position() <= c.selectionEnd():
@@ -2554,7 +2554,7 @@ identifier: {identifier}
                     woorden[aantal_woorden - 1] = self.romeinse_cijfers_omzetten(woorden[aantal_woorden - 1]) + "."
                     aantal_vervangen += 1
             if aantal_woorden > 2:
-                if woorden[0]=="#":
+                if woorden[0]=="#" or woorden[0]=="##" or woorden[0]=="###" or woorden[0]=="####" or woorden[0]=="#####":
                     if self.is_dit_een_romeins_cijfer(woorden[2]):
                         woorden[2] = self.romeinse_cijfers_omzetten(woorden[2])
                         aantal_vervangen += 1

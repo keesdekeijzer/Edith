@@ -22,6 +22,11 @@ class FrontmatterWindow(QDialog):
             self.fields[key] = field
             self.layout.addRow(QLabel(key), field)
 
+        self.label2 = QLabel("Change ID:")
+        self.knop = QPushButton("Change ID")
+        self.knop.clicked.connect(self.change_ok)
+        self.layout.addRow(self.label2, self.knop)
+
         self.label = QLabel("Save and Close:")
         self.knop = QPushButton("OK")
         self.knop.clicked.connect(self.ok)
@@ -55,5 +60,12 @@ class FrontmatterWindow(QDialog):
     def ok(self):
         """Handle the OK button click."""
         #print("OK button clicked. Current form data:", self.get_form_data())
+        self.resultaat = self.get_form_data()  # Store the current form data
+        self.accept()  # Close the dialog and return QDialog.Accepted
+
+    def change_ok(self):
+        """Handle the Change ID button click."""
+        new_id = self.fields['author'].text() + "_" + self.fields['title'].text()
+        self.fields['identifier'].setText(new_id)  # Change the identifier field to a new value
         self.resultaat = self.get_form_data()  # Store the current form data
         self.accept()  # Close the dialog and return QDialog.Accepted
