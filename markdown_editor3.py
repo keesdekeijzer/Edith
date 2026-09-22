@@ -2836,13 +2836,7 @@ identifier: {identifier}
         if not os.path.exists(path2):
             os.makedirs(path2)
 
-        #path = self.mijn_configuratie["opslaglocatie"] + "/" + naam + "_TTS_teksten" + "/"
-        #if not os.path.exists(path):
-            #os.makedirs(path)
-
         save_path = path1 + naam + ".md"
-        #with open(save_path, "w", encoding="utf-8") as f:
-            #f.write(md_text)
         self.opslaan_als(save_path=save_path)
 
         # epub
@@ -2860,8 +2854,8 @@ identifier: {identifier}
         # txt per hoofdstuk
 
         self.export_txt_per_chapter(path=path2, naam=naam, tts=True)  # Export the current markdown to text files per chapter
-        print(f"Exported TTS texts to {path2}")
-        print("naam", naam)
+        #print(f"Exported TTS texts to {path2}")
+        #print("naam", naam)
         
 
         QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["EPUB succesvol geëxporteerd naar TTS-teksten!"])

@@ -65,6 +65,8 @@ class FrontmatterWindow(QDialog):
 
     def change_ok(self):
         """Handle the Change ID button click."""
+        self.fields['author'].setText(self.fields['author'].text().strip().replace(".", " ").replace(":", " ").replace(";", " "))  # Ensure no leading/trailing whitespace
+        self.fields['title'].setText(self.fields['title'].text().strip().replace(".", " ").replace(":", " - ").replace(";", " "))
         new_id = self.fields['author'].text() + "_" + self.fields['title'].text()
         self.fields['identifier'].setText(new_id)  # Change the identifier field to a new value
         self.resultaat = self.get_form_data()  # Store the current form data
