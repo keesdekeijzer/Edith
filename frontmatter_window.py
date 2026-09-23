@@ -68,6 +68,7 @@ class FrontmatterWindow(QDialog):
         self.fields['author'].setText(self.fields['author'].text().strip().replace(".", " ").replace(":", " ").replace(";", " "))  # Ensure no leading/trailing whitespace
         self.fields['title'].setText(self.fields['title'].text().strip().replace(".", " ").replace(":", " - ").replace(";", " "))
         new_id = self.fields['author'].text() + "_" + self.fields['title'].text()
+        new_id = new_id.replace("/", "_")
         self.fields['identifier'].setText(new_id)  # Change the identifier field to a new value
         self.resultaat = self.get_form_data()  # Store the current form data
         self.accept()  # Close the dialog and return QDialog.Accepted
