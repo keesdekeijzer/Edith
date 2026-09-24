@@ -23,7 +23,8 @@ class FrontmatterWindow(QDialog):
             self.layout.addRow(QLabel(key), field)
 
         self.label2 = QLabel("Change ID:")
-        self.knop = QPushButton("Change ID")
+        self.knop = QPushButton("Change ID (Ctrl+S)")
+        self.knop.setShortcut("Ctrl+S")
         self.knop.clicked.connect(self.change_ok)
         self.layout.addRow(self.label2, self.knop)
 
@@ -65,8 +66,8 @@ class FrontmatterWindow(QDialog):
 
     def change_ok(self):
         """Handle the Change ID button click."""
-        self.fields['author'].setText(self.fields['author'].text().strip().replace(".", " ").replace(":", " ").replace(";", " "))  # Ensure no leading/trailing whitespace
-        self.fields['title'].setText(self.fields['title'].text().strip().replace(".", " ").replace(":", " - ").replace(";", " "))
+        self.fields['author'].setText(self.fields['author'].text().strip().replace(".", " ").replace(":", " ").replace(";", " ").replace("/", "_"))  # Ensure no leading/trailing whitespace
+        self.fields['title'].setText(self.fields['title'].text().strip().replace(".", " ").replace(":", " - ").replace(";", " ").replace("/", "_"))
         new_id = self.fields['author'].text() + "_" + self.fields['title'].text()
         new_id = new_id.replace("/", "_")
         self.fields['identifier'].setText(new_id)  # Change the identifier field to a new value
