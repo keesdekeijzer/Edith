@@ -22,16 +22,64 @@ class FrontmatterWindow(QDialog):
             self.fields[key] = field
             self.layout.addRow(QLabel(key), field)
 
-        self.label2 = QLabel("Change ID:")
-        self.knop = QPushButton("Change ID (Ctrl+S)")
-        self.knop.setShortcut("Ctrl+S")
-        self.knop.clicked.connect(self.change_ok)
-        self.layout.addRow(self.label2, self.knop)
+        
+
+        self.label2 = QLabel("")
+        self.knop2 = QPushButton("Change ID (Ctrl+S)")
+        self.knop2.setShortcut("Ctrl+S")
+        self.knop2.clicked.connect(self.change_ok)
+        self.layout.addRow(self.label2, self.knop2)
+
+        self.label3 = QLabel("")
+        self.knop3 = QPushButton("Add Subtitle (Alt+S)")
+        self.knop3.setShortcut("Alt+S")
+        self.knop3.clicked.connect(self.add_subtitle)
+        self.layout.addRow(self.label3, self.knop3)
 
         self.label = QLabel("Save and Close:")
         self.knop = QPushButton("OK")
         self.knop.clicked.connect(self.ok)
         self.layout.addRow(self.label, self.knop)
+
+        self.knop.setStyleSheet("""    
+                QPushButton {        
+                background-color: #3498db;        
+                color: white;        
+                border: none;        
+                border-radius: 6px;        
+                padding: 8px 16px;    }
+                QPushButton:hover {        
+                background-color: #2980b9;    }
+                QPushButton:pressed {        
+                background-color: #1f618d;    }
+                """)
+
+        self.knop2.setStyleSheet("""    
+                QPushButton {        
+                background-color: #3498db;        
+                color: white;        
+                border: none;        
+                border-radius: 6px;        
+                padding: 8px 16px;    }
+                QPushButton:hover {        
+                background-color: #2980b9;    }
+                QPushButton:pressed {        
+                background-color: #1f618d;    }
+                """)
+
+        self.knop3.setStyleSheet("""    
+                QPushButton {        
+                background-color: #3498db;        
+                color: white;        
+                border: none;        
+                border-radius: 6px;        
+                padding: 8px 16px;    }
+                QPushButton:hover {        
+                background-color: #2980b9;    }
+                QPushButton:pressed {        
+                background-color: #1f618d;    }
+                """)
+
 
         #print("FrontmatterWindow initialized with fields:", self.fields)   
         self.print_gegevens() 
@@ -73,3 +121,10 @@ class FrontmatterWindow(QDialog):
         self.fields['identifier'].setText(new_id)  # Change the identifier field to a new value
         self.resultaat = self.get_form_data()  # Store the current form data
         self.accept()  # Close the dialog and return QDialog.Accepted
+
+    def add_subtitle(self):
+        #print("fields:", self.fields)
+        self.fields['subtitle'] = QLineEdit(str(""))
+        self.layout.addRow(QLabel('subtitle'), QLineEdit(str("")))
+        self.resultaat = self.get_form_data()
+        self.accept()
