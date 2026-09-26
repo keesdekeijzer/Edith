@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QFormLayout, QLabel, QLineEdit, QMainWindow, QPushButton, QWidget, QDialog
+from PyQt6.QtWidgets import QFormLayout, QVBoxLayout, QLabel, QLineEdit, QMainWindow, QPushButton, QWidget, QDialog
 
 class FrontmatterWindow(QDialog):
     def __init__(self, fm=None):
@@ -12,34 +12,39 @@ class FrontmatterWindow(QDialog):
         self.setWindowTitle("Frontmatter Window")
         self.setGeometry(100, 100, 800, 600)
         # Additional UI setup can be done here
-        self.layout = QFormLayout()
-        self.setLayout(self.layout)
+        self.form_layout = QFormLayout()
+        #self.setLayout(self.layout)
 
         for key, value in self.fm.items():
             #print(f"Adding field for key: {key}, value: {value}")
             field = QLineEdit(str(value))
             field.editingFinished.connect(self._emit_change)
             self.fields[key] = field
-            self.layout.addRow(QLabel(key), field)
+            self.form_layout.addRow(QLabel(key), field)
 
-        
+        self.button_layout = QVBoxLayout()
+        #button_layout.addWidget(QPushButton("Submit"))
+        #button_layout.addWidget(QPushButton("Cancel"))
 
         self.label2 = QLabel("")
         self.knop2 = QPushButton("Change ID (Ctrl+S)")
         self.knop2.setShortcut("Ctrl+S")
         self.knop2.clicked.connect(self.change_ok)
-        self.layout.addRow(self.label2, self.knop2)
+        #self.button_layout.addRow(self.label2, self.knop2)
+        self.button_layout.addWidget(self.knop2)
 
         self.label3 = QLabel("")
         self.knop3 = QPushButton("Add Subtitle (Alt+S)")
         self.knop3.setShortcut("Alt+S")
         self.knop3.clicked.connect(self.add_subtitle)
-        self.layout.addRow(self.label3, self.knop3)
+        #self.button_layout.addRow(self.label3, self.knop3)
+        self.button_layout.addWidget(self.knop3)
 
         self.label = QLabel("Save and Close:")
         self.knop = QPushButton("OK")
         self.knop.clicked.connect(self.ok)
-        self.layout.addRow(self.label, self.knop)
+        #self.button_layout.addRow(self.label, self.knop)
+        self.button_layout.addWidget(self.knop)
 
         self.knop.setStyleSheet("""    
                 QPushButton {        
@@ -80,6 +85,11 @@ class FrontmatterWindow(QDialog):
                 background-color: #1f618d;    }
                 """)
 
+        self.main_layout = QVBoxLayout()
+        self.main_layout.addLayout(self.form_layout)
+        self.main_layout.addLayout(self.button_layout)
+
+        self.setLayout(self.main_layout)
 
         #print("FrontmatterWindow initialized with fields:", self.fields)   
         self.print_gegevens() 
@@ -125,6 +135,6 @@ class FrontmatterWindow(QDialog):
     def add_subtitle(self):
         #print("fields:", self.fields)
         self.fields['subtitle'] = QLineEdit(str(""))
-        self.layout.addRow(QLabel('subtitle'), QLineEdit(str("")))
+        self.form_layout.addRow(QLabel('subtitle'), QLineEdit(str("")))
         self.resultaat = self.get_form_data()
         self.accept()
