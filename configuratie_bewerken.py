@@ -1,4 +1,5 @@
-from PyQt6.QtWidgets import QButtonGroup, QDialog, QLabel, QMessageBox, QRadioButton, QVBoxLayout, QPushButton as QButton
+from PyQt6.QtWidgets import QButtonGroup, QDialog, QLabel, QMessageBox, QRadioButton
+from PyQt6.QtWidgets import QVBoxLayout, QHBoxLayout, QPushButton as QButton
 import yaml
 
 from teksten_config import config_meldingen_de, config_meldingen_en, config_meldingen_nl
@@ -32,35 +33,58 @@ class ConfiguratieBewerken(QDialog):
         self.setWindowTitle(self.config_meldingen["Configuratie bewerken"])
 
     def setup_ui(self):
-        layout = QVBoxLayout()
+
+        self.main_layout = QVBoxLayout()
+
+        self.layout1 = QVBoxLayout()
         label = QLabel(self.config_meldingen["Hier kun je de configuratie bewerken."])
-        layout.addWidget(label)
+        self.layout1.addWidget(label)
+
+        self.layout2 = QVBoxLayout()
         label2 = QLabel("Light mode / Dark mode / Blue mode")
-        layout.addWidget(label2)
+        label2.setStyleSheet("""    
+                QLabel {        
+                background-color: #3498db;        
+                color: white;        
+                border: none;        
+                border-radius: 6px;        
+                padding: 8px 16px;    }
+                """)
+        self.layout2.addWidget(label2)
 
         self.groep_mode = QButtonGroup(self)
         self.mode_choice1 = QRadioButton("Light mode")
         self.mode_choice2 = QRadioButton("Dark mode")
         self.mode_choice3 = QRadioButton("Blue mode")
-        layout.addWidget(self.mode_choice1)
-        layout.addWidget(self.mode_choice2)
-        layout.addWidget(self.mode_choice3)
+        self.layout2.addWidget(self.mode_choice1)
+        self.layout2.addWidget(self.mode_choice2)
+        self.layout2.addWidget(self.mode_choice3)
         self.groep_mode.addButton(self.mode_choice1, 1) 
         self.groep_mode.addButton(self.mode_choice2, 2)
         self.groep_mode.addButton(self.mode_choice3, 3)
         
 
+        self.layout3 = QVBoxLayout()
+
         label3 = QLabel("Language / Taal / Sprache")
-        layout.addWidget(label3)
+        label3.setStyleSheet("""    
+                QLabel {        
+                background-color: #3498db;        
+                color: white;        
+                border: none;        
+                border-radius: 6px;        
+                padding: 8px 16px;    }
+                """)
+        self.layout3.addWidget(label3)
 
 
         self.groep_taal = QButtonGroup(self)
         self.mode_choice4 = QRadioButton("Dutch")
         self.mode_choice5 = QRadioButton("English")
         self.mode_choice6 = QRadioButton("German")
-        layout.addWidget(self.mode_choice4)
-        layout.addWidget(self.mode_choice5)
-        layout.addWidget(self.mode_choice6)
+        self.layout3.addWidget(self.mode_choice4)
+        self.layout3.addWidget(self.mode_choice5)
+        self.layout3.addWidget(self.mode_choice6)
         self.groep_taal.addButton(self.mode_choice4, 1)
         self.groep_taal.addButton(self.mode_choice5, 2)
         self.groep_taal.addButton(self.mode_choice6, 3)
@@ -82,23 +106,44 @@ class ConfiguratieBewerken(QDialog):
         else:
             self.mode_choice6.setChecked(True)
 
+        self.layout4 = QVBoxLayout()
+
         label4 = QLabel("Save location: ")
-        layout.addWidget(label4)
+        label4.setStyleSheet("""    
+                QLabel {        
+                background-color: #3498db;        
+                color: white;        
+                border: none;        
+                border-radius: 6px;        
+                padding: 8px 16px;    }
+                """)
+        self.layout4.addWidget(label4)
 
         self.label5 = QLabel(self.configuratie.get("opslaglocatie", "/home/kees/Data/"))
-        layout.addWidget(self.label5)
+        self.layout4.addWidget(self.label5)
 
         location_btn = QButton("Change location")
-        layout.addWidget(location_btn)
+        self.layout4.addWidget(location_btn)
         location_btn.clicked.connect(self.change_location)
         #self.label5.setText(self.configuratie.get("opslaglocatie", "/home/kees/Data/"))
         #layout.addWidget(self.label5)
 
-        mode_btn = QButton("Opslaan")
-        layout.addWidget(mode_btn)  
+        self.layout5 = QVBoxLayout()
+
+        mode_btn = QButton("Submit")
+        self.layout5.addWidget(mode_btn)  
         mode_btn.clicked.connect(self.bevestig_mode)
 
-        self.setLayout(layout)
+        #self.layout = QVBoxLayout
+
+
+        self.main_layout.addLayout(self.layout1)
+        self.main_layout.addLayout(self.layout2)
+        self.main_layout.addLayout(self.layout3)
+        self.main_layout.addLayout(self.layout4)
+        self.main_layout.addLayout(self.layout5)
+
+        self.setLayout(self.main_layout)
 
     def load_config(self):
         try:
