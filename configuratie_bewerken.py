@@ -6,6 +6,28 @@ from teksten_config import config_meldingen_de, config_meldingen_en, config_meld
 
 #from config import self.configuratie
 
+label_stylesheet = """
+QLabel {        
+                background-color: #58db40;        
+                color: white;        
+                border: none;        
+                border-radius: 6px;        
+                padding: 8px 16px;    }
+"""
+
+button_stylesheet = """
+QPushButton {        
+                background-color: #3498db;        
+                color: white;        
+                border: none;        
+                border-radius: 6px;        
+                padding: 8px 16px;    }
+                QPushButton:hover {        
+                background-color: #2980b9;    }
+                QPushButton:pressed {        
+                background-color: #1f618d;    }
+"""
+
 class ConfiguratieBewerken(QDialog):
     def __init__(self, taal='nl'):
         super().__init__()
@@ -42,14 +64,7 @@ class ConfiguratieBewerken(QDialog):
 
         self.layout2 = QVBoxLayout()
         label2 = QLabel("Light mode / Dark mode / Blue mode")
-        label2.setStyleSheet("""    
-                QLabel {        
-                background-color: #3498db;        
-                color: white;        
-                border: none;        
-                border-radius: 6px;        
-                padding: 8px 16px;    }
-                """)
+        label2.setStyleSheet(label_stylesheet)
         self.layout2.addWidget(label2)
 
         self.groep_mode = QButtonGroup(self)
@@ -67,14 +82,7 @@ class ConfiguratieBewerken(QDialog):
         self.layout3 = QVBoxLayout()
 
         label3 = QLabel("Language / Taal / Sprache")
-        label3.setStyleSheet("""    
-                QLabel {        
-                background-color: #3498db;        
-                color: white;        
-                border: none;        
-                border-radius: 6px;        
-                padding: 8px 16px;    }
-                """)
+        label3.setStyleSheet(label_stylesheet)
         self.layout3.addWidget(label3)
 
 
@@ -109,39 +117,29 @@ class ConfiguratieBewerken(QDialog):
         self.layout4 = QVBoxLayout()
 
         label4 = QLabel("Save location: ")
-        label4.setStyleSheet("""    
-                QLabel {        
-                background-color: #3498db;        
-                color: white;        
-                border: none;        
-                border-radius: 6px;        
-                padding: 8px 16px;    }
-                """)
+        label4.setStyleSheet(label_stylesheet)
         self.layout4.addWidget(label4)
 
         self.label5 = QLabel(self.configuratie.get("opslaglocatie", "/home/kees/Data/"))
         self.layout4.addWidget(self.label5)
 
         location_btn = QButton("Change location")
+        location_btn.setStyleSheet(button_stylesheet)
         self.layout4.addWidget(location_btn)
         location_btn.clicked.connect(self.change_location)
-        #self.label5.setText(self.configuratie.get("opslaglocatie", "/home/kees/Data/"))
-        #layout.addWidget(self.label5)
 
         self.layout5 = QVBoxLayout()
 
         mode_btn = QButton("Submit")
+        mode_btn.setStyleSheet(button_stylesheet)
         self.layout5.addWidget(mode_btn)  
         mode_btn.clicked.connect(self.bevestig_mode)
 
-        #self.layout = QVBoxLayout
-
-
-        self.main_layout.addLayout(self.layout1)
-        self.main_layout.addLayout(self.layout2)
-        self.main_layout.addLayout(self.layout3)
-        self.main_layout.addLayout(self.layout4)
-        self.main_layout.addLayout(self.layout5)
+        self.main_layout.addLayout(self.layout1) # intro
+        self.main_layout.addLayout(self.layout4) # location 
+        self.main_layout.addLayout(self.layout2) # mode
+        self.main_layout.addLayout(self.layout3) # taal
+        self.main_layout.addLayout(self.layout5) # submit
 
         self.setLayout(self.main_layout)
 
@@ -191,8 +189,8 @@ class ConfiguratieBewerken(QDialog):
 
         
     def melding_opgeslagen(self):
-        print("self.configuratie opgeslagen!")
-        QMessageBox.information(self, "Opgeslagen", "self.configuratie is opgeslagen!")
+        #print("self.configuratie opgeslagen!")
+        QMessageBox.information(self, "Opgeslagen", "Configuratie is opgeslagen!")
         self.close()
 
     def change_location(self):
