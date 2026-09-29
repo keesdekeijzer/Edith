@@ -556,6 +556,14 @@ class Markdown_Editor(QMainWindow):
 
         self.editor.verticalScrollBar().valueChanged.connect(self.sync_scroll_to_preview)
 
+    def set_file_label(self, name):
+        f_name = name
+        length = len(name)
+        if length > 80:
+            f_name = name[0:39] + "..." + name[-39:]
+        self.file_label.setText(f_name)
+
+
     def hello(self):        
         print("Hello!")
 
@@ -760,7 +768,8 @@ class Markdown_Editor(QMainWindow):
         self.setWindowTitle(self.meldingen["Geen naam"])
         self.current_path = None 
         self.statusBar().showMessage(self.meldingen["Nieuw Bestand"])
-        self.file_label.setText("?")
+        #self.file_label.setText("?")
+        self.set_file_label("?")
 
     def openen(self):        
         if self.unsaved_changes:
@@ -772,7 +781,8 @@ class Markdown_Editor(QMainWindow):
         try:
             fname = QFileDialog.getOpenFileName(self, self.meldingen["Open bestand"], self.mijn_configuratie["opslaglocatie"], 'Alle bestanden (*)')
             self.setWindowTitle(fname[0])
-            self.file_label.setText(fname[0])
+            #self.file_label.setText(fname[0])
+            self.set_file_label(fname[0])
             
             with open(fname[0], 'r') as f:
                 filetext = f.read()
@@ -800,7 +810,8 @@ class Markdown_Editor(QMainWindow):
                 with open(self.current_path, 'w') as f:
                     f.write(filetext)
                 self.statusBar().showMessage(self.meldingen["Bestand opgeslagen"])
-                self.file_label.setText(self.current_path)
+                #self.file_label.setText(self.current_path)
+                self.set_file_label(self.current_path)
                 self.unsaved_changes = False
             except Exception as e:
                 self.dialog_critical(str(e))
@@ -821,7 +832,8 @@ class Markdown_Editor(QMainWindow):
                 f.write(filetext)
             self.current_path = pathname[0]
             self.setWindowTitle(pathname[0])
-            self.file_label.setText(pathname[0])
+            #self.file_label.setText(pathname[0])
+            self.set_file_label(pathname[0])
             self.statusBar().showMessage(self.meldingen["Bestand opgeslagen"])
             self.unsaved_changes = False
         except Exception as e:
@@ -1196,7 +1208,8 @@ class Markdown_Editor(QMainWindow):
         self.editor.setPlainText(text)
 
         self.current_file_path = None
-        self.file_label.setText("?")
+        #self.file_label.setText("?")
+        self.set_file_label("?")
 
     def import_pdf_as_md(self):
         path, _ = QFileDialog.getOpenFileName(self, self.meldingen["Kies een pdf om te importeren"], self.mijn_configuratie["opslaglocatie"], self.meldingen["PDF-bestanden (*.pdf)"])
@@ -1211,7 +1224,8 @@ class Markdown_Editor(QMainWindow):
         self.editor.setPlainText(text)
 
         self.current_file_path = None
-        self.file_label.setText("?")
+        #self.file_label.setText("?")
+        self.set_file_label("?")
 
     def pdf_to_markdown(self, path: str) -> str:
         # fontsizes
