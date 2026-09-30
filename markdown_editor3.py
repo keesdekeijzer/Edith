@@ -563,6 +563,13 @@ class Markdown_Editor(QMainWindow):
             f_name = name[0:39] + "..." + name[-39:]
         self.file_label.setText(f_name)
 
+    def set_window_title(self, name):
+        w_name = name
+        length = len(name)
+        if length > 80:
+            w_name = name[0:39] + "..." + name[-39:]
+        self.setWindowTitle(w_name)
+
 
     def hello(self):        
         print("Hello!")
@@ -765,7 +772,8 @@ class Markdown_Editor(QMainWindow):
             if reply == QMessageBox.StandardButton.Yes:
                 self.opslaan()
         self.editor.clear()
-        self.setWindowTitle(self.meldingen["Geen naam"])
+        #self.setWindowTitle(self.meldingen["Geen naam"])
+        self.set_window_title(self.meldingen["Geen naam"])
         self.current_path = None 
         self.statusBar().showMessage(self.meldingen["Nieuw Bestand"])
         #self.file_label.setText("?")
@@ -780,7 +788,8 @@ class Markdown_Editor(QMainWindow):
                 self.opslaan()
         try:
             fname = QFileDialog.getOpenFileName(self, self.meldingen["Open bestand"], self.mijn_configuratie["opslaglocatie"], 'Alle bestanden (*)')
-            self.setWindowTitle(fname[0])
+            #self.setWindowTitle(fname[0])
+            self.set_window_title(fname[0])
             #self.file_label.setText(fname[0])
             self.set_file_label(fname[0])
             
@@ -831,7 +840,8 @@ class Markdown_Editor(QMainWindow):
             with open(pathname[0], 'w') as f:
                 f.write(filetext)
             self.current_path = pathname[0]
-            self.setWindowTitle(pathname[0])
+            #self.setWindowTitle(pathname[0])
+            self.set_window_title(pathname[0])
             #self.file_label.setText(pathname[0])
             self.set_file_label(pathname[0])
             self.statusBar().showMessage(self.meldingen["Bestand opgeslagen"])
