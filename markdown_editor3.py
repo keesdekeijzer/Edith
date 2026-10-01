@@ -4,7 +4,7 @@ import sys
 
 from PyQt6 import QtWidgets
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QApplication, QCheckBox, QDialog, QFileDialog, QInputDialog, QLabel, QToolBar
+from PyQt6.QtWidgets import QApplication, QCheckBox, QDialog, QFileDialog, QFrame, QInputDialog, QLabel, QToolBar
 from PyQt6.QtWidgets import QLineEdit, QMainWindow, QPushButton, QTextEdit, QPlainTextEdit
 from PyQt6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout, QPlainTextEdit, QMessageBox, QMenuBar
 from PyQt6.QtWebEngineWidgets import QWebEngineView
@@ -458,7 +458,8 @@ class Markdown_Editor(QMainWindow):
 
 
         v_layout = QVBoxLayout()
- 
+
+        inner_h_layout = QHBoxLayout()
 
         self.file_label = QLabel("?")  # bestandsnaam
         self.file_label.setStyleSheet("padding: 8px;")
@@ -466,9 +467,24 @@ class Markdown_Editor(QMainWindow):
         self.file_label.setMaximumHeight(60)
 
 
-        v_layout.addWidget(self.file_label, 0)
+        #v_layout.addWidget(self.file_label, 0)
+        inner_h_layout.addWidget(self.file_label, 0)
+
+        inner_h_layout.addStretch()
+
+        #css_btn = QPushButton(menu_teksten["CSS"])
+        self.css_btn = QPushButton("CSS")
+        inner_h_layout.addWidget(self.css_btn, 0)
+
+        v_layout.addLayout(inner_h_layout)
+
+        lijn = QFrame()
+        lijn.setFrameShape(QFrame.Shape.HLine)
+        lijn.setStyleSheet("color: gray;")
+        v_layout.addWidget(lijn)
 
 
+        self.css_btn.clicked.connect(self.css_actie)
 
         # menu einde
 
@@ -562,6 +578,7 @@ class Markdown_Editor(QMainWindow):
         if length > 80:
             f_name = name[0:39] + "..." + name[-39:]
         self.file_label.setText(f_name)
+        self.file_label.setToolTip(name)
 
     def set_window_title(self, name):
         w_name = name
@@ -570,6 +587,8 @@ class Markdown_Editor(QMainWindow):
             w_name = name[0:39] + "..." + name[-39:]
         self.setWindowTitle(w_name)
 
+    def css_actie(self):
+        print("css actie")
 
     def hello(self):        
         print("Hello!")
