@@ -112,6 +112,11 @@ class Markdown_Editor(QMainWindow):
         else:
             self.taal = "de"
 
+        self.preview_stijl = {
+            "voorgrondkleur": config.get("voorgrondkleur", "#47256D"),
+            "achtergrondkleur": config.get("achtergrondkleur", "#FFFFFF")
+        }
+
         # Toolbar aanmaken        
         toolbar = QToolBar("Mijn toolbar", self)        
         self.addToolBar(toolbar)
@@ -629,7 +634,7 @@ class Markdown_Editor(QMainWindow):
 
     def update_preview(self):
         text = self.editor.toPlainText()
-        html = render_markdown(text, color_mode=self.color_mode)  # Pass the color mode to the renderer
+        html = render_markdown(text, color_mode=self.color_mode, stijl=self.preview_stijl)  # Pass the color mode and style to the renderer
         ratio = self._editor_scroll_ratio()
 
         #self.frontmatter.load_frontmatter(text)
@@ -641,6 +646,7 @@ class Markdown_Editor(QMainWindow):
         else:
             base_url = QUrl("file:///")  # fallback
 
+        #print(html)
         self.preview.setHtml(html, baseUrl=base_url)
 
         # Sroll herstellen zodra de pagina geladen is
@@ -1427,7 +1433,7 @@ class Markdown_Editor(QMainWindow):
 
     def export_markdown_to_pdf(self, md_text, output_path):
         # 1. Markdown -> HTML
-        html = render_markdown(md_text, color_mode=self.color_mode)  # Pass the color mode to the renderer
+        html = render_markdown(md_text, color_mode=self.color_mode, stijl=self.preview_stijl)  # Pass the color mode and style to the renderer
 
         # 2. HTML in QTextDocument
         doc = QTextDocument()
@@ -1495,7 +1501,7 @@ class Markdown_Editor(QMainWindow):
         meta = self.extract_metadata(md_text)
 
         # 2. Markdown -> HTML
-        html = render_markdown(md_text, color_mode=self.color_mode)  # Pass the color mode to the renderer
+        html = render_markdown(md_text, color_mode=self.color_mode, stijl=self.preview_stijl)  # Pass the color mode and style to the renderer
 
         # 3. TOC genereren
         headings = self.extract_headings(md_text)
@@ -1657,7 +1663,7 @@ class Markdown_Editor(QMainWindow):
         for title, md in chapters:
             #html = self.markdown_to_html(md)
             compleet = "# " + title + "\n" + md
-            html = render_markdown(compleet, color_mode=self.color_mode)  # Pass the color mode to the renderer
+            html = render_markdown(compleet, color_mode=self.color_mode, stijl=self.preview_stijl)  # Pass the color mode and style to the renderer
             # paden van afbeeldingen aanpassen naar relatieve paden in imported_epub/images
             # dit gaat niet goed als de src al een relatieve pad is, dan wordt het pad verkeerd aangepast
             # afbeeldingen worden ook nog niet meegenomen in de EPUB, dat moet nog worden toegevoegd

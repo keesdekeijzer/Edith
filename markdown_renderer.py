@@ -1,6 +1,7 @@
 import markdown
 
-def render_markdown(text: str, color_mode: str = "light") -> str:
+
+def render_markdown(text: str, color_mode: str = "light", stijl: dict = {}) -> str:
     """Convert Markdown text to HTML."""
     html = markdown.markdown(
         text,
@@ -19,7 +20,9 @@ def render_markdown(text: str, color_mode: str = "light") -> str:
     voorgrondkleur = "#FFFFFF" if color_mode == "dark" else "#000000"
     achtergrondkleur = "#000000" if color_mode == "dark" else "#FFFFFF"
 
-
+    if stijl:
+        voorgrondkleur = stijl.get("voorgrondkleur", voorgrondkleur)
+        achtergrondkleur = stijl.get("achtergrondkleur", achtergrondkleur)
 
 
     # Eenvoudige HTML template
