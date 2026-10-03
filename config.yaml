@@ -6,3 +6,5 @@ favoriete_font:
 - 12
 language: en
 font_path: /home/kees/Data/FreeSerif.ttf
+voorgrondkleur: '#111111'
+achtergrondkleur: '#FFFFFF'

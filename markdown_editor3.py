@@ -113,8 +113,8 @@ class Markdown_Editor(QMainWindow):
             self.taal = "de"
 
         self.preview_stijl = {
-            "voorgrondkleur": config.get("voorgrondkleur", "#47256D"),
-            "achtergrondkleur": config.get("achtergrondkleur", "#FFFFFF")
+            "voorgrondkleur": self.mijn_configuratie.get("voorgrondkleur", "#47256D"),
+            "achtergrondkleur": self.mijn_configuratie.get("achtergrondkleur", "#FFFFFF")
         }
 
         # Toolbar aanmaken        
