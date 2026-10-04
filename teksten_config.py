@@ -18,3 +18,11 @@ config_meldingen_de["Configuratie bewerken"] = "Konfiguration bearbeiten"
 config_meldingen_nl["Hier kun je de configuratie bewerken."] = "Hier kun je de configuratie bewerken."
 config_meldingen_en["Hier kun je de configuratie bewerken."] = "Here you can edit the configuration."
 config_meldingen_de["Hier kun je de configuratie bewerken."] = "Hier können Sie die Konfiguration bearbeiten."
+
+config_meldingen_nl["Hier kun je de CSS configuratie bewerken."] = "Hier kun je de CSS configuratie bewerken."
+config_meldingen_en["Hier kun je de CSS configuratie bewerken."] = "Here you can edit the CSS configuration."
+config_meldingen_de["Hier kun je de CSS configuratie bewerken."] = "Hier können Sie die CSS-Konfiguration bearbeiten." 
+
+config_meldingen_nl["CSS configureren"] = "CSS configureren"
+config_meldingen_en["CSS configureren"] = "Configure CSS"
+config_meldingen_de["CSS configureren"] = "CSS konfigurieren"

@@ -11,6 +11,7 @@ from PyQt6.QtWebEngineWidgets import QWebEngineView
 import ebooklib
 import language_tool_python
 from configuratie_bewerken import ConfiguratieBewerken
+from css_bewerken import CssBewerken
 from highlighter_markdown import MarkdownHighlighter
 from highlighter_python import PythonHighlighter
 from highlighter_html import HtmlHighlighter
@@ -78,6 +79,8 @@ class Markdown_Editor(QMainWindow):
 
         self.mijn_configuratie = self.load_config()  # Load configuration from config.yaml
 
+        self.mijn_css_configuratie = self.load_css_config()  # Load configuration from css_config.yaml
+
         LANG_MAP = {
             "nl": "nld",
             "en": "eng",
@@ -113,8 +116,8 @@ class Markdown_Editor(QMainWindow):
             self.taal = "de"
 
         self.preview_stijl = {
-            "voorgrondkleur": self.mijn_configuratie.get("voorgrondkleur", "#47256D"),
-            "achtergrondkleur": self.mijn_configuratie.get("achtergrondkleur", "#FFFFFF")
+            "voorgrondkleur": self.mijn_css_configuratie.get("foreground_color", "#47256D"),
+            "achtergrondkleur": self.mijn_css_configuratie.get("background_color", "#FFFFFF")
         }
 
         # Toolbar aanmaken        
@@ -594,6 +597,7 @@ class Markdown_Editor(QMainWindow):
 
     def css_actie(self):
         print("css actie")
+        self.css_bewerken()
 
     def hello(self):        
         print("Hello!")
@@ -605,6 +609,14 @@ class Markdown_Editor(QMainWindow):
         except FileNotFoundError:
             config = {}
         return config
+
+    def load_css_config(self):
+        try:
+            with open("css_config.yaml", "r", encoding='utf-8') as f:
+                css_config = yaml.safe_load(f)
+        except FileNotFoundError:
+            css_config = {}
+        return css_config
 
     def on_text_changed(self):
         self.unsaved_changes = True
@@ -2545,9 +2557,7 @@ identifier: {identifier}
     def configuratie_bewerken(self):
         self.config_venster = ConfiguratieBewerken(self.taal)
         self.config_venster.show()
-        #self.load_config()
         y_config = self.load_config()  # yaml-bestand laden
-        #print("config", y_config)
         modus = y_config.get('darkmode', 'light')
         self.modus_wijzigen(modus)
 
@@ -2942,6 +2952,14 @@ identifier: {identifier}
                 new_lines.append(line)
         new_md_text = "\n".join(new_lines)
         self.editor.setPlainText(new_md_text)
+
+    def css_bewerken(self):
+        self.config_venster = CssBewerken(self.taal)
+        self.config_venster.show()
+        #y_config = self.load_config()  # yaml-bestand laden
+        #modus = y_config.get('darkmode', 'light')
+        #self.modus_wijzigen(modus)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
