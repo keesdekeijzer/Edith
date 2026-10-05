@@ -359,6 +359,10 @@ menu_teksten_nl["Hoofdstukken maken"] = "Hoofdstukken maken"
 menu_teksten_en["Hoofdstukken maken"] = "Create chapters"
 menu_teksten_de["Hoofdstukken maken"] = "Kapitel erstellen"
 
+menu_teksten_nl["HTML opslaan"] = "HTML opslaan"
+menu_teksten_en["HTML opslaan"] = "Save as HTML"
+menu_teksten_de["HTML opslaan"] = "Als HTML speichern"
+
 #
 # Meldingen
 #
@@ -938,3 +942,11 @@ meldingen_de["Dit voegt een markdown kop 1 toe aan regels waar alleen cijfers op
 meldingen_nl["CSS configureren"] = "CSS configureren"
 meldingen_en["CSS configureren"] = "Configure CSS"
 meldingen_de["CSS configureren"] = "CSS konfigurieren"
+
+meldingen_nl["HTML-bestand opgeslagen!"] = "HTML-bestand opgeslagen!"
+meldingen_en["HTML-bestand opgeslagen!"] = "HTML file saved!"
+meldingen_de["HTML-bestand opgeslagen!"] = "HTML-Datei gespeichert!"
+
+meldingen_nl["Fout bij opslaan"] = "Fout bij opslaan"
+meldingen_en["Fout bij opslaan"] = "Error saving"
+meldingen_de["Fout bij opslaan"] = "Fehler beim Speichern"

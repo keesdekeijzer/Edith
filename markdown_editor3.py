@@ -480,6 +480,9 @@ class Markdown_Editor(QMainWindow):
 
         inner_h_layout.addStretch()
 
+        self.html_btn = QPushButton(menu_teksten["HTML opslaan"])
+        inner_h_layout.addWidget(self.html_btn, 0)
+
         #css_btn = QPushButton(menu_teksten["CSS"])
         self.css_btn = QPushButton("CSS")
         inner_h_layout.addWidget(self.css_btn, 0)
@@ -493,6 +496,8 @@ class Markdown_Editor(QMainWindow):
 
 
         self.css_btn.clicked.connect(self.css_actie)
+
+        self.html_btn.clicked.connect(self.html_actie)
 
         # menu einde
 
@@ -598,6 +603,10 @@ class Markdown_Editor(QMainWindow):
     def css_actie(self):
         print("css actie")
         self.css_bewerken()
+
+    def html_actie(self):
+        print("html actie")
+        self.html_bewerken()
 
     def hello(self):        
         print("Hello!")
@@ -2944,12 +2953,26 @@ identifier: {identifier}
         # regels waar alleen cijfers op staan of alleen cijfers met een punt erachter, moeten een markdown kop 1 krijgen
         lines = md_text.splitlines()
         new_lines = []
+        aantal_lege_regels = 0
+        hoofdstuk_nummer = 0
         for line in lines:
+            #print(line)
             stripped_line = line.strip()
+            if stripped_line == "":
+                aantal_lege_regels += 1
+            else:
+                aantal_lege_regels = 0
             if stripped_line.isdigit() or (stripped_line[:-1].isdigit() and stripped_line.endswith(".")):
                 new_lines.append("# " + stripped_line)
             else:
                 new_lines.append(line)
+            if aantal_lege_regels > 4:
+                #print(f"Aantal lege regels: {aantal_lege_regels}")
+                hoofdstuk_nummer += 1
+                new_lines.append("# " + str(hoofdstuk_nummer) + ".")  # voeg een lege regel toe
+                aantal_lege_regels = 0
+                #print(f"Hoofdstuk {hoofdstuk_nummer} toegevoegd.")
+                
         new_md_text = "\n".join(new_lines)
         self.editor.setPlainText(new_md_text)
 
@@ -2959,6 +2982,30 @@ identifier: {identifier}
         #y_config = self.load_config()  # yaml-bestand laden
         #modus = y_config.get('darkmode', 'light')
         #self.modus_wijzigen(modus)
+
+    def html_bewerken(self):
+        bestandsnaam, _ = QFileDialog.getSaveFileName( 
+                       self,            
+                       "HTML opslaan",            
+                       self.mijn_configuratie["opslaglocatie"],            
+                       "HTML-bestanden (*.html *.htm);;Alle bestanden (*.*)"        
+                       )
+        if not bestandsnaam:            
+            return
+        # toHtml() werkt met een callback        
+        self.preview.page().toHtml(            
+            lambda html: self.write_html(bestandsnaam, html)        
+            )
+
+    def write_html(self, bestandsnaam, html):
+        try:
+            with open(bestandsnaam, "w", encoding="utf-8") as f:
+                f.write(html)
+        except Exception as e:
+            QMessageBox.critical(self, self.meldingen["Fout"], f"{self.meldingen['Fout bij opslaan']}: {e}")
+        else:
+            QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["HTML-bestand opgeslagen!"])
+
 
 
 if __name__ == "__main__":
