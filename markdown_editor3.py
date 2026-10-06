@@ -277,8 +277,10 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "alle_romeinse_cijfers_vervangen_actie", menu_teksten["Alle Romeinse cijfers vervangen"], "", self.alle_romeinse_cijfers_vervangen)
 
-        maak_menu_punt(self, "hoofdstukken_maken_actie", menu_teksten["Hoofdstukken maken"], "", self.hoofdstukken_maken)
+        maak_menu_punt(self, "hoofdstukken_maken_cijfers_actie", menu_teksten["Hoofdstukken maken (cijfers)"], "", self.hoofdstukken_maken_cijfers)
 
+        maak_menu_punt(self, "hoofdstukken_maken_regels_actie", menu_teksten["Hoofdstukken maken (regels)"], "", self.hoofdstukken_maken_regels)
+        
         # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
 
         maak_menu_punt(self, "lichte_modus_actie", menu_teksten["Lichte modus"], "", self.lichte_modus)
@@ -410,7 +412,8 @@ class Markdown_Editor(QMainWindow):
         bewerken_menu.addAction(actie["woorden_vervangen_actie"])
         bewerken_menu.addAction(actie["romeinse_cijfers_vervangen_actie"])
         bewerken_menu.addAction(actie["alle_romeinse_cijfers_vervangen_actie"])
-        bewerken_menu.addAction(actie["hoofdstukken_maken_actie"])
+        bewerken_menu.addAction(actie["hoofdstukken_maken_cijfers_actie"])
+        bewerken_menu.addAction(actie["hoofdstukken_maken_regels_actie"])
         bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["frontmatter_actie"])
 
@@ -2945,7 +2948,7 @@ identifier: {identifier}
         else:
             QMessageBox.warning(self, self.meldingen["Waarschuwing"], self.meldingen["Geen frontmatter gevonden om bij te werken."])
 
-    def hoofdstukken_maken(self):
+    def hoofdstukken_maken_cijfers(self):
         QMessageBox.about(self, self.meldingen["Hoofdstukken Maken"], 
                                       self.meldingen["Dit voegt een markdown kop 1 toe aan regels waar alleen cijfers op staan of alleen cijfers met een punt erachter."])
                 
@@ -2953,25 +2956,40 @@ identifier: {identifier}
         # regels waar alleen cijfers op staan of alleen cijfers met een punt erachter, moeten een markdown kop 1 krijgen
         lines = md_text.splitlines()
         new_lines = []
+        for line in lines:
+            stripped_line = line.strip()
+            if stripped_line.isdigit() or (stripped_line[:-1].isdigit() and stripped_line.endswith(".")):
+                new_lines.append("# " + stripped_line)
+            else:
+                new_lines.append(line)
+        new_md_text = "\n".join(new_lines)
+        self.editor.setPlainText(new_md_text)
+
+    def hoofdstukken_maken_regels(self):
+        QMessageBox.about(self, self.meldingen["Hoofdstukken Maken"], 
+                                self.meldingen["Dit voegt een markdown kop 1 toe na 5 lege regels."])
+                
+        md_text = self.editor.toPlainText()
+        lines = md_text.splitlines()
+        new_lines = []
         aantal_lege_regels = 0
         hoofdstuk_nummer = 0
         for line in lines:
-            #print(line)
             stripped_line = line.strip()
             if stripped_line == "":
                 aantal_lege_regels += 1
             else:
                 aantal_lege_regels = 0
-            if stripped_line.isdigit() or (stripped_line[:-1].isdigit() and stripped_line.endswith(".")):
-                new_lines.append("# " + stripped_line)
-            else:
-                new_lines.append(line)
+
+            
             if aantal_lege_regels > 4:
                 #print(f"Aantal lege regels: {aantal_lege_regels}")
                 hoofdstuk_nummer += 1
                 new_lines.append("# " + str(hoofdstuk_nummer) + ".")  # voeg een lege regel toe
                 aantal_lege_regels = 0
                 #print(f"Hoofdstuk {hoofdstuk_nummer} toegevoegd.")
+            else:
+                new_lines.append(line)
                 
         new_md_text = "\n".join(new_lines)
         self.editor.setPlainText(new_md_text)

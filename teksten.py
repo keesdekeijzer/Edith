@@ -355,9 +355,13 @@ menu_teksten_nl["Exporteer ePub naar TTS-teksten"] = "Exporteer ePub naar TTS-te
 menu_teksten_en["Exporteer ePub naar TTS-teksten"] = "Export ePub to TTS texts"
 menu_teksten_de["Exporteer ePub naar TTS-teksten"] = "ePub in TTS-Texte exportieren"
 
-menu_teksten_nl["Hoofdstukken maken"] = "Hoofdstukken maken"
-menu_teksten_en["Hoofdstukken maken"] = "Create chapters"
-menu_teksten_de["Hoofdstukken maken"] = "Kapitel erstellen"
+menu_teksten_nl["Hoofdstukken maken (cijfers)"] = "Hoofdstukken maken (cijfers)"
+menu_teksten_en["Hoofdstukken maken (cijfers)"] = "Create chapters (numbers)"
+menu_teksten_de["Hoofdstukken maken (cijfers)"] = "Kapitel erstellen (Zahlen)"
+
+menu_teksten_nl["Hoofdstukken maken (regels)"] = "Hoofdstukken maken (regels)"
+menu_teksten_en["Hoofdstukken maken (regels)"] = "Create chapters (lines)"
+menu_teksten_de["Hoofdstukken maken (regels)"] = "Kapitel erstellen (Linien)"
 
 menu_teksten_nl["HTML opslaan"] = "HTML opslaan"
 menu_teksten_en["HTML opslaan"] = "Save as HTML"
@@ -938,6 +942,10 @@ meldingen_de["Hoofdstukken Maken"] = "Kapitel erstellen"
 meldingen_nl["Dit voegt een markdown kop 1 toe aan regels waar alleen cijfers op staan of alleen cijfers met een punt erachter."] = "Dit voegt een markdown kop 1 toe aan regels waar alleen cijfers op staan of alleen cijfers met een punt erachter."
 meldingen_en["Dit voegt een markdown kop 1 toe aan regels waar alleen cijfers op staan of alleen cijfers met een punt erachter."] = "This adds a markdown heading 1 to lines that contain only numbers or numbers followed by a period."
 meldingen_de["Dit voegt een markdown kop 1 toe aan regels waar alleen cijfers op staan of alleen cijfers met een punt erachter."] = "Dies fügt eine markdown Überschrift 1 zu Zeilen hinzu, die nur Zahlen enthalten oder Zahlen gefolgt von einem Punkt."
+
+meldingen_nl["Dit voegt een markdown kop 1 toe na 5 lege regels."] = "Dit voegt een markdown kop 1 toe na 5 lege regels."
+meldingen_en["Dit voegt een markdown kop 1 toe na 5 lege regels."] = "This adds a markdown heading 1 after 5 empty lines."
+meldingen_de["Dit voegt een markdown kop 1 toe na 5 lege regels."] = "Dies fügt eine markdown Überschrift 1 nach 5 leeren Zeilen hinzu."
 
 meldingen_nl["CSS configureren"] = "CSS configureren"
 meldingen_en["CSS configureren"] = "Configure CSS"
