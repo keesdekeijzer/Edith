@@ -35,3 +35,15 @@ menuBar_style = """
                 background: #444;
             }
         """
+
+zoekveld_style = """
+QLineEdit {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+QLineEdit:focus {
+    border-color: #66afe9;
+    outline: none;
+}
+"""

@@ -63,9 +63,11 @@ from help_window import HelpWindow
 from frontmatter_window import FrontmatterWindow
 
 from utils import slugify  # Import the slugify function from utils.py
+from utils import icon_from_text  # Import the icon_from_text function from utils.py
 
 from styles import toolbar_style  # Import the toolbar_style from styles.py
 from styles import menuBar_style  # Import the menuBar_style from styles.py
+from styles import zoekveld_style  # Import the zoekveld_style from styles.py
 
 menuBarStyle = menuBar_style
 
@@ -511,12 +513,20 @@ class Markdown_Editor(QMainWindow):
 
         find_label = QLabel(menu_teksten["Zoeken:"])
         self.find_input = QLineEdit()
+        self.find_input.setStyleSheet(zoekveld_style)
+        action = QAction(icon_from_text("\U0000232B"), "Wissen", self.find_input)
+        action.triggered.connect(self.find_input.clear)
+        self.find_input.addAction(action, QLineEdit.ActionPosition.TrailingPosition)
         self.case_cb = QCheckBox(menu_teksten["Hoofdlettergevoelig"])
         next_btn = QPushButton(menu_teksten["Volgende"])
         prev_btn = QPushButton(menu_teksten["Vorige"])
 
         replace_label = QLabel(menu_teksten["Vervangen door:"])
         self.replace_input = QLineEdit()
+        self.replace_input.setStyleSheet(zoekveld_style)
+        action2 = QAction(icon_from_text("\U0000232B"), "Wissen", self.replace_input)
+        action2.triggered.connect(self.replace_input.clear)
+        self.replace_input.addAction(action2, QLineEdit.ActionPosition.TrailingPosition)
         replace_btn = QPushButton(menu_teksten["Vervangen"])
         replace_all_btn = QPushButton(menu_teksten["Alles vervangen"])
 
