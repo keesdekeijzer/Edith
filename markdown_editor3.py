@@ -315,6 +315,8 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "md_afbeelding_actie", menu_teksten["md afbeelding"], "Alt+A", self.md_afbeelding)
 
+        maak_menu_punt(self, "paragraafteken_invoegen_actie", menu_teksten["Paragraafteken invoegen"], "Alt+P", self.paragraafteken_invoegen)
+
         #maak_menu_punt(self, "if_name_is_main_actie", menu_teksten["if name == main"], "Alt+I", self.if_name_is_main)
 
         maak_menu_punt(self, "frontmatter_actie", menu_teksten["Frontmatter"], "Alt+F", self.frontmatter_popup)
@@ -440,6 +442,7 @@ class Markdown_Editor(QMainWindow):
         invoegen_menu.addAction(actie["tijd_actie"])
         invoegen_menu.addAction(actie["md_link_actie"])
         invoegen_menu.addAction(actie["md_afbeelding_actie"])
+        invoegen_menu.addAction(actie["paragraafteken_invoegen_actie"])
         #invoegen_menu.addAction(actie["if_name_is_main_actie"])
         
         #invoegen_menu.addAction(actie["frontmatter_epub_actie"])
@@ -1206,6 +1209,9 @@ class Markdown_Editor(QMainWindow):
             bestandsnaam = pathname[0].split('/')[-1]
             md_code = f"[{bestandsnaam}]({pathname[0]})"
             self.editor.insertPlainText(md_code)
+
+    def paragraafteken_invoegen(self):
+        self.editor.insertPlainText("§")
 
     def md_afbeelding(self):
         pathname = QFileDialog.getOpenFileName(self, self.meldingen["Afbeelding openen"], self.mijn_configuratie["opslaglocatie"], self.meldingen["Afbeeldingen (*.png *.jpg *.jpeg *.bmp *.gif);;Alle bestanden (*)"])

@@ -367,6 +367,10 @@ menu_teksten_nl["HTML opslaan"] = "HTML opslaan"
 menu_teksten_en["HTML opslaan"] = "Save as HTML"
 menu_teksten_de["HTML opslaan"] = "Als HTML speichern"
 
+menu_teksten_nl["Paragraafteken invoegen"] = "Paragraafteken invoegen"
+menu_teksten_en["Paragraafteken invoegen"] = "Insert paragraph sign"
+menu_teksten_de["Paragraafteken invoegen"] = "Absatzzeichen einfügen"
+
 #
 # Meldingen
 #
