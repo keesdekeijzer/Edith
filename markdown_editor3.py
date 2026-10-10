@@ -442,6 +442,7 @@ class Markdown_Editor(QMainWindow):
         invoegen_menu.addAction(actie["tijd_actie"])
         invoegen_menu.addAction(actie["md_link_actie"])
         invoegen_menu.addAction(actie["md_afbeelding_actie"])
+        invoegen_menu.addSeparator()
         invoegen_menu.addAction(actie["paragraafteken_invoegen_actie"])
         #invoegen_menu.addAction(actie["if_name_is_main_actie"])
         
@@ -462,7 +463,9 @@ class Markdown_Editor(QMainWindow):
         extra_menu = self.menuBar().addMenu(menu_teksten["Extra"])
         extra_menu.addAction(actie["memo_actie"])
         extra_menu.addAction(actie["memolijst_actie"])
+        extra_menu.addSeparator()
         extra_menu.addAction(actie["configuratie_bewerken_actie"])
+        extra_menu.addSeparator()
         extra_menu.addAction(actie["versleutel_actie"])
         extra_menu.addAction(actie["ontsleutel_actie"])
 
