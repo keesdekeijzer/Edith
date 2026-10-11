@@ -2320,6 +2320,7 @@ identifier: {identifier}
         if not it.isNull():        
             self.editor.setTextCursor(it)        
             self.update_highlight()
+            self.editor.setFocus()
         else:
             QMessageBox.information(self, self.meldingen["Zoeken"], self.meldingen["Geen resultaten gevonden."])
 
@@ -2359,6 +2360,7 @@ identifier: {identifier}
             if last:
                 self.editor.setTextCursor(last)
         self.update_highlight()
+        self.editor.setFocus()
 
     def replace_one(self):
         cursor = self.editor.textCursor()
