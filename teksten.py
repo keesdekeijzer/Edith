@@ -371,6 +371,10 @@ menu_teksten_nl["Paragraafteken invoegen"] = "Paragraafteken invoegen"
 menu_teksten_en["Paragraafteken invoegen"] = "Insert paragraph sign"
 menu_teksten_de["Paragraafteken invoegen"] = "Absatzzeichen einfügen"
 
+menu_teksten_nl["Asterisken verwijderen"] = "Asterisken verwijderen"
+menu_teksten_en["Asterisken verwijderen"] = "Remove asterisks"
+menu_teksten_de["Asterisken verwijderen"] = "Sternchen entfernen"
+
 #
 # Meldingen
 #

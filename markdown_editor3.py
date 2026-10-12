@@ -283,6 +283,8 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "hoofdstukken_maken_regels_actie", menu_teksten["Hoofdstukken maken (regels)"], "", self.hoofdstukken_maken_regels)
         
+        maak_menu_punt(self, "asterisken_verwijderen_actie", menu_teksten["Asterisken verwijderen"], "", self.asterisken_verwijderen)
+
         # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
 
         maak_menu_punt(self, "lichte_modus_actie", menu_teksten["Lichte modus"], "", self.lichte_modus)
@@ -422,6 +424,8 @@ class Markdown_Editor(QMainWindow):
         bewerken_menu.addAction(actie["hoofdstukken_maken_regels_actie"])
         bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["frontmatter_actie"])
+        bewerken_menu.addSeparator()
+        bewerken_menu.addAction(actie["asterisken_verwijderen_actie"])
 
         beeld_menu = self.menuBar().addMenu(menu_teksten["Beeld"])
         beeld_menu.addAction(actie["lichte_modus_actie"])
@@ -735,10 +739,13 @@ class Markdown_Editor(QMainWindow):
         return headings
     
     def jump_to_heading(self, item):
+        print(f"Jumping to heading: {item.text()}")
         line = item.data(32)  # Retrieve line number from user data
+        print(f"Jumping to line: {line}")
         cursor = self.editor.textCursor()
         cursor.movePosition(cursor.MoveOperation.Start)
-        cursor.movePosition(cursor.MoveOperation.Down, n=line)
+        #cursor.movePosition(cursor.MoveOperation.Down, n=line)
+        cursor.movePosition(cursor.MoveOperation.NextBlock, n=line)
         self.editor.setTextCursor(cursor)
         self.editor.setFocus()
 
@@ -3047,7 +3054,18 @@ identifier: {identifier}
         else:
             QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["HTML-bestand opgeslagen!"])
 
-
+    def asterisken_verwijderen(self):
+        md_text = self.editor.toPlainText()
+        # verwijder alle asterisken
+        lines = md_text.splitlines()
+        new_lines = []
+        for line in lines:
+            stripped_line = line.strip()
+            if "*" in stripped_line:
+                stripped_line = stripped_line.replace("*", "")
+            new_lines.append(stripped_line)
+        new_md_text = "\n".join(new_lines)
+        self.editor.setPlainText(new_md_text)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
