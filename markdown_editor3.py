@@ -51,7 +51,8 @@ from config import FRONTMATTER_TEXT, FRONTMATTER_TEXT_EPUB, configuratie, font_s
 from memo import Memo
 from memolijst import MemoLijst
 
-from teksten import menu_teksten_nl, menu_teksten_en, menu_teksten_de, meldingen_de, meldingen_en, meldingen_nl
+from teksten_menu import menu_teksten_nl, menu_teksten_en, menu_teksten_de
+from teksten_meldingen import meldingen_nl, meldingen_en, meldingen_de
 from keuze_teksten import keuze_teksten_nl, keuze_teksten_en, keuze_teksten_de
 from keuze_teksten_inhoud import keuze_teksten_inhoud, keuze_teksten_naam
 
@@ -739,9 +740,9 @@ class Markdown_Editor(QMainWindow):
         return headings
     
     def jump_to_heading(self, item):
-        print(f"Jumping to heading: {item.text()}")
+        #print(f"Jumping to heading: {item.text()}")
         line = item.data(32)  # Retrieve line number from user data
-        print(f"Jumping to line: {line}")
+        #print(f"Jumping to line: {line}")
         cursor = self.editor.textCursor()
         cursor.movePosition(cursor.MoveOperation.Start)
         #cursor.movePosition(cursor.MoveOperation.Down, n=line)
