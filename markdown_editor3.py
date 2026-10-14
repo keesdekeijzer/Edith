@@ -123,6 +123,15 @@ class Markdown_Editor(QMainWindow):
             "achtergrondkleur": self.mijn_css_configuratie.get("background_color", "#FFFFFF")
         }
 
+        self.zoek_suggesties = [
+            "# Chapter",
+            "##",
+            "###",
+            "colophon",
+            "table of contents",
+            "gutenberg"
+        ]
+
         # Toolbar aanmaken        
         toolbar = QToolBar("Mijn toolbar", self)        
         self.addToolBar(toolbar)
@@ -525,8 +534,10 @@ class Markdown_Editor(QMainWindow):
 
 
         find_label = QLabel(menu_teksten["Zoeken:"])
+        self.completer_zoek = QtWidgets.QCompleter(self.zoek_suggesties)
         self.find_input = QLineEdit()
         self.find_input.setStyleSheet(zoekveld_style)
+        self.find_input.setCompleter(self.completer_zoek)
         action = QAction(icon_from_text("\U0000232B"), "Wissen", self.find_input)
         action.triggered.connect(self.find_input.clear)
         self.find_input.addAction(action, QLineEdit.ActionPosition.TrailingPosition)
@@ -535,7 +546,11 @@ class Markdown_Editor(QMainWindow):
         prev_btn = QPushButton(menu_teksten["Vorige"])
 
         replace_label = QLabel(menu_teksten["Vervangen door:"])
+
+
+        self.completer_vervang = QtWidgets.QCompleter(self.zoek_suggesties)
         self.replace_input = QLineEdit()
+        self.replace_input.setCompleter(self.completer_vervang)
         self.replace_input.setStyleSheet(zoekveld_style)
         action2 = QAction(icon_from_text("\U0000232B"), "Wissen", self.replace_input)
         action2.triggered.connect(self.replace_input.clear)
