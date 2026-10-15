@@ -129,7 +129,9 @@ class Markdown_Editor(QMainWindow):
             "###",
             "colophon",
             "table of contents",
-            "gutenberg"
+            "gutenberg",
+            "apendix",
+            "the end"
         ]
 
         # Toolbar aanmaken        
@@ -2321,6 +2323,7 @@ identifier: {identifier}
         text = self.find_input.text()    
         if not text:
             return
+        self.suggestie_toevoegen(text)  # voeg toe aan suggesties
         doc = self.editor.document()    
         cursor = self.editor.textCursor()    
         start_pos = cursor.selectionEnd() if cursor.hasSelection() else cursor.position()
@@ -2353,6 +2356,7 @@ identifier: {identifier}
         text = self.find_input.text()
         if not text:
             return
+        self.suggestie_toevoegen(text)  # voeg toe aan suggesties
         doc = self.editor.document()
 
         cur = self.editor.textCursor()
@@ -3082,6 +3086,21 @@ identifier: {identifier}
             new_lines.append(stripped_line)
         new_md_text = "\n".join(new_lines)
         self.editor.setPlainText(new_md_text)
+
+    def suggestie_toevoegen(self, suggestie):
+        # suggestie toevoegen aan het begin van de lijst van suggesties
+        if suggestie not in self.zoek_suggesties:
+            self.zoek_suggesties.insert(0, suggestie)
+            # laatste item verwijderen uit de lijst van suggesties als
+            #  er meer dan 9 suggesties zijn
+            if len(self.zoek_suggesties) > 9:
+                self.zoek_suggesties.pop()
+            self.completer_zoek = QtWidgets.QCompleter(self.zoek_suggesties)
+            self.find_input.setCompleter(self.completer_zoek)
+            self.completer_vervang = QtWidgets.QCompleter(self.zoek_suggesties)
+            self.find_input.setCompleter(self.completer_vervang)
+            #print("suggestie toegevoegd:", suggestie)
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
