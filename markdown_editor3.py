@@ -131,7 +131,9 @@ class Markdown_Editor(QMainWindow):
             "table of contents",
             "gutenberg",
             "apendix",
-            "the end"
+            "the end",
+            "jpg",
+            "png"
         ]
 
         # Toolbar aanmaken        
@@ -3092,8 +3094,8 @@ identifier: {identifier}
         if suggestie not in self.zoek_suggesties:
             self.zoek_suggesties.insert(0, suggestie)
             # laatste item verwijderen uit de lijst van suggesties als
-            #  er meer dan 9 suggesties zijn
-            if len(self.zoek_suggesties) > 9:
+            #  er meer dan 49 suggesties zijn
+            if len(self.zoek_suggesties) > 49:
                 self.zoek_suggesties.pop()
             self.completer_zoek = QtWidgets.QCompleter(self.zoek_suggesties)
             self.find_input.setCompleter(self.completer_zoek)
