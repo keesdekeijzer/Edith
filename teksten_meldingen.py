@@ -596,3 +596,19 @@ meldingen_de["HTML-bestand opgeslagen!"] = "HTML-Datei gespeichert!"
 meldingen_nl["Fout bij opslaan"] = "Fout bij opslaan"
 meldingen_en["Fout bij opslaan"] = "Error saving"
 meldingen_de["Fout bij opslaan"] = "Fehler beim Speichern"
+
+meldingen_nl["Bevestiging"] = "Bevestiging"
+meldingen_en["Bevestiging"] = "Confirmation"
+meldingen_de["Bevestiging"] = "Bestätigung"
+
+meldingen_nl["Weet je zeker dat je de huidige inhoud wilt verwijderen?"] = "Weet je zeker dat je de huidige inhoud wilt verwijderen?"
+meldingen_en["Weet je zeker dat je de huidige inhoud wilt verwijderen?"] = "Are you sure you want to delete the current content?"
+meldingen_de["Weet je zeker dat je de huidige inhoud wilt verwijderen?"] = "Sind Sie sicher, dass Sie den aktuellen Inhalt löschen möchten?"
+
+meldingen_nl["Alle afbeeldingen verwijderd."] = "Alle afbeeldingen verwijderd."
+meldingen_en["Alle afbeeldingen verwijderd."] = "All images deleted."
+meldingen_de["Alle afbeeldingen verwijderd."] = "Alle Bilder gelöscht."
+
+meldingen_nl["Weet je zeker dat je alle afbeeldingen wilt verwijderen?"] = "Weet je zeker dat je alle afbeeldingen wilt verwijderen?"
+meldingen_en["Weet je zeker dat je alle afbeeldingen wilt verwijderen?"] = "Are you sure you want to delete all images?"
+meldingen_de["Weet je zeker dat je alle afbeeldingen wilt verwijderen?"] = "Sind Sie sicher, dass Sie alle Bilder löschen möchten?"

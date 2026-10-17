@@ -133,7 +133,8 @@ class Markdown_Editor(QMainWindow):
             "apendix",
             "the end",
             "jpg",
-            "png"
+            "png",
+            "Chapter"
         ]
 
         # Toolbar aanmaken        
@@ -262,6 +263,7 @@ class Markdown_Editor(QMainWindow):
 
         maak_menu_punt(self, "afsluiten_actie", menu_teksten["Afsluiten"], "Ctrl+Q", self.afsluiten)
  
+        
         # Bewerken - Kopieren, Plakken, Knippen, Zoeken, Alles selecteren, Ongedaan maken, Opnieuw doen,
         #     Normaliseren, Geen hoofdletters, Schrift
 
@@ -298,6 +300,9 @@ class Markdown_Editor(QMainWindow):
         maak_menu_punt(self, "hoofdstukken_maken_regels_actie", menu_teksten["Hoofdstukken maken (regels)"], "", self.hoofdstukken_maken_regels)
         
         maak_menu_punt(self, "asterisken_verwijderen_actie", menu_teksten["Asterisken verwijderen"], "", self.asterisken_verwijderen)
+
+        maak_menu_punt(self, "afbeeldingen_verwijderen_actie", menu_teksten["Afbeeldingen verwijderen"], "", self.afbeeldingen_verwijderen)
+        
 
         # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
 
@@ -440,6 +445,7 @@ class Markdown_Editor(QMainWindow):
         bewerken_menu.addAction(actie["frontmatter_actie"])
         bewerken_menu.addSeparator()
         bewerken_menu.addAction(actie["asterisken_verwijderen_actie"])
+        bewerken_menu.addAction(actie["afbeeldingen_verwijderen_actie"])
 
         beeld_menu = self.menuBar().addMenu(menu_teksten["Beeld"])
         beeld_menu.addAction(actie["lichte_modus_actie"])
@@ -3103,6 +3109,14 @@ identifier: {identifier}
             self.find_input.setCompleter(self.completer_vervang)
             #print("suggestie toegevoegd:", suggestie)
 
+    def afbeeldingen_verwijderen(self):
+        reply = QMessageBox.question(self, self.meldingen["Bevestiging"], self.meldingen["Weet je zeker dat je alle afbeeldingen wilt verwijderen?"], QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        if reply == QMessageBox.StandardButton.Yes:
+            md_text = self.editor.toPlainText()
+            # verwijder alle afbeeldingen in markdown-formaat ![alt](url)
+            new_md_text = re.sub(r'!\[.*?\]\(.*?\)', '', md_text)
+            self.editor.setPlainText(new_md_text)
+            QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Alle afbeeldingen verwijderd."])
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

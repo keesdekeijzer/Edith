@@ -372,3 +372,7 @@ menu_teksten_de["Paragraafteken invoegen"] = "Absatzzeichen einfügen"
 menu_teksten_nl["Asterisken verwijderen"] = "Asterisken verwijderen"
 menu_teksten_en["Asterisken verwijderen"] = "Remove asterisks"
 menu_teksten_de["Asterisken verwijderen"] = "Sternchen entfernen"
+
+menu_teksten_nl["Afbeeldingen verwijderen"] = "Afbeeldingen verwijderen"
+menu_teksten_en["Afbeeldingen verwijderen"] = "Remove images"
+menu_teksten_de["Afbeeldingen verwijderen"] = "Bilder entfernen"
