@@ -67,6 +67,7 @@ class CssBewerken(QDialog):
         self.layout2.addWidget(label2)
 
         self.label3 = QLabel(self.configuratie.get("foreground_color", "#000000"))
+        self.label3.setStyleSheet(f"QLabel {{ background-color: {self.configuratie.get('foreground_color', '#000000')}; }}")
         self.layout2.addWidget(self.label3)
 
         fg_button = QButton("Change foreground color")
@@ -79,6 +80,7 @@ class CssBewerken(QDialog):
         self.layout2.addWidget(self.label4)
 
         self.label5 = QLabel(self.configuratie.get("background_color", "#ffffff"))
+        self.label5.setStyleSheet(f"QLabel {{ background-color: {self.configuratie.get('background_color', '#ffffff')}; }}")
         self.layout2.addWidget(self.label5)
 
         bg_button = QButton("Change background color")
