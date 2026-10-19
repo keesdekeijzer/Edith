@@ -134,7 +134,10 @@ class Markdown_Editor(QMainWindow):
             "the end",
             "jpg",
             "png",
-            "Chapter"
+            "Chapter",
+            "imprint",
+            "copyright",
+            "endnotes"
         ]
 
         # Toolbar aanmaken        
@@ -191,6 +194,14 @@ class Markdown_Editor(QMainWindow):
         actie_ontsleutel = QAction(menu_teksten["Ontsleutel Bestand"], self)
         actie_ontsleutel.triggered.connect(self.ontsleutelen)
         toolbar.addAction(actie_ontsleutel)
+
+        actie_memo = QAction(menu_teksten["Memo"], self)
+        actie_memo.triggered.connect(self.memo)
+        toolbar.addAction(actie_memo)
+
+        actie_memolijst = QAction(menu_teksten["Memolijst"], self)
+        actie_memolijst.triggered.connect(self.memolijst)
+        toolbar.addAction(actie_memolijst)
 
         # Central widget        
         self.editor = CodeEditor()  
