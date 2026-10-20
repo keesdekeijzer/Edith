@@ -8,9 +8,9 @@ from teksten_config import config_meldingen_de, config_meldingen_en, config_meld
 
 label_stylesheet = """
 QLabel {        
-                background-color: #58db40;        
-                color: white;        
-                border: none;        
+                background-color: white;        
+                color: black;        
+                border: 1px solid #000000;        
                 border-radius: 6px;        
                 padding: 8px 16px;    }
 """
