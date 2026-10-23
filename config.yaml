@@ -1,7 +1,7 @@
 database: /home/kees/Data/memo.db
 darkmode: light
 opslaglocatie: /home/kees/Data
-opslaglocatie_keuze_teksten: /home/kees/Data/keuze_teksten
+opslaglocatie_keuze_teksten: /home/kees/Data/keuze_teksten.yaml
 favoriete_font:
 - Arial
 - 12

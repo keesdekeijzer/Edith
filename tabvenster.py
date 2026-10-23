@@ -38,11 +38,16 @@ class TabVenster(QMainWindow):
         self.keuze_teksten_inhoud = keuze_teksten_inhoud
         self.keuze_teksten_naam = keuze_teksten_naam
 
+        self.config_keuze_teksten = self.load_config_keuze_teksten()
+
         for i in range(10):            
             tab = QWidget()            
-            layout = QVBoxLayout(tab)    
+            layout = QVBoxLayout(tab)
+            if f"keuze_{i + 1}" in self.config_keuze_teksten:
+                ki = self.config_keuze_teksten[f"keuze_{i + 1}"]
+            else: 
+                ki = self.keuze_teksten_inhoud.get(f"Keuze {i + 1}", f"Keuze {i + 1}") 
             kz = self.keuze_teksten_naam.get(f"Keuze {i + 1}", f"Keuze {i + 1}") 
-            ki = self.keuze_teksten_inhoud.get(f"Keuze {i + 1}", f"Keuze {i + 1}") 
             layout.addWidget(QPlainTextEdit(ki))  
             layout.addWidget(QLabel(f"Tab {i + 1}"))  
             knop = QPushButton(f"Opslaan {i + 1}")  
@@ -69,18 +74,26 @@ class TabVenster(QMainWindow):
             # Save the text content to a file or handle it as needed
             try:
                 with open(self.opslaglocatie_keuze_teksten, "r", encoding='utf-8') as f:
-                    config = yaml.safe_load(f)
+                    config_keuze_teksten = yaml.safe_load(f)
             except FileNotFoundError:
-                config = {}
-            config[f"keuze_{index + 1}"] = text_content
+                config_keuze_teksten = {}
+            config_keuze_teksten[f"keuze_{index + 1}"] = text_content
             with open(self.opslaglocatie_keuze_teksten, "w", encoding='utf-8') as f:
-                yaml.safe_dump(config, f)
+                yaml.safe_dump(config_keuze_teksten, f)
             """
             filename = f"{self.opslaglocatie_keuze_teksten}/keuze_{index + 1}.txt"
             with open(filename, "w", encoding='utf-8') as f:
                 f.write(text_content)
             """
             print(f"Text for Keuze {index + 1} saved")
+
+    def load_config_keuze_teksten(self):
+        try:
+            with open(self.opslaglocatie_keuze_teksten, "r", encoding='utf-8') as f:
+                config_keuze_teksten = yaml.safe_load(f)
+        except FileNotFoundError:
+            config_keuze_teksten = {}
+        return config_keuze_teksten
 
 def main():    
     app = QApplication(sys.argv)    
