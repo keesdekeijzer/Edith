@@ -45,9 +45,10 @@ class TabVenster(QMainWindow):
             layout = QVBoxLayout(tab)
             if f"keuze_{i + 1}" in self.config_keuze_teksten:
                 ki = self.config_keuze_teksten[f"keuze_{i + 1}"]
+                kz = ki[:20] + "..." if len(ki) > 20 else ki
             else: 
                 ki = self.keuze_teksten_inhoud.get(f"Keuze {i + 1}", f"Keuze {i + 1}") 
-            kz = self.keuze_teksten_naam.get(f"Keuze {i + 1}", f"Keuze {i + 1}") 
+                kz = self.keuze_teksten_naam.get(f"Keuze {i + 1}", f"Keuze {i + 1}") 
             layout.addWidget(QPlainTextEdit(ki))  
             layout.addWidget(QLabel(f"Tab {i + 1}"))  
             knop = QPushButton(f"Opslaan {i + 1}")  
@@ -98,7 +99,7 @@ class TabVenster(QMainWindow):
 def main():    
     app = QApplication(sys.argv)    
     win = TabVenster()    
-    win.resize(1200, 600)    
+    win.resize(1600, 600)    
     win.show()    
     sys.exit(app.exec())
 
