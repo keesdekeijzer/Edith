@@ -140,6 +140,21 @@ class Markdown_Editor(QMainWindow):
             "endnotes"
         ]
 
+        self.keuze_teksten_naam = keuze_teksten_naam
+        self.keuze_teksten_inhoud = keuze_teksten_inhoud
+        self.opslaglocatie_keuze_teksten = config.get("opslaglocatie_keuze_teksten", "/home/kees/Data/keuze_teksten")
+        self.config_keuze_teksten = self.load_config_keuze_teksten()
+
+        for i in range(10):            
+            if f"keuze_{i + 1}" in self.config_keuze_teksten:
+                ki = self.config_keuze_teksten[f"keuze_{i + 1}"]
+                kz = ki[:20] + "..." if len(ki) > 20 else ki
+            else: 
+                ki = self.keuze_teksten_inhoud.get(f"Keuze {i + 1}", f"Keuze {i + 1}") 
+                kz = self.keuze_teksten_naam.get(f"Keuze {i + 1}", f"Keuze {i + 1}") 
+            self.keuze_teksten_naam[f"Keuze {i + 1}"] = kz
+            self.keuze_teksten_inhoud[f"Keuze {i + 1}"] = ki
+
         # Toolbar aanmaken        
         toolbar = QToolBar("Mijn toolbar", self)        
         self.addToolBar(toolbar)
@@ -672,6 +687,14 @@ class Markdown_Editor(QMainWindow):
 
     def hello(self):        
         print("Hello!")
+
+    def load_config_keuze_teksten(self):
+        try:
+            with open(self.opslaglocatie_keuze_teksten, "r", encoding='utf-8') as f:
+                config_keuze_teksten = yaml.safe_load(f)
+        except FileNotFoundError:
+            config_keuze_teksten = {}
+        return config_keuze_teksten
 
     def load_config(self):
         try:
