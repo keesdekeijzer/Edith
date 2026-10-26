@@ -15,6 +15,7 @@ from css_bewerken import CssBewerken
 from highlighter_markdown import MarkdownHighlighter
 from highlighter_python import PythonHighlighter
 from highlighter_html import HtmlHighlighter
+from markdown_editor_menu import Markdown_Editor_Menu
 from markdown_renderer import render_markdown
 from code_editor import CodeEditor
 import re, yaml
@@ -53,6 +54,7 @@ from memolijst import MemoLijst
 
 from teksten_menu import menu_teksten_nl, menu_teksten_en, menu_teksten_de
 from teksten_meldingen import meldingen_nl, meldingen_en, meldingen_de
+
 from keuze_teksten import keuze_teksten_nl, keuze_teksten_en, keuze_teksten_de
 from keuze_teksten_inhoud import keuze_teksten_inhoud, keuze_teksten_naam
 
@@ -66,21 +68,21 @@ from frontmatter_window import FrontmatterWindow
 from utils import slugify  # Import the slugify function from utils.py
 from utils import icon_from_text  # Import the icon_from_text function from utils.py
 
-from styles import toolbar_style  # Import the toolbar_style from styles.py
-from styles import menuBar_style  # Import the menuBar_style from styles.py
-from styles import zoekveld_style  # Import the zoekveld_style from styles.py
+# Import the styles from styles.py  
+import styles
 
-menuBarStyle = menuBar_style
+from markdown_editor_menu import Markdown_Editor_Menu  # Import the Markdown_Editor_Menu class from markdown_editor_menu.py
 
 
-class Markdown_Editor(QMainWindow):
+
+
+class Markdown_Editor(Markdown_Editor_Menu):
     def __init__(self):
         super().__init__()
 
         self.unsaved_changes = False
-        self.current_path = None
+        self.current_path = None  # pad naar het huidige bestand
 
-        self.mijn_configuratie = self.load_config()  # Load configuration from config.yaml
 
         self.mijn_css_configuratie = self.load_css_config()  # Load configuration from css_config.yaml
 
@@ -93,30 +95,18 @@ class Markdown_Editor(QMainWindow):
             "it": "ita",
         }
         
-        self.taal = configuratie.get("language", "nl")
-
-        # read config
-        config = self.load_config()
+        
 
         # darkmode
-        if config["darkmode"] == "light":
+        if self.mijn_configuratie["darkmode"] == "light":
             self.lichte_modus()
             self.color_mode = "light"
-        elif config["darkmode"] == "dark":
+        elif self.mijn_configuratie["darkmode"] == "dark":
             self.donkere_modus()
             self.color_mode = "dark"
         else:
             self.blauwe_modus()
             self.color_mode = "blue"
-
-
-        # taal
-        if config.get("language") == "nl":
-            self.taal = "nl"
-        elif config.get("language") == "en":
-            self.taal = "en"
-        else:
-            self.taal = "de"
 
         self.preview_stijl = {
             "voorgrondkleur": self.mijn_css_configuratie.get("foreground_color", "#47256D"),
@@ -142,7 +132,7 @@ class Markdown_Editor(QMainWindow):
 
         self.keuze_teksten_naam = keuze_teksten_naam
         self.keuze_teksten_inhoud = keuze_teksten_inhoud
-        self.opslaglocatie_keuze_teksten = config.get("opslaglocatie_keuze_teksten", "/home/kees/Data/keuze_teksten")
+        self.opslaglocatie_keuze_teksten = self.mijn_configuratie.get("opslaglocatie_keuze_teksten", "/home/kees/Data/keuze_teksten")
         self.config_keuze_teksten = self.load_config_keuze_teksten()
 
         for i in range(10):            
@@ -159,7 +149,7 @@ class Markdown_Editor(QMainWindow):
         toolbar = QToolBar("Mijn toolbar", self)        
         self.addToolBar(toolbar)
 
-        toolbar.setStyleSheet(toolbar_style)
+        toolbar.setStyleSheet(styles.toolbar_style)
 
         self.meldingen = {}
 
@@ -422,7 +412,7 @@ class Markdown_Editor(QMainWindow):
         
 
         # set style for menubar and menu's
-        self.menuBar().setStyleSheet(menuBarStyle)
+        self.menuBar().setStyleSheet(styles.menuBar_style)
         
         bestand_menu = self.menuBar().addMenu(menu_teksten["Bestand"])        
         bestand_menu.addAction(actie["nieuw_actie"])        
@@ -572,7 +562,7 @@ class Markdown_Editor(QMainWindow):
         find_label = QLabel(menu_teksten["Zoeken:"])
         self.completer_zoek = QtWidgets.QCompleter(self.zoek_suggesties)
         self.find_input = QLineEdit()
-        self.find_input.setStyleSheet(zoekveld_style)
+        self.find_input.setStyleSheet(styles.zoekveld_style)
         self.find_input.setCompleter(self.completer_zoek)
         action = QAction(icon_from_text("\U0000232B"), "Wissen", self.find_input)
         action.triggered.connect(self.find_input.clear)
@@ -587,7 +577,7 @@ class Markdown_Editor(QMainWindow):
         self.completer_vervang = QtWidgets.QCompleter(self.zoek_suggesties)
         self.replace_input = QLineEdit()
         self.replace_input.setCompleter(self.completer_vervang)
-        self.replace_input.setStyleSheet(zoekveld_style)
+        self.replace_input.setStyleSheet(styles.zoekveld_style)
         action2 = QAction(icon_from_text("\U0000232B"), "Wissen", self.replace_input)
         action2.triggered.connect(self.replace_input.clear)
         self.replace_input.addAction(action2, QLineEdit.ActionPosition.TrailingPosition)
@@ -688,21 +678,6 @@ class Markdown_Editor(QMainWindow):
     def hello(self):        
         print("Hello!")
 
-    def load_config_keuze_teksten(self):
-        try:
-            with open(self.opslaglocatie_keuze_teksten, "r", encoding='utf-8') as f:
-                config_keuze_teksten = yaml.safe_load(f)
-        except FileNotFoundError:
-            config_keuze_teksten = {}
-        return config_keuze_teksten
-
-    def load_config(self):
-        try:
-            with open("config.yaml", "r", encoding='utf-8') as f:
-                config = yaml.safe_load(f)
-        except FileNotFoundError:
-            config = {}
-        return config
 
     def load_css_config(self):
         try:
@@ -2788,13 +2763,7 @@ identifier: {identifier}
                 return False
         return True    
 
-    def load_config(self):
-        try:
-            with open("config.yaml", "r", encoding='utf-8') as f:
-                config = yaml.safe_load(f)
-        except FileNotFoundError:
-            config = {}
-        return config
+
 
     def keuze_1(self):
         self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 1"])
@@ -3089,9 +3058,7 @@ identifier: {identifier}
     def css_bewerken(self):
         self.config_venster = CssBewerken(self.taal)
         self.config_venster.show()
-        #y_config = self.load_config()  # yaml-bestand laden
-        #modus = y_config.get('darkmode', 'light')
-        #self.modus_wijzigen(modus)
+
 
     def html_bewerken(self):
         bestandsnaam, _ = QFileDialog.getSaveFileName( 
