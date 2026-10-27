@@ -234,175 +234,168 @@ class Markdown_Editor(Markdown_Editor_Menu):
             self.keuze_teksten = keuze_teksten_nl
 
 
-        actie = {}
 
-        def maak_menu_punt(self, naam_actie, naam_in_menu, sneltoets, functie):
-            actie[naam_actie] = QAction(naam_in_menu, self)
-            if len(sneltoets) > 1:
-                actie[naam_actie].setShortcut(sneltoets)
-            actie[naam_actie].triggered.connect(functie)
-            return
 
         # Maak acties        
          
         # Bestand - Nieuw, Openen, Opslaan, Opslaan als, Sluiten
 
-        maak_menu_punt(self, "nieuw_actie", menu_teksten["Nieuw"], "Ctrl+N", self.nieuw)
+        self.maak_menu_punt("nieuw_actie", menu_teksten["Nieuw"], "Ctrl+N", self.nieuw)
         
-        maak_menu_punt(self, "openen_actie", menu_teksten["Openen"], "Ctrl+O", self.openen)
+        self.maak_menu_punt("openen_actie", menu_teksten["Openen"], "Ctrl+O", self.openen)
 
-        maak_menu_punt(self, "invoegen_actie", menu_teksten["Invoegen"], "", self.invoegen)
+        self.maak_menu_punt("invoegen_actie", menu_teksten["Invoegen"], "", self.invoegen)
 
-        maak_menu_punt(self, "opslaan_actie", menu_teksten["Opslaan"], "Ctrl+S", self.opslaan)
+        self.maak_menu_punt("opslaan_actie", menu_teksten["Opslaan"], "Ctrl+S", self.opslaan)
 
-        maak_menu_punt(self, "opslaan_als_actie", menu_teksten["Opslaan als"], "Ctrl+Alt+S", self.opslaan_als)
+        self.maak_menu_punt("opslaan_als_actie", menu_teksten["Opslaan als"], "Ctrl+Alt+S", self.opslaan_als)
 
-        maak_menu_punt(self, "selectie_opslaan_als_actie", menu_teksten["Selectie opslaan als"], "Ctrl+Alt+T", self.selectie_opslaan_als)
+        self.maak_menu_punt("selectie_opslaan_als_actie", menu_teksten["Selectie opslaan als"], "Ctrl+Alt+T", self.selectie_opslaan_als)
 
-        maak_menu_punt(self, "importeer_pdf_als_tekst_actie", menu_teksten["Importeer pdf als tekst"], "", self.import_pdf_as_text)
+        self.maak_menu_punt("importeer_pdf_als_tekst_actie", menu_teksten["Importeer pdf als tekst"], "", self.import_pdf_as_text)
 
-        maak_menu_punt(self, "importeer_pdf_als_md_actie", menu_teksten["Importeer pdf als markdown"], "", self.import_pdf_as_md)
+        self.maak_menu_punt("importeer_pdf_als_md_actie", menu_teksten["Importeer pdf als markdown"], "", self.import_pdf_as_md)
 
-        maak_menu_punt(self, "importeer_epub_actie", menu_teksten["Importeer ePub"], "Alt+E", self.import_epub)
+        self.maak_menu_punt("importeer_epub_actie", menu_teksten["Importeer ePub"], "Alt+E", self.import_epub)
 
-        maak_menu_punt(self, "export_pdf_actie", menu_teksten["Exporteer als PDF"], "", self.export_pdf)
+        self.maak_menu_punt("export_pdf_actie", menu_teksten["Exporteer als PDF"], "", self.export_pdf)
 
-        maak_menu_punt(self, "export_word_actie", menu_teksten["Exporteer naar Word"], "", self.export_word)
+        self.maak_menu_punt("export_word_actie", menu_teksten["Exporteer naar Word"], "", self.export_word)
 
-        maak_menu_punt(self, "export_epub_actie", menu_teksten["Exporteer naar ePub"], "", self.export_epub)
+        self.maak_menu_punt("export_epub_actie", menu_teksten["Exporteer naar ePub"], "", self.export_epub)
 
-        maak_menu_punt(self, "export_txt_actie", menu_teksten["Exporteer als tekst"], "", self.export_txt)
+        self.maak_menu_punt("export_txt_actie", menu_teksten["Exporteer als tekst"], "", self.export_txt)
 
-        maak_menu_punt(self, "export_txt_per_hoofdstuk_actie", menu_teksten["Exporteer als tekstbestand per hoofdstuk"], "", self.export_txt_per_chapter)
+        self.maak_menu_punt("export_txt_per_hoofdstuk_actie", menu_teksten["Exporteer als tekstbestand per hoofdstuk"], "", self.export_txt_per_chapter)
 
-        maak_menu_punt(self, "epub_tts_teksten_actie", menu_teksten["Exporteer ePub naar TTS-teksten"], "Alt+Ctrl+E", self.export_epub_to_tts_texts)        
+        self.maak_menu_punt("epub_tts_teksten_actie", menu_teksten["Exporteer ePub naar TTS-teksten"], "Alt+Ctrl+E", self.export_epub_to_tts_texts)        
 
-        maak_menu_punt(self, "afsluiten_actie", menu_teksten["Afsluiten"], "Ctrl+Q", self.afsluiten)
+        self.maak_menu_punt("afsluiten_actie", menu_teksten["Afsluiten"], "Ctrl+Q", self.afsluiten)
  
         
         # Bewerken - Kopieren, Plakken, Knippen, Zoeken, Alles selecteren, Ongedaan maken, Opnieuw doen,
         #     Normaliseren, Geen hoofdletters, Schrift
 
-        maak_menu_punt(self, "kopieren_actie", menu_teksten["Kopieren"], "Ctrl+C", self.kopieren)
+        self.maak_menu_punt("kopieren_actie", menu_teksten["Kopieren"], "Ctrl+C", self.kopieren)
 
-        maak_menu_punt(self, "plakken_actie", menu_teksten["Plakken"], "Ctrl+V", self.plakken)
+        self.maak_menu_punt("plakken_actie", menu_teksten["Plakken"], "Ctrl+V", self.plakken)
 
-        maak_menu_punt(self, "knippen_actie", menu_teksten["Knippen"], "Ctrl+X", self.knippen)
+        self.maak_menu_punt("knippen_actie", menu_teksten["Knippen"], "Ctrl+X", self.knippen)
 
-        maak_menu_punt(self, "alles_selecteren_actie", menu_teksten["Alles selecteren"], "Ctrl+A", self.alles_selecteren)
+        self.maak_menu_punt("alles_selecteren_actie", menu_teksten["Alles selecteren"], "Ctrl+A", self.alles_selecteren)
 
-        maak_menu_punt(self, "ongedaan_maken_actie", menu_teksten["Ongedaan maken"], "Ctrl+Z", self.ongedaan_maken)
+        self.maak_menu_punt("ongedaan_maken_actie", menu_teksten["Ongedaan maken"], "Ctrl+Z", self.ongedaan_maken)
 
-        maak_menu_punt(self, "opnieuw_doen_actie", menu_teksten["Opnieuw doen"], "Ctrl+R", self.opnieuw_doen)
+        self.maak_menu_punt("opnieuw_doen_actie", menu_teksten["Opnieuw doen"], "Ctrl+R", self.opnieuw_doen)
 
-        maak_menu_punt(self, "normaliseren_actie", menu_teksten["Normaliseren"], "Alt+N", self.normaliseren)
+        self.maak_menu_punt("normaliseren_actie", menu_teksten["Normaliseren"], "Alt+N", self.normaliseren)
 
-        maak_menu_punt(self, "geen_hoofdletters_actie", menu_teksten["Geen hoofdletters"], "Alt+U", self.geen_hoofdletters)
+        self.maak_menu_punt("geen_hoofdletters_actie", menu_teksten["Geen hoofdletters"], "Alt+U", self.geen_hoofdletters)
 
-        maak_menu_punt(self, "hoofdletters_actie", menu_teksten["Hoofdletters"], "", self.hoofdletters)
+        self.maak_menu_punt("hoofdletters_actie", menu_teksten["Hoofdletters"], "", self.hoofdletters)
 
-        maak_menu_punt(self, "schrift_actie", menu_teksten["Schrift"], "Alt+S", self.schrift)
+        self.maak_menu_punt("schrift_actie", menu_teksten["Schrift"], "Alt+S", self.schrift)
 
-        maak_menu_punt(self, "spellcheck_actie", menu_teksten["Spelling controleren"], "F7", self.spellcheck)
+        self.maak_menu_punt("spellcheck_actie", menu_teksten["Spelling controleren"], "F7", self.spellcheck)
 
-        maak_menu_punt(self, "woorden_vervangen_actie", menu_teksten["Woorden vervangen"], "", self.woorden_vervangen)
+        self.maak_menu_punt("woorden_vervangen_actie", menu_teksten["Woorden vervangen"], "", self.woorden_vervangen)
 
-        maak_menu_punt(self, "romeinse_cijfers_vervangen_actie", menu_teksten["Romeinse cijfers vervangen"], "Alt+R", self.romeinse_cijfers_vervangen)
+        self.maak_menu_punt("romeinse_cijfers_vervangen_actie", menu_teksten["Romeinse cijfers vervangen"], "Alt+R", self.romeinse_cijfers_vervangen)
 
-        maak_menu_punt(self, "alle_romeinse_cijfers_vervangen_actie", menu_teksten["Alle Romeinse cijfers vervangen"], "", self.alle_romeinse_cijfers_vervangen)
+        self.maak_menu_punt("alle_romeinse_cijfers_vervangen_actie", menu_teksten["Alle Romeinse cijfers vervangen"], "", self.alle_romeinse_cijfers_vervangen)
 
-        maak_menu_punt(self, "hoofdstukken_maken_cijfers_actie", menu_teksten["Hoofdstukken maken (cijfers)"], "", self.hoofdstukken_maken_cijfers)
+        self.maak_menu_punt("hoofdstukken_maken_cijfers_actie", menu_teksten["Hoofdstukken maken (cijfers)"], "", self.hoofdstukken_maken_cijfers)
 
-        maak_menu_punt(self, "hoofdstukken_maken_regels_actie", menu_teksten["Hoofdstukken maken (regels)"], "", self.hoofdstukken_maken_regels)
+        self.maak_menu_punt("hoofdstukken_maken_regels_actie", menu_teksten["Hoofdstukken maken (regels)"], "", self.hoofdstukken_maken_regels)
         
-        maak_menu_punt(self, "asterisken_verwijderen_actie", menu_teksten["Asterisken verwijderen"], "", self.asterisken_verwijderen)
+        self.maak_menu_punt("asterisken_verwijderen_actie", menu_teksten["Asterisken verwijderen"], "", self.asterisken_verwijderen)
 
-        maak_menu_punt(self, "afbeeldingen_verwijderen_actie", menu_teksten["Afbeeldingen verwijderen"], "", self.afbeeldingen_verwijderen)
+        self.maak_menu_punt("afbeeldingen_verwijderen_actie", menu_teksten["Afbeeldingen verwijderen"], "", self.afbeeldingen_verwijderen)
         
 
         # Beeld - Lichte modus, Donkere modus, Blauwe modus, Font, Lettergrootte
 
-        maak_menu_punt(self, "lichte_modus_actie", menu_teksten["Lichte modus"], "", self.lichte_modus)
+        self.maak_menu_punt("lichte_modus_actie", menu_teksten["Lichte modus"], "", self.lichte_modus)
 
-        maak_menu_punt(self, "donkere_modus_actie", menu_teksten["Donkere modus"], "", self.donkere_modus)
+        self.maak_menu_punt("donkere_modus_actie", menu_teksten["Donkere modus"], "", self.donkere_modus)
 
-        maak_menu_punt(self, "blauwe_modus_actie", menu_teksten["Blauwe modus"], "", self.blauwe_modus)
+        self.maak_menu_punt("blauwe_modus_actie", menu_teksten["Blauwe modus"], "", self.blauwe_modus)
 
-        maak_menu_punt(self, "font_actie", menu_teksten["Font"], "", self.font)
+        self.maak_menu_punt("font_actie", menu_teksten["Font"], "", self.font)
 
-        maak_menu_punt(self, "favoriete_font_actie", menu_teksten["Favoriete font"], "", self.favoriete_font)
+        self.maak_menu_punt("favoriete_font_actie", menu_teksten["Favoriete font"], "", self.favoriete_font)
 
         # Navigatie
 
-        maak_menu_punt(self, "naar_begin_actie", menu_teksten["Naar begin"], "Ctrl+Home", self.naar_begin)
+        self.maak_menu_punt("naar_begin_actie", menu_teksten["Naar begin"], "Ctrl+Home", self.naar_begin)
 
-        maak_menu_punt(self, "naar_einde_actie", menu_teksten["Naar einde"], "Ctrl+End", self.naar_einde)
+        self.maak_menu_punt("naar_einde_actie", menu_teksten["Naar einde"], "Ctrl+End", self.naar_einde)
 
-        maak_menu_punt(self, "naar_begin_regel_actie", menu_teksten["Naar begin regel"], "Ctrl+[", self.naar_begin_regel)
+        self.maak_menu_punt("naar_begin_regel_actie", menu_teksten["Naar begin regel"], "Ctrl+[", self.naar_begin_regel)
         
-        maak_menu_punt(self, "naar_einde_regel_actie", menu_teksten["Naar einde regel"], "Ctrl+]", self.naar_einde_regel)
+        self.maak_menu_punt("naar_einde_regel_actie", menu_teksten["Naar einde regel"], "Ctrl+]", self.naar_einde_regel)
 
         # Invoegen - Datum, Tijd, md link, md afbeelding, if name == main, frontmatter
 
-        maak_menu_punt(self, "datum_actie", menu_teksten["Datum"], "Alt+D", self.datum)
+        self.maak_menu_punt("datum_actie", menu_teksten["Datum"], "Alt+D", self.datum)
 
-        maak_menu_punt(self, "tijd_actie", menu_teksten["Tijd"], "Alt+T", self.tijd)
+        self.maak_menu_punt("tijd_actie", menu_teksten["Tijd"], "Alt+T", self.tijd)
 
-        maak_menu_punt(self, "md_link_actie", menu_teksten["md link"], "Alt+L", self.md_link)
+        self.maak_menu_punt("md_link_actie", menu_teksten["md link"], "Alt+L", self.md_link)
 
-        maak_menu_punt(self, "md_afbeelding_actie", menu_teksten["md afbeelding"], "Alt+A", self.md_afbeelding)
+        self.maak_menu_punt("md_afbeelding_actie", menu_teksten["md afbeelding"], "Alt+A", self.md_afbeelding)
 
-        maak_menu_punt(self, "paragraafteken_invoegen_actie", menu_teksten["Paragraafteken invoegen"], "Alt+P", self.paragraafteken_invoegen)
+        self.maak_menu_punt("paragraafteken_invoegen_actie", menu_teksten["Paragraafteken invoegen"], "Alt+P", self.paragraafteken_invoegen)
 
-        #maak_menu_punt(self, "if_name_is_main_actie", menu_teksten["if name == main"], "Alt+I", self.if_name_is_main)
+        #self.maak_menu_punt(self, "if_name_is_main_actie", menu_teksten["if name == main"], "Alt+I", self.if_name_is_main)
 
-        maak_menu_punt(self, "frontmatter_actie", menu_teksten["Frontmatter"], "Alt+F", self.frontmatter_popup)
+        self.maak_menu_punt("frontmatter_actie", menu_teksten["Frontmatter"], "Alt+F", self.frontmatter_popup)
 
-        #maak_menu_punt(self, "frontmatter_epub_actie", menu_teksten["Frontmatter epub"], "", self.frontmatter_epub)
+        #self.maak_menu_punt(self, "frontmatter_epub_actie", menu_teksten["Frontmatter epub"], "", self.frontmatter_epub)
 
         # Apps - Memo, Memolijst
 
-        maak_menu_punt(self, "memo_actie", menu_teksten["Memo"], "", self.memo)
+        self.maak_menu_punt("memo_actie", menu_teksten["Memo"], "", self.memo)
 
-        maak_menu_punt(self, "memolijst_actie", menu_teksten["Memolijst"], "", self.memolijst)
+        self.maak_menu_punt("memolijst_actie", menu_teksten["Memolijst"], "", self.memolijst)
 
-        maak_menu_punt(self, "configuratie_bewerken_actie", menu_teksten["Configuratie bewerken"], "", self.configuratie_bewerken)
+        self.maak_menu_punt("configuratie_bewerken_actie", menu_teksten["Configuratie bewerken"], "", self.configuratie_bewerken)
 
         # Help - Over Edith, Sneltoetsen, Sneltoetsen (Alt), Markdown
         
-        maak_menu_punt(self, "over_actie", menu_teksten["Over Edith"], "", self.over)
+        self.maak_menu_punt("over_actie", menu_teksten["Over Edith"], "", self.over)
 
-        #maak_menu_punt(self, "sneltoetsen_actie", menu_teksten["Sneltoetsen"], "", self.sneltoetsen)
+        #self.maak_menu_punt(self, "sneltoetsen_actie", menu_teksten["Sneltoetsen"], "", self.sneltoetsen)
 
-        #maak_menu_punt(self, "sneltoetsen_alt_actie", menu_teksten["Sneltoetsen (Alt)"], "", self.sneltoetsen_alt)
+        #self.maak_menu_punt(self, "sneltoetsen_alt_actie", menu_teksten["Sneltoetsen (Alt)"], "", self.sneltoetsen_alt)
 
-        #maak_menu_punt(self, "markdown_actie", menu_teksten["Markdown"], "", self.markdown_overzicht)
+        #self.maak_menu_punt(self, "markdown_actie", menu_teksten["Markdown"], "", self.markdown_overzicht)
 
-        maak_menu_punt(self, "help_actie", menu_teksten["Help"], "F1", self.edith_help)
+        self.maak_menu_punt("help_actie", menu_teksten["Help"], "F1", self.edith_help)
 
-        maak_menu_punt(self, "keuzetekst1_actie", keuze_teksten_naam["Keuze 1"], "Alt+1", self.keuze_1)
+        self.maak_menu_punt("keuzetekst1_actie", keuze_teksten_naam["Keuze 1"], "Alt+1", self.keuze_1)
 
-        maak_menu_punt(self, "keuzetekst2_actie", keuze_teksten_naam["Keuze 2"], "Alt+2", self.keuze_2)
+        self.maak_menu_punt("keuzetekst2_actie", keuze_teksten_naam["Keuze 2"], "Alt+2", self.keuze_2)
 
-        maak_menu_punt(self, "keuzetekst3_actie", keuze_teksten_naam["Keuze 3"], "Alt+3", self.keuze_3)
+        self.maak_menu_punt("keuzetekst3_actie", keuze_teksten_naam["Keuze 3"], "Alt+3", self.keuze_3)
 
-        maak_menu_punt(self, "keuzetekst4_actie", keuze_teksten_naam["Keuze 4"], "Alt+4", self.keuze_4)
+        self.maak_menu_punt("keuzetekst4_actie", keuze_teksten_naam["Keuze 4"], "Alt+4", self.keuze_4)
 
-        maak_menu_punt(self, "keuzetekst5_actie", keuze_teksten_naam["Keuze 5"], "Alt+5", self.keuze_5)
+        self.maak_menu_punt("keuzetekst5_actie", keuze_teksten_naam["Keuze 5"], "Alt+5", self.keuze_5)
 
-        maak_menu_punt(self, "keuzetekst6_actie", keuze_teksten_naam["Keuze 6"], "Alt+6", self.keuze_6)
+        self.maak_menu_punt("keuzetekst6_actie", keuze_teksten_naam["Keuze 6"], "Alt+6", self.keuze_6)
 
-        maak_menu_punt(self, "keuzetekst7_actie", keuze_teksten_naam["Keuze 7"], "Alt+7", self.keuze_7)
+        self.maak_menu_punt("keuzetekst7_actie", keuze_teksten_naam["Keuze 7"], "Alt+7", self.keuze_7)
 
-        maak_menu_punt(self, "keuzetekst8_actie", keuze_teksten_naam["Keuze 8"], "Alt+8", self.keuze_8)
+        self.maak_menu_punt("keuzetekst8_actie", keuze_teksten_naam["Keuze 8"], "Alt+8", self.keuze_8)
 
-        maak_menu_punt(self, "keuzetekst9_actie", keuze_teksten_naam["Keuze 9"], "Alt+9", self.keuze_9)
+        self.maak_menu_punt("keuzetekst9_actie", keuze_teksten_naam["Keuze 9"], "Alt+9", self.keuze_9)
 
-        maak_menu_punt(self, "keuzetekst10_actie", keuze_teksten_naam["Keuze 10"], "Alt+0", self.keuze_10)
+        self.maak_menu_punt("keuzetekst10_actie", keuze_teksten_naam["Keuze 10"], "Alt+0", self.keuze_10)
 
-        maak_menu_punt(self, "versleutel_actie", menu_teksten["Versleutel Bestand"], "", self.versleutelen)
+        self.maak_menu_punt("versleutel_actie", menu_teksten["Versleutel Bestand"], "", self.versleutelen)
 
-        maak_menu_punt(self, "ontsleutel_actie", menu_teksten["Ontsleutel Bestand"], "", self.ontsleutelen)
+        self.maak_menu_punt("ontsleutel_actie", menu_teksten["Ontsleutel Bestand"], "", self.ontsleutelen)
 
         # verder uitwerken van menu's en acties kan hier worden toegevoegd indien nodig
         #for key, value in self.keuze_teksten.items():
@@ -415,107 +408,107 @@ class Markdown_Editor(Markdown_Editor_Menu):
         self.menuBar().setStyleSheet(styles.menuBar_style)
         
         bestand_menu = self.menuBar().addMenu(menu_teksten["Bestand"])        
-        bestand_menu.addAction(actie["nieuw_actie"])        
-        bestand_menu.addAction(actie["openen_actie"])
-        bestand_menu.addAction(actie["invoegen_actie"])
-        bestand_menu.addAction(actie["opslaan_actie"]) 
-        bestand_menu.addAction(actie["opslaan_als_actie"])
-        bestand_menu.addAction(actie["selectie_opslaan_als_actie"])
+        bestand_menu.addAction(self.actie["nieuw_actie"])        
+        bestand_menu.addAction(self.actie["openen_actie"])
+        bestand_menu.addAction(self.actie["invoegen_actie"])
+        bestand_menu.addAction(self.actie["opslaan_actie"]) 
+        bestand_menu.addAction(self.actie["opslaan_als_actie"])
+        bestand_menu.addAction(self.actie["selectie_opslaan_als_actie"])
         bestand_menu.addSeparator()
-        bestand_menu.addAction(actie["importeer_pdf_als_tekst_actie"])
-        bestand_menu.addAction(actie["importeer_pdf_als_md_actie"])
-        bestand_menu.addAction(actie["importeer_epub_actie"])
+        bestand_menu.addAction(self.actie["importeer_pdf_als_tekst_actie"])
+        bestand_menu.addAction(self.actie["importeer_pdf_als_md_actie"])
+        bestand_menu.addAction(self.actie["importeer_epub_actie"])
         bestand_menu.addSeparator()
-        bestand_menu.addAction(actie["export_pdf_actie"])
-        bestand_menu.addAction(actie["export_word_actie"])
-        bestand_menu.addAction(actie["export_epub_actie"])
-        bestand_menu.addAction(actie["export_txt_actie"])
-        bestand_menu.addAction(actie["export_txt_per_hoofdstuk_actie"])
-        bestand_menu.addAction(actie["epub_tts_teksten_actie"])
+        bestand_menu.addAction(self.actie["export_pdf_actie"])
+        bestand_menu.addAction(self.actie["export_word_actie"])
+        bestand_menu.addAction(self.actie["export_epub_actie"])
+        bestand_menu.addAction(self.actie["export_txt_actie"])
+        bestand_menu.addAction(self.actie["export_txt_per_hoofdstuk_actie"])
+        bestand_menu.addAction(self.actie["epub_tts_teksten_actie"])
         bestand_menu.addSeparator()
-        bestand_menu.addAction(actie["afsluiten_actie"])
+        bestand_menu.addAction(self.actie["afsluiten_actie"])
 
         bewerken_menu = self.menuBar().addMenu(menu_teksten["Bewerken"])
-        bewerken_menu.addAction(actie["kopieren_actie"])
-        bewerken_menu.addAction(actie["knippen_actie"])
-        bewerken_menu.addAction(actie["plakken_actie"])
+        bewerken_menu.addAction(self.actie["kopieren_actie"])
+        bewerken_menu.addAction(self.actie["knippen_actie"])
+        bewerken_menu.addAction(self.actie["plakken_actie"])
         bewerken_menu.addSeparator()
-        bewerken_menu.addAction(actie["alles_selecteren_actie"])
-        bewerken_menu.addAction(actie["ongedaan_maken_actie"])
-        bewerken_menu.addAction(actie["opnieuw_doen_actie"])
+        bewerken_menu.addAction(self.actie["alles_selecteren_actie"])
+        bewerken_menu.addAction(self.actie["ongedaan_maken_actie"])
+        bewerken_menu.addAction(self.actie["opnieuw_doen_actie"])
         bewerken_menu.addSeparator()
-        bewerken_menu.addAction(actie["normaliseren_actie"])
-        bewerken_menu.addAction(actie["geen_hoofdletters_actie"])
-        bewerken_menu.addAction(actie["hoofdletters_actie"])
-        bewerken_menu.addAction(actie["schrift_actie"])
+        bewerken_menu.addAction(self.actie["normaliseren_actie"])
+        bewerken_menu.addAction(self.actie["geen_hoofdletters_actie"])
+        bewerken_menu.addAction(self.actie["hoofdletters_actie"])
+        bewerken_menu.addAction(self.actie["schrift_actie"])
         bewerken_menu.addSeparator()
-        bewerken_menu.addAction(actie["spellcheck_actie"])
-        bewerken_menu.addAction(actie["woorden_vervangen_actie"])
+        bewerken_menu.addAction(self.actie["spellcheck_actie"])
+        bewerken_menu.addAction(self.actie["woorden_vervangen_actie"])
         bewerken_menu.addSeparator()
-        bewerken_menu.addAction(actie["romeinse_cijfers_vervangen_actie"])
-        bewerken_menu.addAction(actie["alle_romeinse_cijfers_vervangen_actie"])
+        bewerken_menu.addAction(self.actie["romeinse_cijfers_vervangen_actie"])
+        bewerken_menu.addAction(self.actie["alle_romeinse_cijfers_vervangen_actie"])
         bewerken_menu.addSeparator()
-        bewerken_menu.addAction(actie["hoofdstukken_maken_cijfers_actie"])
-        bewerken_menu.addAction(actie["hoofdstukken_maken_regels_actie"])
+        bewerken_menu.addAction(self.actie["hoofdstukken_maken_cijfers_actie"])
+        bewerken_menu.addAction(self.actie["hoofdstukken_maken_regels_actie"])
         bewerken_menu.addSeparator()
-        bewerken_menu.addAction(actie["frontmatter_actie"])
+        bewerken_menu.addAction(self.actie["frontmatter_actie"])
         bewerken_menu.addSeparator()
-        bewerken_menu.addAction(actie["asterisken_verwijderen_actie"])
-        bewerken_menu.addAction(actie["afbeeldingen_verwijderen_actie"])
+        bewerken_menu.addAction(self.actie["asterisken_verwijderen_actie"])
+        bewerken_menu.addAction(self.actie["afbeeldingen_verwijderen_actie"])
 
         beeld_menu = self.menuBar().addMenu(menu_teksten["Beeld"])
-        beeld_menu.addAction(actie["lichte_modus_actie"])
-        beeld_menu.addAction(actie["donkere_modus_actie"])
-        beeld_menu.addAction(actie["blauwe_modus_actie"])
+        beeld_menu.addAction(self.actie["lichte_modus_actie"])
+        beeld_menu.addAction(self.actie["donkere_modus_actie"])
+        beeld_menu.addAction(self.actie["blauwe_modus_actie"])
         beeld_menu.addSeparator()
-        beeld_menu.addAction(actie["font_actie"])
-        beeld_menu.addAction(actie["favoriete_font_actie"])
+        beeld_menu.addAction(self.actie["font_actie"])
+        beeld_menu.addAction(self.actie["favoriete_font_actie"])
         
         navigatie_menu = self.menuBar().addMenu(menu_teksten["Navigatie"])
-        navigatie_menu.addAction(actie["naar_begin_actie"])
-        navigatie_menu.addAction(actie["naar_einde_actie"])
-        navigatie_menu.addAction(actie["naar_begin_regel_actie"])
-        navigatie_menu.addAction(actie["naar_einde_regel_actie"])
+        navigatie_menu.addAction(self.actie["naar_begin_actie"])
+        navigatie_menu.addAction(self.actie["naar_einde_actie"])
+        navigatie_menu.addAction(self.actie["naar_begin_regel_actie"])
+        navigatie_menu.addAction(self.actie["naar_einde_regel_actie"])
 
         invoegen_menu = self.menuBar().addMenu(menu_teksten["Invoegen"])
-        invoegen_menu.addAction(actie["datum_actie"])
-        invoegen_menu.addAction(actie["tijd_actie"])
-        invoegen_menu.addAction(actie["md_link_actie"])
-        invoegen_menu.addAction(actie["md_afbeelding_actie"])
+        invoegen_menu.addAction(self.actie["datum_actie"])
+        invoegen_menu.addAction(self.actie["tijd_actie"])
+        invoegen_menu.addAction(self.actie["md_link_actie"])
+        invoegen_menu.addAction(self.actie["md_afbeelding_actie"])
         invoegen_menu.addSeparator()
-        invoegen_menu.addAction(actie["paragraafteken_invoegen_actie"])
-        #invoegen_menu.addAction(actie["if_name_is_main_actie"])
+        invoegen_menu.addAction(self.actie["paragraafteken_invoegen_actie"])
+        #invoegen_menu.addAction(self.actie["if_name_is_main_actie"])
         
-        #invoegen_menu.addAction(actie["frontmatter_epub_actie"])
+        #invoegen_menu.addAction(self.actie["frontmatter_epub_actie"])
 
         invoegen_menu = self.menuBar().addMenu(menu_teksten["Teksten"])
-        invoegen_menu.addAction(actie["keuzetekst1_actie"])
-        invoegen_menu.addAction(actie["keuzetekst2_actie"])
-        invoegen_menu.addAction(actie["keuzetekst3_actie"])
-        invoegen_menu.addAction(actie["keuzetekst4_actie"])
-        invoegen_menu.addAction(actie["keuzetekst5_actie"])
-        invoegen_menu.addAction(actie["keuzetekst6_actie"])
-        invoegen_menu.addAction(actie["keuzetekst7_actie"])
-        invoegen_menu.addAction(actie["keuzetekst8_actie"])
-        invoegen_menu.addAction(actie["keuzetekst9_actie"])
-        invoegen_menu.addAction(actie["keuzetekst10_actie"])
+        invoegen_menu.addAction(self.actie["keuzetekst1_actie"])
+        invoegen_menu.addAction(self.actie["keuzetekst2_actie"])
+        invoegen_menu.addAction(self.actie["keuzetekst3_actie"])
+        invoegen_menu.addAction(self.actie["keuzetekst4_actie"])
+        invoegen_menu.addAction(self.actie["keuzetekst5_actie"])
+        invoegen_menu.addAction(self.actie["keuzetekst6_actie"])
+        invoegen_menu.addAction(self.actie["keuzetekst7_actie"])
+        invoegen_menu.addAction(self.actie["keuzetekst8_actie"])
+        invoegen_menu.addAction(self.actie["keuzetekst9_actie"])
+        invoegen_menu.addAction(self.actie["keuzetekst10_actie"])
 
         extra_menu = self.menuBar().addMenu(menu_teksten["Extra"])
-        extra_menu.addAction(actie["memo_actie"])
-        extra_menu.addAction(actie["memolijst_actie"])
+        extra_menu.addAction(self.actie["memo_actie"])
+        extra_menu.addAction(self.actie["memolijst_actie"])
         extra_menu.addSeparator()
-        extra_menu.addAction(actie["configuratie_bewerken_actie"])
+        extra_menu.addAction(self.actie["configuratie_bewerken_actie"])
         extra_menu.addSeparator()
-        extra_menu.addAction(actie["versleutel_actie"])
-        extra_menu.addAction(actie["ontsleutel_actie"])
+        extra_menu.addAction(self.actie["versleutel_actie"])
+        extra_menu.addAction(self.actie["ontsleutel_actie"])
 
         hulp_menu = self.menuBar().addMenu(menu_teksten["Help"])
-        hulp_menu.addAction(actie["over_actie"])
-        #hulp_menu.addAction(actie["sneltoetsen_actie"])
-        #hulp_menu.addAction(actie["sneltoetsen_alt_actie"])
-        #hulp_menu.addAction(actie["markdown_actie"])
+        hulp_menu.addAction(self.actie["over_actie"])
+        #hulp_menu.addAction(self.actie["sneltoetsen_actie"])
+        #hulp_menu.addAction(self.actie["sneltoetsen_alt_actie"])
+        #hulp_menu.addAction(self.actie["markdown_actie"])
         # nog meertalig toevoegen indien nodig
-        hulp_menu.addAction(actie["help_actie"])
+        hulp_menu.addAction(self.actie["help_actie"])
 
 
         v_layout = QVBoxLayout()

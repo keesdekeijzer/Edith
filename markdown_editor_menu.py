@@ -1,5 +1,6 @@
 from PyQt6.QtWidgets import QMainWindow
 import yaml
+from PyQt6.QtGui import QAction
 
 
 class Markdown_Editor_Menu(QMainWindow):
@@ -16,6 +17,15 @@ class Markdown_Editor_Menu(QMainWindow):
             self.taal = "de"
         else:
             self.taal = "en"
+
+        self.actie = {}
+
+    def maak_menu_punt(self, naam_actie, naam_in_menu, sneltoets, functie):
+        self.actie[naam_actie] = QAction(naam_in_menu, self)
+        if len(sneltoets) > 1:
+            self.actie[naam_actie].setShortcut(sneltoets)
+        self.actie[naam_actie].triggered.connect(functie)
+        return
 
     def load_config(self):
         try:
