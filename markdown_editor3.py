@@ -56,7 +56,7 @@ from teksten_menu import menu_teksten_nl, menu_teksten_en, menu_teksten_de
 from teksten_meldingen import meldingen_nl, meldingen_en, meldingen_de
 
 from keuze_teksten import keuze_teksten_nl, keuze_teksten_en, keuze_teksten_de
-from keuze_teksten_inhoud import keuze_teksten_inhoud, keuze_teksten_naam
+
 
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
@@ -97,17 +97,6 @@ class Markdown_Editor(Markdown_Editor_Menu):
         
         
 
-        # darkmode
-        if self.mijn_configuratie["darkmode"] == "light":
-            self.lichte_modus()
-            self.color_mode = "light"
-        elif self.mijn_configuratie["darkmode"] == "dark":
-            self.donkere_modus()
-            self.color_mode = "dark"
-        else:
-            self.blauwe_modus()
-            self.color_mode = "blue"
-
         self.preview_stijl = {
             "voorgrondkleur": self.mijn_css_configuratie.get("foreground_color", "#47256D"),
             "achtergrondkleur": self.mijn_css_configuratie.get("background_color", "#FFFFFF")
@@ -130,20 +119,9 @@ class Markdown_Editor(Markdown_Editor_Menu):
             "endnotes"
         ]
 
-        self.keuze_teksten_naam = keuze_teksten_naam
-        self.keuze_teksten_inhoud = keuze_teksten_inhoud
-        self.opslaglocatie_keuze_teksten = self.mijn_configuratie.get("opslaglocatie_keuze_teksten", "/home/kees/Data/keuze_teksten")
-        self.config_keuze_teksten = self.load_config_keuze_teksten()
 
-        for i in range(10):            
-            if f"keuze_{i + 1}" in self.config_keuze_teksten:
-                ki = self.config_keuze_teksten[f"keuze_{i + 1}"]
-                kz = ki[:20] + "..." if len(ki) > 20 else ki
-            else: 
-                ki = self.keuze_teksten_inhoud.get(f"Keuze {i + 1}", f"Keuze {i + 1}") 
-                kz = self.keuze_teksten_naam.get(f"Keuze {i + 1}", f"Keuze {i + 1}") 
-            self.keuze_teksten_naam[f"Keuze {i + 1}"] = kz
-            self.keuze_teksten_inhoud[f"Keuze {i + 1}"] = ki
+
+
 
         # Toolbar aanmaken        
         toolbar = QToolBar("Mijn toolbar", self)        
@@ -373,25 +351,25 @@ class Markdown_Editor(Markdown_Editor_Menu):
 
         self.maak_menu_punt("help_actie", menu_teksten["Help"], "F1", self.edith_help)
 
-        self.maak_menu_punt("keuzetekst1_actie", keuze_teksten_naam["Keuze 1"], "Alt+1", self.keuze_1)
+        self.maak_menu_punt("keuzetekst1_actie", self.keuze_teksten_naam["Keuze 1"], "Alt+1", self.keuze_1)
 
-        self.maak_menu_punt("keuzetekst2_actie", keuze_teksten_naam["Keuze 2"], "Alt+2", self.keuze_2)
+        self.maak_menu_punt("keuzetekst2_actie", self.keuze_teksten_naam["Keuze 2"], "Alt+2", self.keuze_2)
 
-        self.maak_menu_punt("keuzetekst3_actie", keuze_teksten_naam["Keuze 3"], "Alt+3", self.keuze_3)
+        self.maak_menu_punt("keuzetekst3_actie", self.keuze_teksten_naam["Keuze 3"], "Alt+3", self.keuze_3)
 
-        self.maak_menu_punt("keuzetekst4_actie", keuze_teksten_naam["Keuze 4"], "Alt+4", self.keuze_4)
+        self.maak_menu_punt("keuzetekst4_actie", self.keuze_teksten_naam["Keuze 4"], "Alt+4", self.keuze_4)
 
-        self.maak_menu_punt("keuzetekst5_actie", keuze_teksten_naam["Keuze 5"], "Alt+5", self.keuze_5)
+        self.maak_menu_punt("keuzetekst5_actie", self.keuze_teksten_naam["Keuze 5"], "Alt+5", self.keuze_5)
 
-        self.maak_menu_punt("keuzetekst6_actie", keuze_teksten_naam["Keuze 6"], "Alt+6", self.keuze_6)
+        self.maak_menu_punt("keuzetekst6_actie", self.keuze_teksten_naam["Keuze 6"], "Alt+6", self.keuze_6)
 
-        self.maak_menu_punt("keuzetekst7_actie", keuze_teksten_naam["Keuze 7"], "Alt+7", self.keuze_7)
+        self.maak_menu_punt("keuzetekst7_actie", self.keuze_teksten_naam["Keuze 7"], "Alt+7", self.keuze_7)
 
-        self.maak_menu_punt("keuzetekst8_actie", keuze_teksten_naam["Keuze 8"], "Alt+8", self.keuze_8)
+        self.maak_menu_punt("keuzetekst8_actie", self.keuze_teksten_naam["Keuze 8"], "Alt+8", self.keuze_8)
 
-        self.maak_menu_punt("keuzetekst9_actie", keuze_teksten_naam["Keuze 9"], "Alt+9", self.keuze_9)
+        self.maak_menu_punt("keuzetekst9_actie", self.keuze_teksten_naam["Keuze 9"], "Alt+9", self.keuze_9)
 
-        self.maak_menu_punt("keuzetekst10_actie", keuze_teksten_naam["Keuze 10"], "Alt+0", self.keuze_10)
+        self.maak_menu_punt("keuzetekst10_actie", self.keuze_teksten_naam["Keuze 10"], "Alt+0", self.keuze_10)
 
         self.maak_menu_punt("versleutel_actie", menu_teksten["Versleutel Bestand"], "", self.versleutelen)
 
@@ -2759,34 +2737,34 @@ identifier: {identifier}
 
 
     def keuze_1(self):
-        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 1"])
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 1"])
 
     def keuze_2(self):
-        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 2"])
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 2"])
 
     def keuze_3(self):
-        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 3"])
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 3"])
 
     def keuze_4(self):
-        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 4"])
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 4"])
 
     def keuze_5(self):
-        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 5"])
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 5"])
 
     def keuze_6(self):
-        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 6"])
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 6"])
 
     def keuze_7(self):
-        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 7"])
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 7"])
 
     def keuze_8(self):
-        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 8"])
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 8"])
 
     def keuze_9(self):
-        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 9"])
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 9"])
 
     def keuze_10(self):
-        self.editor.insertPlainText(keuze_teksten_inhoud["Keuze 10"])
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 10"])
 
 
     # Versleuteling en ontsleuteling van tekst met AES-GCM
