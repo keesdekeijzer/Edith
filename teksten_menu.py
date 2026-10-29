@@ -376,3 +376,7 @@ menu_teksten_de["Asterisken verwijderen"] = "Sternchen entfernen"
 menu_teksten_nl["Afbeeldingen verwijderen"] = "Afbeeldingen verwijderen"
 menu_teksten_en["Afbeeldingen verwijderen"] = "Remove images"
 menu_teksten_de["Afbeeldingen verwijderen"] = "Bilder entfernen"
+
+menu_teksten_nl["CSS"] = "CSS"
+menu_teksten_en["CSS"] = "CSS"
+menu_teksten_de["CSS"] = "CSS"

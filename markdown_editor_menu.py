@@ -1,7 +1,13 @@
-from PyQt6.QtWidgets import QMainWindow
+from PyQt6.QtWidgets import QMainWindow, QToolBar
 import yaml
 from PyQt6.QtGui import QAction
 from keuze_teksten_inhoud import keuze_teksten_inhoud, keuze_teksten_naam
+# Import the styles from styles.py  
+import styles
+
+from teksten_menu import menu_teksten_nl, menu_teksten_en, menu_teksten_de
+from teksten_meldingen import meldingen_nl, meldingen_en, meldingen_de
+from keuze_teksten import keuze_teksten_nl, keuze_teksten_en, keuze_teksten_de
 
 class Markdown_Editor_Menu(QMainWindow):
     def __init__(self):
@@ -45,6 +51,35 @@ class Markdown_Editor_Menu(QMainWindow):
                 kz = self.keuze_teksten_naam.get(f"Keuze {i + 1}", f"Keuze {i + 1}") 
             self.keuze_teksten_naam[f"Keuze {i + 1}"] = kz
             self.keuze_teksten_inhoud[f"Keuze {i + 1}"] = ki
+
+        # Toolbar aanmaken        
+        self.toolbar = QToolBar("Mijn toolbar", self)        
+        self.addToolBar(self.toolbar)
+
+        self.toolbar.setStyleSheet(styles.toolbar_style)
+
+        self.meldingen = {}
+        self.menu_teksten = {}
+
+        if self.taal == "en":
+            self.menu_teksten = menu_teksten_en
+            self.meldingen = meldingen_en
+        elif self.taal == "de":
+            self.menu_teksten = menu_teksten_de
+            self.meldingen = meldingen_de
+        else:
+            self.menu_teksten = menu_teksten_nl
+            self.meldingen = meldingen_nl
+
+        self.keuze_teksten = {}
+
+        if self.taal == "en":
+            self.keuze_teksten = keuze_teksten_en
+        elif self.taal == "de":
+            self.keuze_teksten = keuze_teksten_de
+        else:
+            self.keuze_teksten = keuze_teksten_nl
+
 
     def maak_menu_punt(self, naam_actie, naam_in_menu, sneltoets, functie):
         self.actie[naam_actie] = QAction(naam_in_menu, self)
