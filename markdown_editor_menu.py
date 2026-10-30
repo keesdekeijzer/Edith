@@ -80,6 +80,47 @@ class Markdown_Editor_Menu(QMainWindow):
         else:
             self.keuze_teksten = keuze_teksten_nl
 
+        # Acties (knoppen) maken        
+        actie_datum = QAction(self.menu_teksten["Datum"], self)        
+        actie_datum.triggered.connect(self.datum)
+        self.toolbar.addAction(actie_datum)
+
+        actie_tijd = QAction(self.menu_teksten["Tijd"], self)        
+        actie_tijd.triggered.connect(self.tijd)
+        self.toolbar.addAction(actie_tijd)
+
+        actie_md_link = QAction(self.menu_teksten["md link"], self)
+        actie_md_link.triggered.connect(self.md_link)
+        self.toolbar.addAction(actie_md_link)
+
+        actie_md_afbeelding = QAction(self.menu_teksten["md afbeelding"], self)
+        actie_md_afbeelding.triggered.connect(self.md_afbeelding)
+        self.toolbar.addAction(actie_md_afbeelding)
+
+        actie_frontmatter = QAction(self.menu_teksten["Frontmatter"], self)
+        actie_frontmatter.triggered.connect(self.frontmatter)
+        self.toolbar.addAction(actie_frontmatter)
+
+        actie_frontmatter_epub = QAction(self.menu_teksten["Frontmatter epub"], self)
+        actie_frontmatter_epub.triggered.connect(self.frontmatter_epub)
+        self.toolbar.addAction(actie_frontmatter_epub)
+
+        actie_versleutel = QAction(self.menu_teksten["Versleutel Bestand"], self)
+        actie_versleutel.triggered.connect(self.versleutelen)
+        self.toolbar.addAction(actie_versleutel)
+
+        actie_ontsleutel = QAction(self.menu_teksten["Ontsleutel Bestand"], self)
+        actie_ontsleutel.triggered.connect(self.ontsleutelen)
+        self.toolbar.addAction(actie_ontsleutel)
+
+        actie_memo = QAction(self.menu_teksten["Memo"], self)
+        actie_memo.triggered.connect(self.memo)
+        self.toolbar.addAction(actie_memo)
+
+        actie_memolijst = QAction(self.menu_teksten["Memolijst"], self)
+        actie_memolijst.triggered.connect(self.memolijst)
+        self.toolbar.addAction(actie_memolijst)
+
 
     def maak_menu_punt(self, naam_actie, naam_in_menu, sneltoets, functie):
         self.actie[naam_actie] = QAction(naam_in_menu, self)
@@ -103,4 +144,4 @@ class Markdown_Editor_Menu(QMainWindow):
         except FileNotFoundError:
             config_keuze_teksten = {}
         return config_keuze_teksten
-    
+

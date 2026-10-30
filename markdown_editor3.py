@@ -122,7 +122,7 @@ class Markdown_Editor(Markdown_Editor_Menu):
 
 
 
-
+        """
         # Acties (knoppen) maken        
         actie_datum = QAction(self.menu_teksten["Datum"], self)        
         actie_datum.triggered.connect(self.datum)
@@ -163,7 +163,9 @@ class Markdown_Editor(Markdown_Editor_Menu):
         actie_memolijst = QAction(self.menu_teksten["Memolijst"], self)
         actie_memolijst.triggered.connect(self.memolijst)
         self.toolbar.addAction(actie_memolijst)
+        """
 
+        
         # Central widget        
         self.editor = CodeEditor()  
         container = QWidget()
