@@ -118,66 +118,17 @@ class Markdown_Editor(Markdown_Editor_Menu):
             "endnotes"
         ]
 
-
-
-
-
         """
-        # Acties (knoppen) maken        
-        actie_datum = QAction(self.menu_teksten["Datum"], self)        
-        actie_datum.triggered.connect(self.datum)
-        self.toolbar.addAction(actie_datum)
-
-        actie_tijd = QAction(self.menu_teksten["Tijd"], self)        
-        actie_tijd.triggered.connect(self.tijd)
-        self.toolbar.addAction(actie_tijd)
-
-        actie_md_link = QAction(self.menu_teksten["md link"], self)
-        actie_md_link.triggered.connect(self.md_link)
-        self.toolbar.addAction(actie_md_link)
-
-        actie_md_afbeelding = QAction(self.menu_teksten["md afbeelding"], self)
-        actie_md_afbeelding.triggered.connect(self.md_afbeelding)
-        self.toolbar.addAction(actie_md_afbeelding)
-
-        actie_frontmatter = QAction(self.menu_teksten["Frontmatter"], self)
-        actie_frontmatter.triggered.connect(self.frontmatter)
-        self.toolbar.addAction(actie_frontmatter)
-
-        actie_frontmatter_epub = QAction(self.menu_teksten["Frontmatter epub"], self)
-        actie_frontmatter_epub.triggered.connect(self.frontmatter_epub)
-        self.toolbar.addAction(actie_frontmatter_epub)
-
-        actie_versleutel = QAction(self.menu_teksten["Versleutel Bestand"], self)
-        actie_versleutel.triggered.connect(self.versleutelen)
-        self.toolbar.addAction(actie_versleutel)
-
-        actie_ontsleutel = QAction(self.menu_teksten["Ontsleutel Bestand"], self)
-        actie_ontsleutel.triggered.connect(self.ontsleutelen)
-        self.toolbar.addAction(actie_ontsleutel)
-
-        actie_memo = QAction(self.menu_teksten["Memo"], self)
-        actie_memo.triggered.connect(self.memo)
-        self.toolbar.addAction(actie_memo)
-
-        actie_memolijst = QAction(self.menu_teksten["Memolijst"], self)
-        actie_memolijst.triggered.connect(self.memolijst)
-        self.toolbar.addAction(actie_memolijst)
-        """
-
-        
         # Central widget        
         self.editor = CodeEditor()  
         container = QWidget()
 
         layout = QVBoxLayout(container)
-
         h_layout = QHBoxLayout()
-
-
         layout.addLayout(h_layout)   
 
         self.setCentralWidget(container)
+        """
 
         # menu begin
 
@@ -563,24 +514,24 @@ class Markdown_Editor(Markdown_Editor_Menu):
         # Editor links
         self.editor = CodeEditor()
         self.editor.set_highlighter(MarkdownHighlighter)
-        h_layout.addWidget(self.editor, 1)
+        self.h_layout.addWidget(self.editor, 1)
 
         self.editor.textChanged.connect(self.on_text_changed)
 
         # Outline panel
         self.outline_panel = OutlinePanel()
-        h_layout.addWidget(self.outline_panel, 0)
+        self.h_layout.addWidget(self.outline_panel, 0)
         self.outline_panel.itemClicked.connect(self.jump_to_heading)  # _panel
 
 
         # Preview rechts
         self.preview = QWebEngineView()
-        h_layout.addWidget(self.preview, 1)
+        self.h_layout.addWidget(self.preview, 1)
 
         # layouts
-        layout.setContentsMargins(10, 10, 10, 10)
-        layout.setSpacing(10)
-        layout.addLayout(v_layout)
+        self.layout.setContentsMargins(10, 10, 10, 10)
+        self.layout.setSpacing(10)
+        self.layout.addLayout(v_layout)
 
         # Live updates
         self.editor.textChanged.connect(self.update_preview)

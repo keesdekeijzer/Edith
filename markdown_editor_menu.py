@@ -1,6 +1,7 @@
-from PyQt6.QtWidgets import QMainWindow, QToolBar
+from PyQt6.QtWidgets import QHBoxLayout, QMainWindow, QToolBar, QVBoxLayout, QWidget
 import yaml
 from PyQt6.QtGui import QAction
+from code_editor import CodeEditor
 from keuze_teksten_inhoud import keuze_teksten_inhoud, keuze_teksten_naam
 # Import the styles from styles.py  
 import styles
@@ -121,6 +122,15 @@ class Markdown_Editor_Menu(QMainWindow):
         actie_memolijst.triggered.connect(self.memolijst)
         self.toolbar.addAction(actie_memolijst)
 
+        # Central widget        
+        self.editor = CodeEditor()  
+        container = QWidget()
+
+        self.layout = QVBoxLayout(container)
+        self.h_layout = QHBoxLayout()
+        self.layout.addLayout(self.h_layout)   
+
+        self.setCentralWidget(container)
 
     def maak_menu_punt(self, naam_actie, naam_in_menu, sneltoets, functie):
         self.actie[naam_actie] = QAction(naam_in_menu, self)
