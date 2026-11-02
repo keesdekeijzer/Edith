@@ -126,7 +126,7 @@ class Markdown_Editor(Markdown_Editor_Menu):
         
 
         # set style for menubar and menu's
-        self.menuBar().setStyleSheet(styles.menuBar_style)
+        #self.menuBar().setStyleSheet(styles.menuBar_style)
 
 
 
@@ -670,132 +670,13 @@ class Markdown_Editor(Markdown_Editor_Menu):
 
     def donkere_modus(self):
         self.mijn_configuratie["darkmode"] = 'dark'
-        self.setStyleSheet('''
-            QWidget{
-                background-color: rgb(33,33,33);
-                color: #FFFFFF;
-                }
-            QPlainTextEdit{
-                background-color: rgb(46,46,46);
-                color: #FFFFFF;
-            }
-            ''')
-        #window.set_colors("#212121", "#FFFFFF")
+        self.setStyleSheet(styles.dark_mode_style)
+        
 
     def blauwe_modus(self):
         self.mijn_configuratie["darkmode"] = 'blue'
-        self.setStyleSheet('''
-                background-color: #0000AA;
-                color: #FFFFFF;
-                QWidget{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                    }
-                QPlainTextEdit{  
-                    background-color: #000BFF;
-                    color: #FFFFFF;
-                    }
-                QMenuBar{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QMenu{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QStatusBar{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QLabel{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QPushButton{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QLineEdit{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QCheckBox{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QScrollBar{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QHeaderView::section{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QTreeView{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QTableView{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QTabWidget::pane{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QTabBar::tab{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QTabBar::tab:selected{
-                    background-color: #000BFF;
-                    color: #FFFFFF;
-                }
-                QScrollBar::handle{
-                    background-color: #000BFF;
-                    color: #FFFFFF;
-                }
-                QScrollBar::add-line, QScrollBar::sub-line{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QScrollBar::add-page, QScrollBar::sub-page{
-                    background-color: #0000AA;
-                    color: #FFFFFF;
-                }
-                QMenuBar::item:selected{
-                    background-color: #000BFF;
-                    color: #FFFFFF;
-                }
-                QMenu::item:selected{
-                    background-color: #000BFF;
-                    color: #FFFFFF;
-                }
-                QStatusBar::item:selected{
-                    background-color: #000BFF;
-                    color: #FFFFFF;
-                }
-                QLabel::item:selected{
-                    background-color: #000BFF;
-                    color: #FFFFFF;
-                }
-                QPushButton::item:selected{
-                    background-color: #000BFF;
-                    color: #FFFFFF;
-                }
-                QLineEdit::item:selected{
-                    background-color: #000BFF;
-                    color: #FFFFFF;
-                }
-                QCheckBox::item:selected{
-                    background-color: #000BFF;
-                    color: #FFFFFF;
-                }
-                QScrollBar::handle:selected{
-                    background-color: #000BFF;
-                    color: #FFFFFF;
-                }
-                ''')
+        self.setStyleSheet(styles.blue_mode_style)
+        
 
     def font(self):
         from PyQt6.QtWidgets import QFontDialog

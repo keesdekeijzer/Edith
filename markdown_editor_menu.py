@@ -363,7 +363,8 @@ class Markdown_Editor_Menu(QMainWindow):
         hulp_menu.addAction(self.actie["over_actie"])
         hulp_menu.addAction(self.actie["help_actie"])
  
-
+        # set style for menubar and menu's
+        self.menuBar().setStyleSheet(styles.menuBar_style)
 
 
     def maak_menu_punt(self, naam_actie, naam_in_menu, sneltoets, functie):
