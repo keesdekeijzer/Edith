@@ -274,3 +274,11 @@ QScrollBar::handle:selected{
     color: #FFFFFF;
 }
 """
+
+file_label_style = """
+QLabel {
+    font-size: 14px;
+    font-weight: bold;
+    color: #333;
+}
+"""

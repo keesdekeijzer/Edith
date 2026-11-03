@@ -135,7 +135,8 @@ class Markdown_Editor(Markdown_Editor_Menu):
         inner_h_layout = QHBoxLayout()
 
         self.file_label = QLabel("?")  # bestandsnaam
-        self.file_label.setStyleSheet("padding: 8px;")
+        #self.file_label.setStyleSheet("padding: 8px;")
+        self.file_label.setStyleSheet(styles.file_label_style)
         self.file_label.setMinimumHeight(30)
         self.file_label.setMaximumHeight(60)
 
