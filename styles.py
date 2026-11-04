@@ -138,6 +138,14 @@ QStatusBar QLabel {
 }
 """
 
+lijn_style = """
+QFrame {
+    background-color: #ccc;
+    height: 1px;
+    margin: 5px 0;
+}
+"""
+
 blue_mode_style = """
 background-color: #0000AA;
 color: #FFFFFF;
@@ -282,3 +290,4 @@ QLabel {
     color: #333;
 }
 """
+
