@@ -130,7 +130,7 @@ class Markdown_Editor(Markdown_Editor_Menu):
 
 
 
-        v_layout = QVBoxLayout()
+        self.v_layout = QVBoxLayout()
 
         inner_h_layout = QHBoxLayout()
 
@@ -149,12 +149,12 @@ class Markdown_Editor(Markdown_Editor_Menu):
         self.css_btn = QPushButton(self.menu_teksten["CSS"])
         inner_h_layout.addWidget(self.css_btn, 0)
 
-        v_layout.addLayout(inner_h_layout)
+        self.v_layout.addLayout(inner_h_layout)
 
         self.lijn = QFrame()
         self.lijn.setFrameShape(QFrame.Shape.HLine)
         self.lijn.setStyleSheet(styles.lijn_style)
-        v_layout.addWidget(self.lijn)
+        self.v_layout.addWidget(self.lijn)
 
         self.css_btn.clicked.connect(self.css_actie)
 
@@ -210,7 +210,7 @@ class Markdown_Editor(Markdown_Editor_Menu):
         main_layout.addLayout(top_layout)
         main_layout.addLayout(bottom_layout)
 
-        v_layout.addLayout(main_layout)
+        self.v_layout.addLayout(main_layout)
 
         # Signalen
         next_btn.clicked.connect(self.find_next)
@@ -250,7 +250,7 @@ class Markdown_Editor(Markdown_Editor_Menu):
         # layouts
         self.layout.setContentsMargins(10, 10, 10, 10)
         self.layout.setSpacing(10)
-        self.layout.addLayout(v_layout)
+        self.layout.addLayout(self.v_layout)
 
         # Live updates
         self.editor.textChanged.connect(self.update_preview)
