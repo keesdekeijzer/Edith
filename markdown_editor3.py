@@ -19,6 +19,7 @@ from markdown_editor_menu import Markdown_Editor_Menu
 from markdown_renderer import render_markdown
 from code_editor import CodeEditor
 import re, yaml
+import my_constants
 from outline_panel import OutlinePanel 
 from pathlib import Path
 from PyQt6.QtCore import QRegularExpression, QUrl, Qt
@@ -85,46 +86,19 @@ class Markdown_Editor(Markdown_Editor_Menu):
 
         self.mijn_css_configuratie = self.load_css_config()  # Load configuration from css_config.yaml
 
-        LANG_MAP = {
-            "nl": "nld",
-            "en": "eng",
-            "fr": "fra",
-            "de": "deu",
-            "es": "spa",
-            "it": "ita",
-        }
-        
-        
+        LANG_MAP = my_constants.LANG_MAP
 
         self.preview_stijl = {
             "voorgrondkleur": self.mijn_css_configuratie.get("foreground_color", "#47256D"),
             "achtergrondkleur": self.mijn_css_configuratie.get("background_color", "#FFFFFF")
         }
 
-        self.zoek_suggesties = [
-            "# Chapter",
-            "##",
-            "###",
-            "colophon",
-            "table of contents",
-            "gutenberg",
-            "apendix",
-            "the end",
-            "jpg",
-            "png",
-            "Chapter",
-            "imprint",
-            "copyright",
-            "endnotes"
-        ]
+        self.zoek_suggesties = my_constants.ZOEK_SUGGESTIES    
 
 
-        # menu begin
-
-        
+        # menu begin      
         # Maak menubalk en menu's        
         
-
         # set style for menubar and menu's
         #self.menuBar().setStyleSheet(styles.menuBar_style)
 
@@ -132,24 +106,24 @@ class Markdown_Editor(Markdown_Editor_Menu):
 
         self.v_layout = QVBoxLayout()
 
-        inner_h_layout = QHBoxLayout()
+        self.inner_h_layout = QHBoxLayout()
 
         self.file_label = QLabel("?")  # bestandsnaam
         self.file_label.setStyleSheet(styles.file_label_style)
         self.file_label.setMinimumHeight(30)
         self.file_label.setMaximumHeight(60)
 
-        inner_h_layout.addWidget(self.file_label, 0)
+        self.inner_h_layout.addWidget(self.file_label, 0)
 
-        inner_h_layout.addStretch()
+        self.inner_h_layout.addStretch()
 
         self.html_btn = QPushButton(self.menu_teksten["HTML opslaan"])
-        inner_h_layout.addWidget(self.html_btn, 0)
+        self.inner_h_layout.addWidget(self.html_btn, 0)
 
         self.css_btn = QPushButton(self.menu_teksten["CSS"])
-        inner_h_layout.addWidget(self.css_btn, 0)
+        self.inner_h_layout.addWidget(self.css_btn, 0)
 
-        self.v_layout.addLayout(inner_h_layout)
+        self.v_layout.addLayout(self.inner_h_layout)
 
         self.lijn = QFrame()
         self.lijn.setFrameShape(QFrame.Shape.HLine)
