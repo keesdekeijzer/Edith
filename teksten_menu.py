@@ -380,3 +380,15 @@ menu_teksten_de["Afbeeldingen verwijderen"] = "Bilder entfernen"
 menu_teksten_nl["CSS"] = "CSS instellen"
 menu_teksten_en["CSS"] = "Set CSS"
 menu_teksten_de["CSS"] = "CSS einstellen"
+
+menu_teksten_nl["Ga naar regel:"] = "Ga naar regel:"
+menu_teksten_en["Ga naar regel:"] = "Go to line:"
+menu_teksten_de["Ga naar regel:"] = "Gehe zu Zeile:"
+
+menu_teksten_nl["Ga"] = "Ga"
+menu_teksten_en["Ga"] = "Go"
+menu_teksten_de["Ga"] = "Gehe"
+
+menu_teksten_nl["Langste regel"] = "Langste regel"
+menu_teksten_en["Langste regel"] = "Longest line"
+menu_teksten_de["Langste regel"] = "Längste Zeile"

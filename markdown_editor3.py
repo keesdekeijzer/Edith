@@ -23,7 +23,7 @@ import my_constants
 from outline_panel import OutlinePanel 
 from pathlib import Path
 from PyQt6.QtCore import QRegularExpression, QUrl, Qt
-from PyQt6.QtGui import QColor, QFont, QImage, QGuiApplication, QAction, QTextCharFormat, QTextCursor, QWindow
+from PyQt6.QtGui import QColor, QFont, QImage, QGuiApplication, QAction, QIntValidator, QTextCharFormat, QTextCursor, QWindow
 from PyQt6.QtCore import QStandardPaths
 import os, glob
 from frontmatter_panel import FrontmatterPanel
@@ -79,29 +79,10 @@ from markdown_editor_menu import Markdown_Editor_Menu  # Import the Markdown_Edi
 class Markdown_Editor(Markdown_Editor_Menu):
     def __init__(self):
         super().__init__()
-
-        self.unsaved_changes = False
-        self.current_path = None  # pad naar het huidige bestand
-
-
-        self.mijn_css_configuratie = self.load_css_config()  # Load configuration from css_config.yaml
-
+        
         LANG_MAP = my_constants.LANG_MAP
 
-        self.preview_stijl = {
-            "voorgrondkleur": self.mijn_css_configuratie.get("foreground_color", "#47256D"),
-            "achtergrondkleur": self.mijn_css_configuratie.get("background_color", "#FFFFFF")
-        }
-
-        self.zoek_suggesties = my_constants.ZOEK_SUGGESTIES    
-
-
         # menu begin      
-        # Maak menubalk en menu's        
-        
-        # set style for menubar and menu's
-        #self.menuBar().setStyleSheet(styles.menuBar_style)
-
 
 
         self.v_layout = QVBoxLayout()
@@ -140,57 +121,77 @@ class Markdown_Editor(Markdown_Editor_Menu):
 
         self.statusBar().showMessage(self.meldingen["Ready"], 3000)
 
+        # ga naar regelnummer
+        self.goto_label = QLabel(self.menu_teksten["Ga naar regel:"])
+        self.goto_input = QLineEdit()
+        self.goto_input.setFixedWidth(100)
+        self.goto_input.setStyleSheet(styles.zoekveld_style)
+        self.goto_input.setValidator(QIntValidator(1, 99999, self.goto_input))
+        self.goto_button = QPushButton(self.menu_teksten["Ga"])
+        self.goto_button.clicked.connect(self.goto_regel)
+        self.langste_regel_button = QPushButton(self.menu_teksten["Langste regel"])
+        self.langste_regel_button.clicked.connect(self.langste_regel)
 
-        find_label = QLabel(self.menu_teksten["Zoeken:"])
+        # zoek en vervang
+        self.find_label = QLabel(self.menu_teksten["Zoeken:"])
         self.completer_zoek = QtWidgets.QCompleter(self.zoek_suggesties)
         self.find_input = QLineEdit()
         self.find_input.setStyleSheet(styles.zoekveld_style)
         self.find_input.setCompleter(self.completer_zoek)
-        action = QAction(icon_from_text("\U0000232B"), "Wissen", self.find_input)
-        action.triggered.connect(self.find_input.clear)
-        self.find_input.addAction(action, QLineEdit.ActionPosition.TrailingPosition)
+        self.find_action = QAction(icon_from_text("\U0000232B"), "Wissen", self.find_input)
+        self.find_action.triggered.connect(self.find_input.clear)
+        self.find_input.addAction(self.find_action, QLineEdit.ActionPosition.TrailingPosition)
         self.case_cb = QCheckBox(self.menu_teksten["Hoofdlettergevoelig"])
-        next_btn = QPushButton(self.menu_teksten["Volgende"])
-        prev_btn = QPushButton(self.menu_teksten["Vorige"])
+        self.next_btn = QPushButton(self.menu_teksten["Volgende"])
+        self.prev_btn = QPushButton(self.menu_teksten["Vorige"])
 
-        replace_label = QLabel(self.menu_teksten["Vervangen door:"])
-
-
+        # vervangen
+        self.replace_label = QLabel(self.menu_teksten["Vervangen door:"])
         self.completer_vervang = QtWidgets.QCompleter(self.zoek_suggesties)
         self.replace_input = QLineEdit()
         self.replace_input.setCompleter(self.completer_vervang)
         self.replace_input.setStyleSheet(styles.zoekveld_style)
-        action2 = QAction(icon_from_text("\U0000232B"), "Wissen", self.replace_input)
-        action2.triggered.connect(self.replace_input.clear)
-        self.replace_input.addAction(action2, QLineEdit.ActionPosition.TrailingPosition)
-        replace_btn = QPushButton(self.menu_teksten["Vervangen"])
-        replace_all_btn = QPushButton(self.menu_teksten["Alles vervangen"])
+        self.replace_action = QAction(icon_from_text("\U0000232B"), "Wissen", self.replace_input)
+        self.replace_action.triggered.connect(self.replace_input.clear)
+        self.replace_input.addAction(self.replace_action, QLineEdit.ActionPosition.TrailingPosition)
+        self.replace_btn = QPushButton(self.menu_teksten["Vervangen"])
+        self.replace_all_btn = QPushButton(self.menu_teksten["Alles vervangen"])
+
+        # layout regelnummer
+        self.goto_layout = QHBoxLayout()
+        self.goto_layout.addWidget(self.goto_label)
+        self.goto_layout.addWidget(self.goto_input)
+        self.goto_layout.addWidget(self.goto_button)
+        self.goto_layout.addStretch()
+        self.goto_layout.addWidget(self.langste_regel_button)
+
 
         # Layout
-        top_layout = QHBoxLayout()
-        top_layout.addWidget(find_label)
-        top_layout.addWidget(self.find_input)
-        top_layout.addWidget(prev_btn)
-        top_layout.addWidget(next_btn)
+        self.top_layout = QHBoxLayout()
+        self.top_layout.addWidget(self.find_label)
+        self.top_layout.addWidget(self.find_input)
+        self.top_layout.addWidget(self.prev_btn)
+        self.top_layout.addWidget(self.next_btn)
 
-        bottom_layout = QHBoxLayout()
-        bottom_layout.addWidget(replace_label)
-        bottom_layout.addWidget(self.replace_input)
-        bottom_layout.addWidget(self.case_cb)
-        bottom_layout.addWidget(replace_btn)
-        bottom_layout.addWidget(replace_all_btn)
+        self.bottom_layout = QHBoxLayout()
+        self.bottom_layout.addWidget(self.replace_label)
+        self.bottom_layout.addWidget(self.replace_input)
+        self.bottom_layout.addWidget(self.case_cb)
+        self.bottom_layout.addWidget(self.replace_btn)
+        self.bottom_layout.addWidget(self.replace_all_btn)
 
-        main_layout = QVBoxLayout()
-        main_layout.addLayout(top_layout)
-        main_layout.addLayout(bottom_layout)
+        self.main_layout = QVBoxLayout()
+        self.main_layout.addLayout(self.goto_layout)
+        self.main_layout.addLayout(self.top_layout)
+        self.main_layout.addLayout(self.bottom_layout)
 
-        self.v_layout.addLayout(main_layout)
+        self.v_layout.addLayout(self.main_layout)
 
         # Signalen
-        next_btn.clicked.connect(self.find_next)
-        prev_btn.clicked.connect(self.find_previous)
-        replace_btn.clicked.connect(self.replace_one)
-        replace_all_btn.clicked.connect(self.replace_all)
+        self.next_btn.clicked.connect(self.find_next)
+        self.prev_btn.clicked.connect(self.find_previous)
+        self.replace_btn.clicked.connect(self.replace_one)
+        self.replace_all_btn.clicked.connect(self.replace_all)
         self.find_input.textChanged.connect(self.update_highlight)
         self.case_cb.stateChanged.connect(self.update_highlight)
 
@@ -2581,6 +2582,32 @@ identifier: {identifier}
             new_md_text = re.sub(r'!\[.*?\]\(.*?\)', '', md_text)
             self.editor.setPlainText(new_md_text)
             QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Alle afbeeldingen verwijderd."])
+
+    def goto_regel(self):
+        # haal de inhoud op van self.goto_input
+        regel_text = self.goto_input.text()
+        if not regel_text.isdigit():
+            QMessageBox.warning(self, self.meldingen["Waarschuwing"], self.meldingen["Ongeldig regelnummer."])
+            return
+        regel = int(regel_text)
+        cursor = self.editor.textCursor()
+        block = self.editor.document().findBlockByNumber(regel - 1)
+        if block.isValid():
+            cursor.setPosition(block.position())
+            self.editor.setTextCursor(cursor)
+            self.editor.setFocus()
+        else:
+            QMessageBox.warning(self, self.meldingen["Waarschuwing"], self.meldingen["Ongeldig regelnummer."])
+        
+    def langste_regel(self):
+        md_text = self.editor.toPlainText()
+        lines = md_text.splitlines()
+        if lines:
+            longest_line = max(lines, key=len)
+            lr = lines.index(longest_line) + 1
+            QMessageBox.information(self, self.meldingen["Langste regel"], 
+                                    self.meldingen["De langste regel is:"] + " " +str(lr) + "\n" + longest_line[:100] + "..." if len(longest_line) > 100 else longest_line)
+        #print("Het regelnummer van de langste regel is:", lr)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

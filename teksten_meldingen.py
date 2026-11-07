@@ -612,3 +612,31 @@ meldingen_de["Alle afbeeldingen verwijderd."] = "Alle Bilder gelöscht."
 meldingen_nl["Weet je zeker dat je alle afbeeldingen wilt verwijderen?"] = "Weet je zeker dat je alle afbeeldingen wilt verwijderen?"
 meldingen_en["Weet je zeker dat je alle afbeeldingen wilt verwijderen?"] = "Are you sure you want to delete all images?"
 meldingen_de["Weet je zeker dat je alle afbeeldingen wilt verwijderen?"] = "Sind Sie sicher, dass Sie alle Bilder löschen möchten?"
+
+meldingen_nl["Ga naar regel"] = "Ga naar regel"
+meldingen_en["Ga naar regel"] = "Go to line"
+meldingen_de["Ga naar regel"] = "Gehe zu Zeile"
+
+meldingen_nl["Voer het regelnummer in:"] = "Voer het regelnummer in:"
+meldingen_en["Voer het regelnummer in:"] = "Enter the line number:"
+meldingen_de["Voer het regelnummer in:"] = "Geben Sie die Zeilennummer ein:"
+
+meldingen_nl["Regelnummer ongeldig."] = "Regelnummer ongeldig."
+meldingen_en["Regelnummer ongeldig."] = "Line number invalid."
+meldingen_de["Regelnummer ongeldig."] = "Zeilennummer ungültig."
+
+meldingen_nl["Waarschuwing"] = "Waarschuwing"
+meldingen_en["Waarschuwing"] = "Warning"
+meldingen_de["Waarschuwing"] = "Warnung"
+
+meldingen_nl["Ongeldig regelnummer."] = "Ongeldig regelnummer."
+meldingen_en["Ongeldig regelnummer."] = "Invalid line number."
+meldingen_de["Ongeldig regelnummer."] = "Ungültige Zeilennummer."
+
+meldingen_nl["Langste regel"] = "Langste regel"
+meldingen_en["Langste regel"] = "Longest line"
+meldingen_de["Langste regel"] = "Längste Zeile"
+
+meldingen_nl["De langste regel is:"] = "De langste regel is:"
+meldingen_en["De langste regel is:"] = "The longest line is:"
+meldingen_de["De langste regel is:"] = "Die längste Zeile ist:"

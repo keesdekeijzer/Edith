@@ -4,6 +4,7 @@ from PyQt6.QtGui import QAction
 from code_editor import CodeEditor
 from keuze_teksten_inhoud import keuze_teksten_inhoud, keuze_teksten_naam
 # Import the styles from styles.py  
+import my_constants
 import styles
 
 from teksten_menu import menu_teksten_nl, menu_teksten_en, menu_teksten_de
@@ -16,6 +17,19 @@ class Markdown_Editor_Menu(QMainWindow):
 
         self.mijn_configuratie = self.load_config()
 
+        self.unsaved_changes = False
+        self.current_path = None  # pad naar het huidige bestand
+        
+        
+        self.mijn_css_configuratie = self.load_css_config()  # Load configuration from css_config.yaml
+        
+        self.preview_stijl = {
+            "voorgrondkleur": self.mijn_css_configuratie.get("foreground_color", "#47256D"),
+            "achtergrondkleur": self.mijn_css_configuratie.get("background_color", "#FFFFFF")
+        }
+
+        self.zoek_suggesties = my_constants.ZOEK_SUGGESTIES
+        
         # colormode
         if self.mijn_configuratie["darkmode"] == "light":
             self.lichte_modus()
