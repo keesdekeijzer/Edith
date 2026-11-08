@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QHBoxLayout, QMainWindow, QToolBar, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QFrame, QHBoxLayout, QLabel, QMainWindow, QPushButton, QToolBar, QVBoxLayout, QWidget
 import yaml
 from PyQt6.QtGui import QAction
 from code_editor import CodeEditor
@@ -380,6 +380,40 @@ class Markdown_Editor_Menu(QMainWindow):
         # set style for menubar and menu's
         self.menuBar().setStyleSheet(styles.menuBar_style)
 
+        # menu begin      
+
+
+        self.v_layout = QVBoxLayout()
+
+        self.inner_h_layout = QHBoxLayout()
+
+        self.file_label = QLabel("?")  # bestandsnaam
+        self.file_label.setStyleSheet(styles.file_label_style)
+        self.file_label.setMinimumHeight(30)
+        self.file_label.setMaximumHeight(60)
+
+        self.inner_h_layout.addWidget(self.file_label, 0)
+
+        self.inner_h_layout.addStretch()
+
+        self.html_btn = QPushButton(self.menu_teksten["HTML opslaan"])
+        self.inner_h_layout.addWidget(self.html_btn, 0)
+
+        self.css_btn = QPushButton(self.menu_teksten["CSS"])
+        self.inner_h_layout.addWidget(self.css_btn, 0)
+
+        self.v_layout.addLayout(self.inner_h_layout)
+
+        self.lijn = QFrame()
+        self.lijn.setFrameShape(QFrame.Shape.HLine)
+        self.lijn.setStyleSheet(styles.lijn_style)
+        self.v_layout.addWidget(self.lijn)
+
+        self.css_btn.clicked.connect(self.css_actie)
+
+        self.html_btn.clicked.connect(self.html_actie)
+
+        # menu einde
 
     def maak_menu_punt(self, naam_actie, naam_in_menu, sneltoets, functie):
         self.actie[naam_actie] = QAction(naam_in_menu, self)

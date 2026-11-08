@@ -2,31 +2,22 @@
 
 Tekstbewerker met database.
 
-Markdown editor met simpel toevoegen van een frontmatter-blok.
+Markdown editor met 3 panelen.
+Het linkervenster is het edit-venster voor tekst of Markdown.
+Het middenvenster is een navigatievenster waar je op de titels van koppen kunt klikken om daar in het edit-venster naar toe te gaan.
+Het rechtervenster is het preview-venster waar je de HTML rendering ziet van wat er in het edit-venster staat.
 
-Edith heeft de mogelijkheid om de tekst uit een pdf te importeren.
+Importeren van pdfs en epubs is mogelijk, je krijgt dan een Markdown bestand.
 
-De inhoud van een pdf kan worden geimporteerd als markdown.
+Exporteren kan onder andere naar PDF, ePub, Word en platte tekst.
 
-Er is ook een export naar Word-formaat mogelijk.
-
-Export naar epub is ook mogelijk, staat default op lang=nl.
-
-Import van epub bestanden kan ook.
-
-Markdown exporteren als platte tekst kan ook.
-
-Spellingcontrole is op afroep beschikbaar, maar is wel langzaam.
+Spellingcontrole is op afroep beschikbaar, maar is wel langzaam. De spellingcontrole produceert een rapport met de gevonden fouten met daarbij de regelnummers waarin deze zijn gevonden en met suggesties voor wat er waarschijnlijk wel moet staan.
 
 Een favoriet font is in te stellen in het config.py bestand.
 
 Via woorden vervangen kan op basis van een woordenlijst de tekst worden gemoderniseerd.
 
 Configuratie aanpassen via het menupunt onder Extra geeft de mogelijkheid om lichte modus, donkere modus of blauwe modus in te stellen.
-
-Het linkervenster is het edit-venster voor tekst of Markdown.
-Het middenvenster is een navigatievenster waar je op hoofdstuktitels kunt klikken om daar in het edit-venster naar toe te gaan.
-Het rechtervenster is het preview-venster waar je de HTML rendering ziet van wat er in het edit-venster staat.
 
 Het linker- en rechervenster moeten synchroon scrollen. Dit gaat niet geheel gelijkmatig als er afbeeldingen in de preview staan.
 
@@ -42,7 +33,7 @@ Misschien handig om de map images van te voren te legen of the backuppen, want a
 
 ## Zoeken en vervangen
 
-Zoeken is niet hoofdlettergevoelig, maar vervangen wel als dat is aangezet.
+Zoeken is niet hoofdlettergevoelig, maar vervangen wel als dat is aangezet (vinkje).
 
 ## Opslaan
 
@@ -50,7 +41,7 @@ Je kunt ook een tekstselectie opslaan.
 
 ## Export voor TTS
 
-Er is een complete export mogelijk voor TTS. De export omvat een md-bestand die als backup kan dienen, een epub-bestand en een map met tekstbestanden per hoofdstuk. De bestandsnamen van de tekstbestanden worden ge-slugified om te voorkomen dat hierin tekens komen die hinder veroorzaken in andere scripts of programma's die deze bestanden inlezen.
+Er is een complete export mogelijk voor TTS. De export omvat een md-bestand die als backup kan dienen, een epub-bestand en een map met tekstbestanden per hoofdstuk. De bestandsnamen van de tekstbestanden worden ge-sluggified om te voorkomen dat hierin tekens komen die hinder veroorzaken in andere scripts of programma's die deze bestanden inlezen.
 
 Het epub bestand krijgt als aanvulling op de naam "- 1" mee, om deze te onderscheiden van het eventuele oorspronkelijke epub bestand.
 
@@ -61,4 +52,5 @@ De frontmatter kan in een apart venster bewerkt worden.
 ## Hoofdstukken toevoegen
 
 De functie Hoofdstukken toevoegen is bedoeld voor epub/markdown bestanden.
-De regels waar alleen cijfers op staan of alleen cijfers met een punt erachter, moeten een markdown kop 1 krijgen.
+De regels waar alleen cijfers op staan of alleen cijfers met een punt erachter, moeten een markdown kop 1 krijgen. Er kan ook gekozen worden om hoofdstukkoppen toe te voegen als er minimaal 5 lege regels achter alkaar staan.
+
