@@ -84,124 +84,6 @@ class Markdown_Editor(Markdown_Editor_Menu):
 
 
 
-     
-
-        self.statusBar().showMessage(self.meldingen["Ready"], 3000)
-
-        # ga naar regelnummer
-        self.goto_label = QLabel(self.menu_teksten["Ga naar regel:"])
-        self.goto_input = QLineEdit()
-        self.goto_input.setFixedWidth(100)
-        self.goto_input.setStyleSheet(styles.zoekveld_style)
-        self.goto_input.setValidator(QIntValidator(1, 99999, self.goto_input))
-        self.goto_button = QPushButton(self.menu_teksten["Ga"])
-        self.goto_button.clicked.connect(self.goto_regel)
-        self.langste_regel_button = QPushButton(self.menu_teksten["Langste regel"])
-        self.langste_regel_button.clicked.connect(self.langste_regel)
-
-        # zoek en vervang
-        self.find_label = QLabel(self.menu_teksten["Zoeken:"])
-        self.completer_zoek = QtWidgets.QCompleter(self.zoek_suggesties)
-        self.find_input = QLineEdit()
-        self.find_input.setStyleSheet(styles.zoekveld_style)
-        self.find_input.setCompleter(self.completer_zoek)
-        self.find_action = QAction(icon_from_text("\U0000232B"), "Wissen", self.find_input)
-        self.find_action.triggered.connect(self.find_input.clear)
-        self.find_input.addAction(self.find_action, QLineEdit.ActionPosition.TrailingPosition)
-        self.case_cb = QCheckBox(self.menu_teksten["Hoofdlettergevoelig"])
-        self.next_btn = QPushButton(self.menu_teksten["Volgende"])
-        self.prev_btn = QPushButton(self.menu_teksten["Vorige"])
-
-        # vervangen
-        self.replace_label = QLabel(self.menu_teksten["Vervangen door:"])
-        self.completer_vervang = QtWidgets.QCompleter(self.zoek_suggesties)
-        self.replace_input = QLineEdit()
-        self.replace_input.setCompleter(self.completer_vervang)
-        self.replace_input.setStyleSheet(styles.zoekveld_style)
-        self.replace_action = QAction(icon_from_text("\U0000232B"), "Wissen", self.replace_input)
-        self.replace_action.triggered.connect(self.replace_input.clear)
-        self.replace_input.addAction(self.replace_action, QLineEdit.ActionPosition.TrailingPosition)
-        self.replace_btn = QPushButton(self.menu_teksten["Vervangen"])
-        self.replace_all_btn = QPushButton(self.menu_teksten["Alles vervangen"])
-
-        # layout regelnummer
-        self.goto_layout = QHBoxLayout()
-        self.goto_layout.addWidget(self.goto_label)
-        self.goto_layout.addWidget(self.goto_input)
-        self.goto_layout.addWidget(self.goto_button)
-        self.goto_layout.addStretch()
-        self.goto_layout.addWidget(self.langste_regel_button)
-
-
-        # Layout
-        self.top_layout = QHBoxLayout()
-        self.top_layout.addWidget(self.find_label)
-        self.top_layout.addWidget(self.find_input)
-        self.top_layout.addWidget(self.prev_btn)
-        self.top_layout.addWidget(self.next_btn)
-
-        self.bottom_layout = QHBoxLayout()
-        self.bottom_layout.addWidget(self.replace_label)
-        self.bottom_layout.addWidget(self.replace_input)
-        self.bottom_layout.addWidget(self.case_cb)
-        self.bottom_layout.addWidget(self.replace_btn)
-        self.bottom_layout.addWidget(self.replace_all_btn)
-
-        self.main_layout = QVBoxLayout()
-        self.main_layout.addLayout(self.goto_layout)
-        self.main_layout.addLayout(self.top_layout)
-        self.main_layout.addLayout(self.bottom_layout)
-
-        self.v_layout.addLayout(self.main_layout)
-
-        # Signalen
-        self.next_btn.clicked.connect(self.find_next)
-        self.prev_btn.clicked.connect(self.find_previous)
-        self.replace_btn.clicked.connect(self.replace_one)
-        self.replace_all_btn.clicked.connect(self.replace_all)
-        self.find_input.textChanged.connect(self.update_highlight)
-        self.case_cb.stateChanged.connect(self.update_highlight)
-
-        # Highlight format
-        self.highlight_format = QTextCharFormat()
-        self.highlight_format.setBackground(QColor("#FFF59D"))  # lichtgeel
-        self.match_format = QTextCharFormat()
-        self.match_format.setBackground(QColor("#FFCC80"))  # geselecteerde match iets donkerder
-        #
-
-        #v_layout.addWidget(self.statusBar(), 0)
-        self.statusBar().showMessage(self.meldingen["Ready"], 3000)
-
-        # Editor links
-        self.editor = CodeEditor()
-        self.editor.set_highlighter(MarkdownHighlighter)
-        self.h_layout.addWidget(self.editor, 1)
-
-        self.editor.textChanged.connect(self.on_text_changed)
-
-        # Outline panel
-        self.outline_panel = OutlinePanel()
-        self.h_layout.addWidget(self.outline_panel, 0)
-        self.outline_panel.itemClicked.connect(self.jump_to_heading)  # _panel
-
-
-        # Preview rechts
-        self.preview = QWebEngineView()
-        self.h_layout.addWidget(self.preview, 1)
-
-        # layouts
-        self.layout.setContentsMargins(10, 10, 10, 10)
-        self.layout.setSpacing(10)
-        self.layout.addLayout(self.v_layout)
-
-        # Live updates
-        self.editor.textChanged.connect(self.update_preview)
-
-        # Initial render
-        self.update_preview()
-
-        self.editor.verticalScrollBar().valueChanged.connect(self.sync_scroll_to_preview)
-
     def set_file_label(self, name):
         f_name = name
         length = len(name)
@@ -268,8 +150,6 @@ class Markdown_Editor(Markdown_Editor_Menu):
         html = render_markdown(text, color_mode=self.color_mode, stijl=self.preview_stijl)  # Pass the color mode and style to the renderer
         ratio = self._editor_scroll_ratio()
 
-        #self.frontmatter.load_frontmatter(text)
-
         # bepaal directory van het huidige bestand
         base_path = getattr(self, "current_file_path", None)
         if base_path:
@@ -277,7 +157,6 @@ class Markdown_Editor(Markdown_Editor_Menu):
         else:
             base_url = QUrl("file:///")  # fallback
 
-        #print(html)
         self.preview.setHtml(html, baseUrl=base_url)
 
         # Sroll herstellen zodra de pagina geladen is
@@ -300,9 +179,6 @@ class Markdown_Editor(Markdown_Editor_Menu):
                      const h = dbody.scrollHeight - window.innerHeight;  
                      window.scrollTo(0, h * {ratio});}})();
             """
-
-
-
 
             self.preview.page().runJavaScript(js)
 
