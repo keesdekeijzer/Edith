@@ -9,6 +9,7 @@ QToolBar {
 QToolButton {
     background-color: lightblue;
     border: solid 1px silver;
+    border-radius: 4px;
     padding: 6px;
     color: black;
 }

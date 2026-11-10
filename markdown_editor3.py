@@ -53,11 +53,6 @@ from config import FRONTMATTER_TEXT, FRONTMATTER_TEXT_EPUB, configuratie, font_s
 from memo import Memo
 from memolijst import MemoLijst
 
-
-
-
-
-
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.kdf.scrypt import Scrypt
 

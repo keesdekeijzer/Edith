@@ -16,6 +16,8 @@ from teksten_meldingen import meldingen_nl, meldingen_en, meldingen_de
 from keuze_teksten import keuze_teksten_nl, keuze_teksten_en, keuze_teksten_de
 from utils import icon_from_text
 
+
+
 class Markdown_Editor_Menu(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -536,12 +538,14 @@ class Markdown_Editor_Menu(QMainWindow):
 
         self.editor.verticalScrollBar().valueChanged.connect(self.sync_scroll_to_preview)
 
+    
     def maak_menu_punt(self, naam_actie, naam_in_menu, sneltoets, functie):
         self.actie[naam_actie] = QAction(naam_in_menu, self)
         if len(sneltoets) > 1:
             self.actie[naam_actie].setShortcut(sneltoets)
         self.actie[naam_actie].triggered.connect(functie)
         return
+    
 
     def load_config(self):
         try:
