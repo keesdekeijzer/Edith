@@ -106,13 +106,7 @@ class Markdown_Editor(Markdown_Editor_Menu):
         print("Hello!")
 
 
-    def load_css_config(self):
-        try:
-            with open("css_config.yaml", "r", encoding='utf-8') as f:
-                css_config = yaml.safe_load(f)
-        except FileNotFoundError:
-            css_config = {}
-        return css_config
+
 
     def on_text_changed(self):
         self.unsaved_changes = True

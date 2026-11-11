@@ -1,5 +1,7 @@
+import sys
+
 from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QCheckBox, QFrame, QHBoxLayout, QLabel, QLineEdit, QMainWindow, QPushButton, QToolBar, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QApplication, QCheckBox, QFrame, QHBoxLayout, QLabel, QLineEdit, QMainWindow, QPushButton, QToolBar, QVBoxLayout, QWidget
 import yaml
 from PyQt6.QtGui import QAction, QColor, QIntValidator, QTextCharFormat
 from code_editor import CodeEditor
@@ -563,3 +565,16 @@ class Markdown_Editor_Menu(QMainWindow):
             config_keuze_teksten = {}
         return config_keuze_teksten
 
+    def load_css_config(self):
+        try:
+            with open("css_config.yaml", "r", encoding='utf-8') as f:
+                css_config = yaml.safe_load(f)
+        except FileNotFoundError:
+            css_config = {}
+        return css_config
+
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = Markdown_Editor_Menu()
+    window.show()
+    sys.exit(app.exec())
