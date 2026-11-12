@@ -95,8 +95,8 @@ class Markdown_Editor(Markdown_Editor_Menu):
         self.setWindowTitle(w_name)
 
     def css_actie(self):
-        print("css actie")
-        self.css_bewerken()
+        self.config_venster = CssBewerken(self.taal)
+        self.config_venster.show()
 
     def html_actie(self):
         print("html actie")
@@ -189,12 +189,9 @@ class Markdown_Editor(Markdown_Editor_Menu):
         return headings
     
     def jump_to_heading(self, item):
-        #print(f"Jumping to heading: {item.text()}")
         line = item.data(32)  # Retrieve line number from user data
-        #print(f"Jumping to line: {line}")
         cursor = self.editor.textCursor()
         cursor.movePosition(cursor.MoveOperation.Start)
-        #cursor.movePosition(cursor.MoveOperation.Down, n=line)
         cursor.movePosition(cursor.MoveOperation.NextBlock, n=line)
         self.editor.setTextCursor(cursor)
         self.editor.setFocus()
@@ -2350,11 +2347,6 @@ identifier: {identifier}
                 
         new_md_text = "\n".join(new_lines)
         self.editor.setPlainText(new_md_text)
-
-    def css_bewerken(self):
-        self.config_venster = CssBewerken(self.taal)
-        self.config_venster.show()
-
 
     def html_bewerken(self):
         bestandsnaam, _ = QFileDialog.getSaveFileName( 
