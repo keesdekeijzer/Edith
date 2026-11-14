@@ -99,8 +99,20 @@ class Markdown_Editor(Markdown_Editor_Menu):
         self.config_venster.show()
 
     def html_actie(self):
-        print("html actie")
-        self.html_bewerken()
+        #print("html actie")
+        #self.html_bewerken()
+        bestandsnaam, _ = QFileDialog.getSaveFileName( 
+                       self,            
+                       "HTML opslaan",            
+                       self.mijn_configuratie["opslaglocatie"],            
+                       "HTML-bestanden (*.html *.htm);;Alle bestanden (*.*)"        
+                       )
+        if not bestandsnaam:            
+            return
+        # toHtml() werkt met een callback        
+        self.preview.page().toHtml(            
+            lambda html: self.write_html(bestandsnaam, html)        
+            )
 
     def hello(self):        
         print("Hello!")
@@ -2348,19 +2360,6 @@ identifier: {identifier}
         new_md_text = "\n".join(new_lines)
         self.editor.setPlainText(new_md_text)
 
-    def html_bewerken(self):
-        bestandsnaam, _ = QFileDialog.getSaveFileName( 
-                       self,            
-                       "HTML opslaan",            
-                       self.mijn_configuratie["opslaglocatie"],            
-                       "HTML-bestanden (*.html *.htm);;Alle bestanden (*.*)"        
-                       )
-        if not bestandsnaam:            
-            return
-        # toHtml() werkt met een callback        
-        self.preview.page().toHtml(            
-            lambda html: self.write_html(bestandsnaam, html)        
-            )
 
     def write_html(self, bestandsnaam, html):
         try:
