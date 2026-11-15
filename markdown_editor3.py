@@ -78,7 +78,7 @@ class Markdown_Editor(Markdown_Editor_Menu):
         LANG_MAP = my_constants.LANG_MAP
 
 
-
+    """
     def set_file_label(self, name):
         f_name = name
         length = len(name)
@@ -93,6 +93,7 @@ class Markdown_Editor(Markdown_Editor_Menu):
         if length > 80:
             w_name = name[0:39] + "..." + name[-39:]
         self.setWindowTitle(w_name)
+    """
 
     def css_actie(self):
         self.config_venster = CssBewerken(self.taal)

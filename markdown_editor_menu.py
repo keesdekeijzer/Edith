@@ -573,6 +573,21 @@ class Markdown_Editor_Menu(QMainWindow):
             css_config = {}
         return css_config
 
+    def set_file_label(self, name):
+        f_name = name
+        length = len(name)
+        if length > 80:
+            f_name = name[0:39] + "..." + name[-39:]
+        self.file_label.setText(f_name)
+        self.file_label.setToolTip(name)
+
+    def set_window_title(self, name):
+        w_name = name
+        length = len(name)
+        if length > 80:
+            w_name = name[0:39] + "..." + name[-39:]
+        self.setWindowTitle(w_name)
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Markdown_Editor_Menu()
