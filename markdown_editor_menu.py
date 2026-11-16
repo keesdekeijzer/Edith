@@ -1,3 +1,4 @@
+import re
 import sys
 
 from PyQt6 import QtWidgets
@@ -587,6 +588,23 @@ class Markdown_Editor_Menu(QMainWindow):
         if length > 80:
             w_name = name[0:39] + "..." + name[-39:]
         self.setWindowTitle(w_name)
+
+    def on_text_changed(self):
+        self.unsaved_changes = True
+        self.statusBar().showMessage(self.meldingen["Onopgeslagen wijzigingen"])
+
+    def parse_headings(self):
+        text = self.editor.toPlainText().split("\n")
+        headings = []
+
+        for i, line in enumerate(text):
+            match = re.match(r'^(#{1,6})\s+(.*)', line)
+            if match:
+                level = len(match.group(1))
+                title = match.group(2).strip()
+                headings.append((level, title, i))
+
+        return headings
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

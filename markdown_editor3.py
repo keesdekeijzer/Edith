@@ -78,23 +78,6 @@ class Markdown_Editor(Markdown_Editor_Menu):
         LANG_MAP = my_constants.LANG_MAP
 
 
-    """
-    def set_file_label(self, name):
-        f_name = name
-        length = len(name)
-        if length > 80:
-            f_name = name[0:39] + "..." + name[-39:]
-        self.file_label.setText(f_name)
-        self.file_label.setToolTip(name)
-
-    def set_window_title(self, name):
-        w_name = name
-        length = len(name)
-        if length > 80:
-            w_name = name[0:39] + "..." + name[-39:]
-        self.setWindowTitle(w_name)
-    """
-
     def css_actie(self):
         self.config_venster = CssBewerken(self.taal)
         self.config_venster.show()
@@ -119,11 +102,6 @@ class Markdown_Editor(Markdown_Editor_Menu):
         print("Hello!")
 
 
-
-
-    def on_text_changed(self):
-        self.unsaved_changes = True
-        self.statusBar().showMessage(self.meldingen["Onopgeslagen wijzigingen"])
 
     def _editor_scroll_ratio(self):
         sb = self.editor.verticalScrollBar()
@@ -188,18 +166,7 @@ class Markdown_Editor(Markdown_Editor_Menu):
 
         self.outline_panel.update_outline(self.parse_headings())
         
-    def parse_headings(self):
-        text = self.editor.toPlainText().split("\n")
-        headings = []
 
-        for i, line in enumerate(text):
-            match = re.match(r'^(#{1,6})\s+(.*)', line)
-            if match:
-                level = len(match.group(1))
-                title = match.group(2).strip()
-                headings.append((level, title, i))
-
-        return headings
     
     def jump_to_heading(self, item):
         line = item.data(32)  # Retrieve line number from user data
