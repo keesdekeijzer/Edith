@@ -2,7 +2,7 @@ import re
 import sys
 
 from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QApplication, QCheckBox, QFrame, QHBoxLayout, QLabel, QLineEdit, QMainWindow, QPushButton, QToolBar, QVBoxLayout, QWidget
+from PyQt6.QtWidgets import QApplication, QCheckBox, QFileDialog, QFrame, QHBoxLayout, QLabel, QLineEdit, QMainWindow, QMessageBox, QPushButton, QToolBar, QVBoxLayout, QWidget
 import yaml
 from PyQt6.QtGui import QAction, QColor, QIntValidator, QTextCharFormat
 from code_editor import CodeEditor
@@ -605,6 +605,114 @@ class Markdown_Editor_Menu(QMainWindow):
                 headings.append((level, title, i))
 
         return headings
+
+    # menu acties
+
+    def nieuw(self):        
+        if self.unsaved_changes:
+            reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
+                                         self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
+            if reply == QMessageBox.StandardButton.Yes:
+                self.opslaan()
+        self.editor.clear()
+        self.set_window_title(self.meldingen["Geen naam"])
+        self.current_path = None 
+        self.statusBar().showMessage(self.meldingen["Nieuw Bestand"])
+        self.set_file_label("?")
+
+    def openen(self):        
+        if self.unsaved_changes:
+            reply = QMessageBox.question(self, self.meldingen["Waarschuwing"], 
+                                         self.meldingen["Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?"])
+            if reply == QMessageBox.StandardButton.Yes:
+                self.opslaan()
+        try:
+            fname = QFileDialog.getOpenFileName(self, self.meldingen["Open bestand"], self.mijn_configuratie["opslaglocatie"], 'Alle bestanden (*)')
+            self.set_window_title(fname[0])
+            self.set_file_label(fname[0])
+            
+            with open(fname[0], 'r') as f:
+                filetext = f.read()
+                self.editor.setPlainText(filetext)
+            self.current_path = fname[0]
+            self.load_highlighter()
+            self.statusBar().showMessage(self.meldingen["Bestand geopend"])
+        except Exception as e:
+            self.dialog_critical(str(e))
+
+    def invoegen(self):
+        try:
+            fname = QFileDialog.getOpenFileName(self, self.meldingen["Tekst of markdown bestand invoegen"], self.mijn_configuratie["opslaglocatie"], 'Alle bestanden (*)')
+            with open(fname[0], 'r') as f:
+                filetext = f.read()
+                self.editor.insertPlainText(filetext)
+            self.statusBar().showMessage(self.meldingen["Bestand ingevoegd"])
+        except Exception as e:
+            self.dialog_critical(str(e))
+
+    def opslaan(self):        
+        if self.current_path is not None:
+            filetext = self.editor.toPlainText()
+            try:
+                with open(self.current_path, 'w') as f:
+                    f.write(filetext)
+                self.statusBar().showMessage(self.meldingen["Bestand opgeslagen"])
+                self.set_file_label(self.current_path)
+                self.unsaved_changes = False
+            except Exception as e:
+                self.dialog_critical(str(e))
+        else:
+            self.opslaan_als()
+
+    def opslaan_als(self, save_path="_no_name_"):   
+        save_my_path = str(save_path)  # Ensure save_path is a string
+        try:
+            if save_my_path=="False" or save_my_path=="_no_name_":
+                pathname = QFileDialog.getSaveFileName(self, self.meldingen["Bestand opslaan"], self.mijn_configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
+            else:
+                pathname = (save_my_path, 'Tekst bestanden (*.txt)')
+            filetext = self.editor.toPlainText()
+            with open(pathname[0], 'w') as f:
+                f.write(filetext)
+            self.current_path = pathname[0]
+            self.set_window_title(pathname[0])
+            self.set_file_label(pathname[0])
+            self.statusBar().showMessage(self.meldingen["Bestand opgeslagen"])
+            self.unsaved_changes = False
+        except Exception as e:
+            errortekst = self.meldingen["Bestand niet opgeslagen"] + "\n" + str(e)
+            self.dialog_critical(errortekst)
+
+    def selectie_opslaan_als(self):
+        selectie = self.editor.textCursor()
+        if selectie.hasSelection():
+            geselecteerde_tekst = selectie.selectedText()
+            try:
+                pathname = QFileDialog.getSaveFileName(self, self.meldingen["Selectie opslaan als"], self.mijn_configuratie["opslaglocatie"], 'Tekst bestanden (*.txt)')
+                with open(pathname[0], 'w') as f:
+                    f.write(geselecteerde_tekst)
+                self.statusBar().showMessage(self.meldingen["Selectie opgeslagen"])
+            except Exception as e:
+                errortekst = self.meldingen["Selectie niet opgeslagen"] + "\n" + str(e)
+                self.dialog_critical(errortekst)
+        else:
+            QMessageBox.about(self, self.meldingen["Geen Selectie"], self.meldingen["Selecteer eerst tekst om op te slaan."])
+
+    def afsluiten(self):
+        QMessageBox.information(self, self.meldingen["Afsluiten"], self.meldingen["Programma afsluiten."])
+        # Alle vensters sluiten
+        for widget in QApplication.topLevelWidgets():
+            widget.close()
+
+    def kopieren(self):
+        self.editor.copy()
+
+    def knippen(self):
+        self.editor.cut()
+
+    def plakken(self):
+        self.editor.paste()
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
