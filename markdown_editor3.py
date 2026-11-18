@@ -279,14 +279,7 @@ class Markdown_Editor(Markdown_Editor_Menu):
                     term = term.replace('>','&gt;')
                     QMessageBox.information(self, self.meldingen["Vinden"], f"'{term}' niet gevonden")
 
-    def alles_selecteren(self):
-        self.editor.selectAll()
 
-    def ongedaan_maken(self):
-        self.editor.undo()
-
-    def opnieuw_doen(self):
-        self.editor.redo()
 
     def normaliseren(self):
         cursor = self.editor.textCursor()
@@ -360,25 +353,7 @@ class Markdown_Editor(Markdown_Editor_Menu):
         font_name, font_size = self.mijn_configuratie['favoriete_font']
         self.set_font(font_name, font_size)
 
-    def naar_begin(self):
-        cursor = self.editor.textCursor()
-        cursor.movePosition(QTextCursor.MoveOperation.Start)
-        self.editor.setTextCursor(cursor)
 
-    def naar_einde(self):
-        cursor = self.editor.textCursor()
-        cursor.movePosition(QTextCursor.MoveOperation.End)
-        self.editor.setTextCursor(cursor)
-
-    def naar_begin_regel(self):
-        cursor = self.editor.textCursor()
-        cursor.movePosition(QTextCursor.MoveOperation.StartOfBlock)
-        self.editor.setTextCursor(cursor)
-
-    def naar_einde_regel(self):
-        cursor = self.editor.textCursor()
-        cursor.movePosition(QTextCursor.MoveOperation.EndOfBlock)
-        self.editor.setTextCursor(cursor)
 
     def over(self):        
         QMessageBox.information(self, self.meldingen["Over Edith"], self.meldingen["Markdown editor met preview."])

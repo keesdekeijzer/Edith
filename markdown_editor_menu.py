@@ -4,7 +4,7 @@ import sys
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QApplication, QCheckBox, QFileDialog, QFrame, QHBoxLayout, QLabel, QLineEdit, QMainWindow, QMessageBox, QPushButton, QToolBar, QVBoxLayout, QWidget
 import yaml
-from PyQt6.QtGui import QAction, QColor, QIntValidator, QTextCharFormat
+from PyQt6.QtGui import QAction, QColor, QIntValidator, QTextCharFormat, QTextCursor
 from code_editor import CodeEditor
 from highlighter_markdown import MarkdownHighlighter
 from keuze_teksten_inhoud import keuze_teksten_inhoud, keuze_teksten_naam
@@ -713,6 +713,34 @@ class Markdown_Editor_Menu(QMainWindow):
     def plakken(self):
         self.editor.paste()
 
+    def alles_selecteren(self):
+        self.editor.selectAll()
+
+    def ongedaan_maken(self):
+        self.editor.undo()
+
+    def opnieuw_doen(self):
+        self.editor.redo()
+
+    def naar_begin(self):
+        cursor = self.editor.textCursor()
+        cursor.movePosition(QTextCursor.MoveOperation.Start)
+        self.editor.setTextCursor(cursor)
+
+    def naar_einde(self):
+        cursor = self.editor.textCursor()
+        cursor.movePosition(QTextCursor.MoveOperation.End)
+        self.editor.setTextCursor(cursor)
+
+    def naar_begin_regel(self):
+        cursor = self.editor.textCursor()
+        cursor.movePosition(QTextCursor.MoveOperation.StartOfBlock)
+        self.editor.setTextCursor(cursor)
+
+    def naar_einde_regel(self):
+        cursor = self.editor.textCursor()
+        cursor.movePosition(QTextCursor.MoveOperation.EndOfBlock)
+        self.editor.setTextCursor(cursor)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
