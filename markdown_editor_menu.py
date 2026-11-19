@@ -742,6 +742,21 @@ class Markdown_Editor_Menu(QMainWindow):
         cursor.movePosition(QTextCursor.MoveOperation.EndOfBlock)
         self.editor.setTextCursor(cursor)
 
+    def closeEvent(self, event):
+        if self.unsaved_changes:
+            reply = QMessageBox.question(self, self.meldingen['Waarschuwing'], 
+                                         self.meldingen['Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?'],
+                                         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No | QMessageBox.StandardButton.Cancel)
+            if reply == QMessageBox.StandardButton.Yes:
+                self.opslaan()
+                event.accept()
+            elif reply == QMessageBox.StandardButton.No:
+                event.accept()
+            else:
+                event.ignore()
+        else:
+            event.accept()
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Markdown_Editor_Menu()

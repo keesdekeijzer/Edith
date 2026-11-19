@@ -359,14 +359,8 @@ class Markdown_Editor(Markdown_Editor_Menu):
         QMessageBox.information(self, self.meldingen["Over Edith"], self.meldingen["Markdown editor met preview."])
 
     def edith_help(self):
-        #print("Help venster openen")
         self.help_venster = HelpWindow()
-
-        #print("Help venster aangemaakt")
         self.help_venster.show()
-        
-        #print("Help venster getoond")
-
 
 
     def datum(self):
@@ -1112,23 +1106,6 @@ class Markdown_Editor(Markdown_Editor_Menu):
                     f.write(item.get_content())
                 mapping[item.file_name] = output_path
         return mapping     
-
-    def closeEvent(self, event):
-        #print("Close event triggered")
-        if self.unsaved_changes:
-            reply = QMessageBox.question(self, self.meldingen['Waarschuwing'], 
-                                         self.meldingen['Huidig bestand is nog niet opgeslagen. Wil je de wijzigingen opslaan?'],
-                                         QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No | QMessageBox.StandardButton.Cancel)
-            if reply == QMessageBox.StandardButton.Yes:
-                self.opslaan()
-                event.accept()
-            elif reply == QMessageBox.StandardButton.No:
-                event.accept()
-            else:
-                event.ignore()
-        else:
-            event.accept()
-
 
 
     def generate_epub_cover(self, meta, logo_path=None, output_path="cover.jpg"):
@@ -2221,7 +2198,7 @@ identifier: {identifier}
             self.find_input.setCompleter(self.completer_zoek)
             self.completer_vervang = QtWidgets.QCompleter(self.zoek_suggesties)
             self.find_input.setCompleter(self.completer_vervang)
-            #print("suggestie toegevoegd:", suggestie)
+
 
     def afbeeldingen_verwijderen(self):
         reply = QMessageBox.question(self, self.meldingen["Bevestiging"], self.meldingen["Weet je zeker dat je alle afbeeldingen wilt verwijderen?"], QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
@@ -2256,7 +2233,6 @@ identifier: {identifier}
             lr = lines.index(longest_line) + 1
             QMessageBox.information(self, self.meldingen["Langste regel"], 
                                     self.meldingen["De langste regel is:"] + " " +str(lr) + "\n" + longest_line[:100] + "..." if len(longest_line) > 100 else longest_line)
-        #print("Het regelnummer van de langste regel is:", lr)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
