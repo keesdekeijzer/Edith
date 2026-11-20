@@ -11,6 +11,8 @@ QToolButton {
     border: solid 1px silver;
     border-radius: 4px;
     padding: 6px;
+    padding-top: 8px;
+    padding-bottom: 8px;
     color: black;
 }
 QToolButton:hover {
