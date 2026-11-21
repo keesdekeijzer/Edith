@@ -281,12 +281,7 @@ class Markdown_Editor(Markdown_Editor_Menu):
 
 
 
-    def normaliseren(self):
-        cursor = self.editor.textCursor()
-        volledige_tekst = self.editor.toPlainText()
-        tussenstap = ' '.join(volledige_tekst.split('\n'))
-        genormaliseerde_tekst = '.\n'.join(tussenstap.split('.'))
-        self.editor.setPlainText(genormaliseerde_tekst)
+
 
     def geen_hoofdletters(self):
         selectie = self.editor.textCursor()

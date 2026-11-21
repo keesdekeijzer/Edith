@@ -757,6 +757,13 @@ class Markdown_Editor_Menu(QMainWindow):
         else:
             event.accept()
 
+    def normaliseren(self):
+        #cursor = self.editor.textCursor()
+        volledige_tekst = self.editor.toPlainText()
+        tussenstap = ' '.join(volledige_tekst.split('\n'))
+        genormaliseerde_tekst = '.\n'.join(tussenstap.split('.'))
+        self.editor.setPlainText(genormaliseerde_tekst)
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Markdown_Editor_Menu()
