@@ -764,6 +764,42 @@ class Markdown_Editor_Menu(QMainWindow):
         genormaliseerde_tekst = '.\n'.join(tussenstap.split('.'))
         self.editor.setPlainText(genormaliseerde_tekst)
 
+    def geen_hoofdletters(self):
+        selectie = self.editor.textCursor()
+        if selectie.hasSelection():
+            geselecteerde_tekst = selectie.selectedText()
+            kleine_tekst = geselecteerde_tekst.lower()
+            selectie.insertText(kleine_tekst)
+        else:
+            QMessageBox.about(self, self.meldingen["Geen Selectie"], self.meldingen["Selecteer eerst tekst om om te zetten naar kleine letters."])
+
+    def hoofdletters(self):
+        selectie = self.editor.textCursor()
+        if selectie.hasSelection():
+            geselecteerde_tekst = selectie.selectedText()
+            grote_tekst = geselecteerde_tekst.upper()
+            selectie.insertText(grote_tekst)
+        else:
+            QMessageBox.about(self, self.meldingen["Geen Selectie"], self.meldingen["Selecteer eerst tekst om om te zetten naar hoofdletters."])
+
+    def schrift(self):
+        selectie = self.editor.textCursor()
+        if selectie.hasSelection():
+            geselecteerde_tekst = selectie.selectedText()
+            schrift_tekst = ''
+            for char in geselecteerde_tekst:
+                if 'A' <= char <= 'Z':
+                    schrift_char = chr(ord(char) + 0x1D4D0 - ord('A'))
+                elif 'a' <= char <= 'z':
+                    schrift_char = chr(ord(char) + 0x1D4EA - ord('a'))
+                else:
+                    schrift_char = char
+                schrift_tekst += schrift_char
+            selectie.insertText(schrift_tekst)
+        else:
+            QMessageBox.about(self, self.meldingen["Geen Selectie"], self.meldingen["Selecteer eerst tekst om om te zetten naar schrift."])
+
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Markdown_Editor_Menu()
