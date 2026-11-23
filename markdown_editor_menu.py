@@ -1,3 +1,4 @@
+import datetime
 import re
 import sys
 
@@ -799,6 +800,16 @@ class Markdown_Editor_Menu(QMainWindow):
         else:
             QMessageBox.about(self, self.meldingen["Geen Selectie"], self.meldingen["Selecteer eerst tekst om om te zetten naar schrift."])
 
+
+    def datum(self):
+        nu = datetime.datetime.now()
+        datum_nu = nu.strftime("%Y-%m-%d") + " "
+        self.editor.insertPlainText(datum_nu)
+
+    def tijd(self):
+        nu = datetime.datetime.now()
+        tijd_nu = nu.strftime("%H:%M") + " "
+        self.editor.insertPlainText(tijd_nu)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

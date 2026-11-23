@@ -320,15 +320,6 @@ class Markdown_Editor(Markdown_Editor_Menu):
         self.help_venster.show()
 
 
-    def datum(self):
-        nu = datetime.datetime.now()
-        datum_nu = nu.strftime("%Y-%m-%d")
-        self.editor.insertPlainText(datum_nu)
-
-    def tijd(self):
-        nu = datetime.datetime.now()
-        tijd_nu = nu.strftime("%H:%M")
-        self.editor.insertPlainText(tijd_nu)
 
     def md_link(self):
         pathname = QFileDialog.getOpenFileName(self, self.meldingen["Bestand openen"], self.mijn_configuratie["opslaglocatie"], self.meldingen["Alle bestanden"])
@@ -2007,6 +1998,7 @@ identifier: {identifier}
 
     def export_epub_to_tts_texts(self):
         # get author and title from frontmatter
+        self.afbeeldingen_verwijderen_no_popup()
         md_text = self.editor.toPlainText()
         fm_pattern = r"^---\n.*?\n---\n"
         fm_match = re.search(fm_pattern, md_text, flags=re.DOTALL)
@@ -2165,6 +2157,13 @@ identifier: {identifier}
             new_md_text = re.sub(r'!\[.*?\]\(.*?\)', '', md_text)
             self.editor.setPlainText(new_md_text)
             QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Alle afbeeldingen verwijderd."])
+
+    def afbeeldingen_verwijderen_no_popup(self):
+        md_text = self.editor.toPlainText()
+        # verwijder alle afbeeldingen in markdown-formaat ![alt](url)
+        new_md_text = re.sub(r'!\[.*?\]\(.*?\)', '', md_text)
+        self.editor.setPlainText(new_md_text)
+            
 
     def goto_regel(self):
         # haal de inhoud op van self.goto_input

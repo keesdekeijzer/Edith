@@ -45,6 +45,8 @@ Er is een complete export mogelijk voor TTS. De export omvat een md-bestand die 
 
 Het epub bestand krijgt als aanvulling op de naam "- 1" mee, om deze te onderscheiden van het eventuele oorspronkelijke epub bestand.
 
+Export naar TTS verwijdert ook de afbeeldingen (zonder dit expliciet te melden).
+
 ## Frontmatter
 
 De frontmatter kan in een apart venster bewerkt worden.
