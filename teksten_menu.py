@@ -392,3 +392,7 @@ menu_teksten_de["Ga"] = "Gehe"
 menu_teksten_nl["Langste regel"] = "Langste regel"
 menu_teksten_en["Langste regel"] = "Longest line"
 menu_teksten_de["Langste regel"] = "Längste Zeile"
+
+menu_teksten_nl["Hoofdstukken maken (streepjes)"] = "Hoofdstukken maken (streepjes)"
+menu_teksten_en["Hoofdstukken maken (streepjes)"] = "Create chapters (dashes)"
+menu_teksten_de["Hoofdstukken maken (streepjes)"] = "Kapitel erstellen (Striche)"

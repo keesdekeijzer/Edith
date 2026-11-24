@@ -640,3 +640,11 @@ meldingen_de["Langste regel"] = "Längste Zeile"
 meldingen_nl["De langste regel is:"] = "De langste regel is:"
 meldingen_en["De langste regel is:"] = "The longest line is:"
 meldingen_de["De langste regel is:"] = "Die längste Zeile ist:"
+
+meldingen_nl["Hoofdstukken Maken"] = "Hoofdstukken Maken"
+meldingen_en["Hoofdstukken Maken"] = "Create Chapters"
+meldingen_de["Hoofdstukken Maken"] = "Kapitel erstellen"
+
+meldingen_nl["Dit voegt een markdown kop 1 toe aan regels waar alleen streepjes op staan."] = "Dit voegt een markdown kop 1 toe aan regels waar alleen streepjes op staan."
+meldingen_en["Dit voegt een markdown kop 1 toe aan regels waar alleen streepjes op staan."] = "This adds a markdown heading 1 to lines that contain only dashes."
+meldingen_de["Dit voegt een markdown kop 1 toe aan regels waar alleen streepjes op staan."] = "Dies fügt eine markdown Überschrift 1 zu Zeilen hinzu, die nur Striche enthalten."

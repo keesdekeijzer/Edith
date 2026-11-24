@@ -221,6 +221,8 @@ class Markdown_Editor_Menu(QMainWindow):
         self.maak_menu_punt("hoofdstukken_maken_cijfers_actie", self.menu_teksten["Hoofdstukken maken (cijfers)"], "", self.hoofdstukken_maken_cijfers)
 
         self.maak_menu_punt("hoofdstukken_maken_regels_actie", self.menu_teksten["Hoofdstukken maken (regels)"], "", self.hoofdstukken_maken_regels)
+
+        self.maak_menu_punt("hoofdstukken_maken_streepjes_actie", self.menu_teksten["Hoofdstukken maken (streepjes)"], "", self.hoofdstukken_maken_streepjes)
         
         self.maak_menu_punt("asterisken_verwijderen_actie", self.menu_teksten["Asterisken verwijderen"], "", self.asterisken_verwijderen)
 
@@ -335,6 +337,7 @@ class Markdown_Editor_Menu(QMainWindow):
         bewerken_menu.addSeparator()
         bewerken_menu.addAction(self.actie["hoofdstukken_maken_cijfers_actie"])
         bewerken_menu.addAction(self.actie["hoofdstukken_maken_regels_actie"])
+        bewerken_menu.addAction(self.actie["hoofdstukken_maken_streepjes_actie"])
         bewerken_menu.addSeparator()
         bewerken_menu.addAction(self.actie["frontmatter_actie"])
         bewerken_menu.addSeparator()

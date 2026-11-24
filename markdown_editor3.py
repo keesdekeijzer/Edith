@@ -2083,6 +2083,31 @@ identifier: {identifier}
         new_md_text = "\n".join(new_lines)
         self.editor.setPlainText(new_md_text)
 
+    def hoofdstukken_maken_streepjes(self):
+        QMessageBox.about(self, self.meldingen["Hoofdstukken Maken"], 
+                                      self.meldingen["Dit voegt een markdown kop 1 toe aan regels waar alleen streepjes op staan."])
+                
+        md_text = self.editor.toPlainText()
+        # regels waar alleen streepjes op staan, moeten een markdown kop 1 krijgen
+        lines = md_text.splitlines()
+        new_lines = []
+        hoofstuk_nummer = -2  # frontmatter overslaan
+        for line in lines:
+            stripped_line = line.strip()
+            if stripped_line == "-" * len(stripped_line) and len(stripped_line) > 0:
+                hoofstuk_nummer += 1
+                # eerste 2 overslaan, want dat is frontmatter, 
+                # en de rest van de streepjes vervangen door een markdown kop 1 
+                # met het hoofdstuknummer
+                if hoofstuk_nummer > 0:
+                    new_lines.append("# " + str(hoofstuk_nummer) + ". ")
+                else:
+                    new_lines.append(line)
+            else:
+                new_lines.append(line)
+        new_md_text = "\n".join(new_lines)
+        self.editor.setPlainText(new_md_text)
+
     def hoofdstukken_maken_regels(self):
         QMessageBox.about(self, self.meldingen["Hoofdstukken Maken"], 
                                 self.meldingen["Dit voegt een markdown kop 1 toe na 5 lege regels."])
