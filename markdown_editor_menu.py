@@ -886,6 +886,21 @@ class Markdown_Editor_Menu(QMainWindow):
         new_md_text = "\n".join(new_lines)
         self.editor.setPlainText(new_md_text)
 
+    def afbeeldingen_verwijderen(self):
+        reply = QMessageBox.question(self, self.meldingen["Bevestiging"], self.meldingen["Weet je zeker dat je alle afbeeldingen wilt verwijderen?"], QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        if reply == QMessageBox.StandardButton.Yes:
+            md_text = self.editor.toPlainText()
+            # verwijder alle afbeeldingen in markdown-formaat ![alt](url)
+            new_md_text = re.sub(r'!\[.*?\]\(.*?\)', '', md_text)
+            self.editor.setPlainText(new_md_text)
+            QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["Alle afbeeldingen verwijderd."])
+
+    def afbeeldingen_verwijderen_no_popup(self):
+        md_text = self.editor.toPlainText()
+        # verwijder alle afbeeldingen in markdown-formaat ![alt](url)
+        new_md_text = re.sub(r'!\[.*?\]\(.*?\)', '', md_text)
+        self.editor.setPlainText(new_md_text)
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Markdown_Editor_Menu()
