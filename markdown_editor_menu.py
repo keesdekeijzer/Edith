@@ -901,6 +901,19 @@ class Markdown_Editor_Menu(QMainWindow):
         new_md_text = re.sub(r'!\[.*?\]\(.*?\)', '', md_text)
         self.editor.setPlainText(new_md_text)
 
+    def asterisken_verwijderen(self):
+        md_text = self.editor.toPlainText()
+        # verwijder alle asterisken
+        lines = md_text.splitlines()
+        new_lines = []
+        for line in lines:
+            stripped_line = line.strip()
+            if "*" in stripped_line:
+                stripped_line = stripped_line.replace("*", "")
+            new_lines.append(stripped_line)
+        new_md_text = "\n".join(new_lines)
+        self.editor.setPlainText(new_md_text)
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Markdown_Editor_Menu()

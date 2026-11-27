@@ -2077,18 +2077,7 @@ identifier: {identifier}
         else:
             QMessageBox.information(self, self.meldingen["Succes"], self.meldingen["HTML-bestand opgeslagen!"])
 
-    def asterisken_verwijderen(self):
-        md_text = self.editor.toPlainText()
-        # verwijder alle asterisken
-        lines = md_text.splitlines()
-        new_lines = []
-        for line in lines:
-            stripped_line = line.strip()
-            if "*" in stripped_line:
-                stripped_line = stripped_line.replace("*", "")
-            new_lines.append(stripped_line)
-        new_md_text = "\n".join(new_lines)
-        self.editor.setPlainText(new_md_text)
+
 
     def suggestie_toevoegen(self, suggestie):
         # suggestie toevoegen aan het begin van de lijst van suggesties
