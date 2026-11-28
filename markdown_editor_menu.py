@@ -914,6 +914,38 @@ class Markdown_Editor_Menu(QMainWindow):
         new_md_text = "\n".join(new_lines)
         self.editor.setPlainText(new_md_text)
 
+    # menu acties voor keuzeteksten
+
+    def keuze_1(self):
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 1"])
+
+    def keuze_2(self):
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 2"])
+
+    def keuze_3(self):
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 3"])
+
+    def keuze_4(self):
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 4"])
+
+    def keuze_5(self):
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 5"])
+
+    def keuze_6(self):
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 6"])
+
+    def keuze_7(self):
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 7"])
+
+    def keuze_8(self):
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 8"])
+
+    def keuze_9(self):
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 9"])
+
+    def keuze_10(self):
+        self.editor.insertPlainText(self.keuze_teksten_inhoud["Keuze 10"])
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Markdown_Editor_Menu()
